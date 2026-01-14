@@ -1,0 +1,18 @@
+package omega.sleepy;
+
+import omega.sleepy.routes.RouteMain;
+import omega.sleepy.util.Database;
+
+import static spark.Spark.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ipAddress("0.0.0.0");
+        port(4567);
+        staticFileLocation("/public");
+
+        RouteMain.init();
+        Database.initDatabase();
+
+    }
+}
