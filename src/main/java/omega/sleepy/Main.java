@@ -1,5 +1,6 @@
 package omega.sleepy;
 
+import omega.sleepy.dao.BlogDao;
 import omega.sleepy.routes.RouteMain;
 import omega.sleepy.util.Database;
 
@@ -12,6 +13,7 @@ public class Main {
         staticFileLocation("/public");
 
         RouteMain.init();
+        BlogDao.init();
         Database.initDatabase();
 
     }
