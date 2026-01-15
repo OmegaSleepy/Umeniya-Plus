@@ -80,7 +80,7 @@ public class ApiController {
     }
 
     public static Object getFavicon(spark.Response response) {
-        response.type("image/x-icon"); // correct MIME type
+        response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
 
         try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
