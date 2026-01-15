@@ -45,6 +45,11 @@ public class ApiRoutes {
             return getBlogContents(request, response);
         });
 
+        get("api/blog/short_blogs", (request, response) -> {
+            response.type(MediaType.JSON.getValue());
+            return BlogDao.getBlogWithoutContents();
+        }, gson::toJson);
+
     }
 
 

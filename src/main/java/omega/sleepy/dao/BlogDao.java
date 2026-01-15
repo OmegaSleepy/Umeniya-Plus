@@ -80,16 +80,45 @@ public class BlogDao {
         return blogList;
     }
 
+    public static List<Blog> getBlogWithoutContents() {
+        List<Blog> blogList = new ArrayList<>();
+        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at FROM blogs LIMIT 10";
+
+        try (Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql)){
+
+            while (resultSet.next()) {
+                blogList.add(getBlog(resultSet));
+            }
+
+            return blogList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static @NotNull Blog getBlog(ResultSet rs) throws SQLException {
         return new Blog(
                 rs.getInt("id"),
-                rs.getString("title"),
-                rs.getString("tag"),
-                rs.getString("excerpt"),
-                rs.getString("content"),
-                rs.getString("creator_username"),
-                rs.getString("created_at")
+                getResultSetString(rs, "title"),
+                getResultSetString(rs, "tag"),
+                getResultSetString(rs, "excerpt"),
+                getResultSetString(rs, "content"),
+                getResultSetString(rs, "creator_username"),
+                getResultSetString(rs, "created_at")
         );
+    }
+
+    private static String getResultSetString(ResultSet rs, String coloumn) throws SQLException {
+        String string;
+        try{
+            string = rs.getString(coloumn);
+        } catch (SQLException e) {
+            string = "?";
+        }
+        return string;
     }
 
 
