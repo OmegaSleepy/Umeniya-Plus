@@ -22,7 +22,7 @@ import static omega.sleepy.validation.BlogValidator.isValidBlog;
 
 public class ApiController {
 
-    private static JsonParser jsonParser;
+    private static JsonParser jsonParser = new JsonParser();
 
     public static String getStyleSheet(Response response) {
         try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/umeniyaStyleSheet.css")) {
