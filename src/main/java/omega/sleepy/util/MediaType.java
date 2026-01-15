@@ -14,6 +14,7 @@ public enum MediaType {
     ZIP("application/zio"),
     RAR("application/vnd.rar"),
     SEVEN_Z("application/x-7z-compressed"),
+    ICON("image/x-icon"),
     TXT("text/plain"),
     HTML("text/html; charset=UTF-8"),
     CSS("text/css"),

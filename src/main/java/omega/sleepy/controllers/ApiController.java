@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
-import omega.sleepy.dto.BlogRequestDTO;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
@@ -13,6 +12,8 @@ import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,5 +77,26 @@ public class ApiController {
             response.redirect("/home");
             return "{\"status\":\"error\"}";
         }
+    }
+
+    public static Object getFavicon(spark.Response response) {
+        response.type("image/x-icon"); // correct MIME type
+        response.header("Cache-Control", "public, max-age=604800"); // 1 week
+
+        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
+            if (inputStream == null) {
+                response.status(404);
+                return "";
+            }
+
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            response.raw().getOutputStream().write(bytes);
+            response.raw().getOutputStream().flush();
+        } catch (IOException e) {
+            response.status(500);
+            return "";
+        }
+
+        return "";
     }
 }
