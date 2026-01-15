@@ -19,23 +19,20 @@
 
 <header>
     <div class="header-container">
-        <a href="/" class="logo">Skills+</a>
-        <a href="/home" class="btn-back">← Back to Feed</a>
+        <a href="/" class="logo">Умения+</a>
+        <a href="/home" class="btn-back">← Обратно</a>
     </div>
 </header>
 
 <main class="article-container">
-    <span class="post-tag" th:text="${blog.tag}">Category</span>
+    <span class="post-tag" th:text="${blog.tag}">Категория</span>
 
-    <h1 class="post-title" th:text="${blog.title}">Post Title Goes Here</h1>
+    <h1 class="post-title" th:text="${blog.title}">Заглавието на поста</h1>
 
-    <p class="post-excerpt" th:text="${blog.excerpt}">This is a short summary of the blog post to hook the reader.</p>
+    <p class="post-excerpt" th:text="${blog.excerpt}">Това е крадко описание на
+        съдържанието, целящо да грабне вниманието на читателя</p>
 
     <hr>
-
-<!--    <div class="post-content" th:text="${blog.content}">-->
-<!--        Full blog content will be injected here.-->
-<!--    </div>-->
 
     <article id="post"></article>
 

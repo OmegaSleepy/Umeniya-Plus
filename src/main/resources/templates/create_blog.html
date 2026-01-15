@@ -13,50 +13,50 @@
 <header>
     <div class="header-container">
         <a href="/" class="logo">Skills+</a>
-        <a href="/home" class="btn-create">View Posts</a>
+        <a href="/home" class="btn-create">Разгледай Постове</a>
     </div>
 </header>
 
 <div class="editor-wrapper" id="mainWrapper">
     <div class="form-container" id="formSide">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Create New Post</h2>
-            <button type="button" id="togglePreview" class="btn-toggle">Show Preview</button>
+            <h2 style="margin: 0;">Създай Нов Пост</h2>
+            <button type="button" id="togglePreview" class="btn-toggle">Предварителен Преглед</button>
         </div>
 
         <form id="blogForm">
             <div class="form-group">
-                <label for="title">Post Title</label>
-                <input type="text" id="title" name="title" placeholder="Enter a catchy title..." required>
+                <label for="title">Заглавие</label>
+                <input type="text" id="title" name="title" placeholder="Въведи интригуващо заглавие..." required>
             </div>
 
             <div class="form-group">
-                <label for="category">Category</label>
+                <label for="category">Категория</label>
                 <select id="category" name="category">
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="excerpt">Short Summary</label>
-                <input type="text" id="excerpt" name="excerpt" placeholder="A brief overview of the post">
+                <label for="excerpt">Кратко описание</label>
+                <input type="text" id="excerpt" name="excerpt" placeholder="Както описание на съдържанието на поста">
             </div>
 
             <div class="form-group">
 
                 <a href="/help/markdown-info">
-                    <label for="content">Content (Markdown)</label>
+                    <label for="content">Съдържание (Markdown)</label>
                 </a>
-                <textarea id="content" name="content" placeholder="Write your story here..." required></textarea>
+                <textarea id="content" name="content" placeholder="Въведи тялото на вашата статия тук..." required></textarea>
             </div>
 
-            <button type="submit" class="btn-submit">Publish Post</button>
+            <button type="submit" class="btn-submit">Публикувай</button>
         </form>
     </div>
 
     <div id="preview-panel" class="article-container" style="margin-top: 0; display: none;">
-        <span class="post-tag" id="preview-tag">Category</span>
-        <h1 class="post-title" id="preview-title">Title Preview</h1>
-        <div class="post-excerpt" id="preview-excerpt">Your summary will appear here...</div>
+        <span class="post-tag" id="preview-tag">Категория</span>
+        <h1 class="post-title" id="preview-title">Преглед на заглавието</h1>
+        <div class="post-excerpt" id="preview-excerpt">Краткото описание ще се появи тук...</div>
         <hr>
         <div id="markdown-body" class="post-content"></div>
     </div>
@@ -75,9 +75,9 @@
 
     // Live Update Function
     function updatePreview() {
-        document.getElementById('preview-title').textContent = titleInput.value || "Title Preview";
-        document.getElementById('preview-excerpt').textContent = excerptInput.value || "Your summary will appear here...";
-        document.getElementById('preview-tag').textContent = categoryInput.value || "Category";
+        document.getElementById('preview-title').textContent = titleInput.value || "Преглед на заглавието";
+        document.getElementById('preview-excerpt').textContent = excerptInput.value || "Краткото описание ще се появи тук...";
+        document.getElementById('preview-tag').textContent = categoryInput.value || "Категория";
 
         const rawValue = contentInput.value;
 
