@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.routes.ApiRoutes;
+import omega.sleepy.util.Direction;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.context.Context;
@@ -116,6 +117,9 @@ public class ApiController {
     public static Object getFilteredView(Request request, Response response) {
         String category = request.queryParams("category");
         String name = request.queryParams("name");
+        String order = request.queryParams("order");
+
+        Direction orderDirection = order.equals("oldest-first") ? Direction.ASC : Direction.DESC;
 
         Log.exec("Queried for " + category + " '" + name + "'");
 
@@ -126,7 +130,7 @@ public class ApiController {
         }
 
         if(BlogDao.getCategories().contains(category) && name.length()<32){
-            return BlogDao.getBlogsByCategory(category, name);
+            return BlogDao.getBlogsByCategory(category, name, orderDirection);
         }
 
         response.status(400);

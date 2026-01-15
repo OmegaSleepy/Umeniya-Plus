@@ -2,7 +2,7 @@ package omega.sleepy.dao;
 
 import omega.sleepy.data.Blog;
 import omega.sleepy.exceptions.MissingResource;
-import omega.sleepy.util.Database;
+import omega.sleepy.util.Direction;
 import omega.sleepy.util.FileUtil;
 import omega.sleepy.util.Log;
 import org.jetbrains.annotations.NotNull;
@@ -16,16 +16,25 @@ import static omega.sleepy.util.Database.getConnection;
 public class BlogDao {
 
     private static List<String> categories;
+    private static String any;
 
     public static List<String> getCategories() {
         return categories;
     }
 
+    public static String getAnyString(){
+        return any;
+    }
+
     public static void init() {
 
-        categories = List.of("Mathematics", "Science", "Biology", "Chemistry", "Physics", "English", "History",
-                "Geography", "Art", "Music", "Computer Science", "Economics", "Philosophy",
-                "Literature", "None", "Any");
+        any = "Всякакви";
+
+        categories = List.of("Математика", "Наука", "Биология", "Химия", "Физика", "Английски език", "История",
+                "География", "Изкуство", "Музика", "Компютърни науки", "Икономика", "Философия",
+                "Литература", "Няма", any);
+
+
     }
 
     public static void addBlog(Blog blog) {
@@ -122,25 +131,27 @@ public class BlogDao {
     }
 
 
-    public static Object getBlogsByCategory(String category, String name) {
+    public static Object getBlogsByCategory(String category, String name, Direction orderDirection) {
         List<Blog> blogList = new ArrayList<>();
+        //TODO fix this ugly spaghetti mess
 
-        boolean isAny = category.equalsIgnoreCase("any");
-        String sql = isAny
-                ? "SELECT * FROM blogs WHERE title LIKE ? ORDER BY id desc LIMIT 15"
-                : "SELECT * FROM blogs WHERE tag = ? AND title LIKE ? ORDER BY id desc LIMIT 15";
+        String order = orderDirection.toString().toLowerCase();
+
+        boolean isAny = category.equalsIgnoreCase(any);
+
+        if(isAny) category = "tag";
+
+        String sql = "SELECT * FROM blogs WHERE tag = " + (isAny ? "tag" : "?") + " AND title LIKE ? ORDER BY created_at " + order + " LIMIT 15";
 
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             String nameSearch = "%" + name + "%";
 
-            if (isAny) {
-                pstmt.setString(1, nameSearch);
-            } else {
-                pstmt.setString(1, category);
-                pstmt.setString(2, nameSearch);
-            }
+            if(!isAny) pstmt.setString(1, category);
+            pstmt.setString((isAny ? 1 : 2), nameSearch);
+
+            System.out.printf("Executing query: %s\n", pstmt);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
