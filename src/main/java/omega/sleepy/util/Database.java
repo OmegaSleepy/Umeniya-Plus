@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import static omega.sleepy.util.FileUtil.readFile;
+
 public class Database {
 
     public static Connection getConnection() {
@@ -23,28 +25,26 @@ public class Database {
         }
     }
 
-    public static String readFile(String path) {
-        try (InputStream is = Database.class.getResourceAsStream(path)) {
-            if (is == null) {
-                throw new IOException("File not found: " + path);
-            }
-            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return null;
+
+    private static void executeSQL(String sql){
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.execute();
+            Log.exec(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void initDatabase(){
         String blogSchema = readFile("/sql/blogSchema.sql");
+        String userSchema = readFile("/sql/userSchema.sql");
         //...
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(blogSchema)){
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
+        executeSQL(blogSchema);
+        executeSQL(userSchema);
+
     }
 
 }
