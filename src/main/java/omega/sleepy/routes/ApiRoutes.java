@@ -50,7 +50,7 @@ public class ApiRoutes {
             return BlogDao.getBlogWithoutContents();
         }, gson::toJson);
 
-        get("/api/filter/post/", (request, response) -> ApiController.getFilteredView(request, response), gson::toJson);
+        get("/api/filter/post/", ApiController::getFilteredView, gson::toJson);
 
     }
 
