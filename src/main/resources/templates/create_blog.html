@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/api/style">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body>
 
 <body>
 
@@ -81,7 +80,7 @@
         document.getElementById('preview-tag').textContent = categoryInput.value || "Category";
 
         const rawValue = contentInput.value;
-        // Parse markdown and inject into the preview body
+
         document.getElementById('markdown-body').innerHTML = marked.parse(rawValue);
     }
 
@@ -92,14 +91,14 @@
         if (isShowing) {
             previewPanel.style.display = 'none';
             formSide.classList.remove('split-mode');
-            // Reset wrapper to single column center
+
             mainWrapper.style.display = 'block';
             mainWrapper.style.maxWidth = '600px'; // Keep form width tight
             toggleBtn.textContent = "Show Preview";
         } else {
             previewPanel.style.display = 'block';
             formSide.classList.add('split-mode');
-            // Switch to side-by-side
+
             mainWrapper.style.display = 'flex';
             mainWrapper.style.maxWidth = '1400px'; // Expand to fit both
             toggleBtn.textContent = "Hide Preview";
@@ -107,12 +106,9 @@
         }
     });
 
-    // Listeners for instant feedback
     [contentInput, titleInput, excerptInput, categoryInput].forEach(el => {
         el.addEventListener('input', updatePreview);
     });
-
-    // --- Your Existing Functions ---
 
     async function loadCategories() {
         try {
