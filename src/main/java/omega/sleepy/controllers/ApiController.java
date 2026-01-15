@@ -3,11 +3,22 @@ package omega.sleepy.controllers;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.data.Blog;
+import omega.sleepy.dto.BlogRequestDTO;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.util.Log;
+import omega.sleepy.util.MediaType;
+import org.thymeleaf.context.Context;
 import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
+
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import static omega.sleepy.routes.PublicRoutes.templateEngine;
+import static omega.sleepy.validation.BlogValidator.isValidBlog;
 
 public class ApiController {
 
@@ -36,15 +47,34 @@ public class ApiController {
 
         if(category.equalsIgnoreCase("Any")) category = "None";
 
-        //data class
-        Blog blog = new Blog(0, title,category,excerpt,content);
+        Blog blog = new Blog(0, title,category,excerpt,content, "None", LocalTime.now().toString());
 
-        //in /validation
         if(!isValidBlog(blog)) return "{\"status\":\"not ok\"}";
 
         Log.info(blog.toString());
         BlogDao.addBlog(blog);
 
         return "{\"status\":\"ok\"}";
+    }
+
+    public static String getBlog(Request request, Response response) {
+        Map<String, Object> model = new HashMap<>();
+
+        model.put("id", request.params(":id"));
+
+        try {
+            Blog blog = BlogDao.getBlogById(Integer.parseInt(request.params(":id")));
+            model.put("blog", blog);
+
+            Context context = new Context();
+            context.setVariables(model);
+
+            return templateEngine.process("blog_page", context);
+        } catch (Exception e) {
+            response.status(404);
+            response.type(MediaType.JSON.getValue());
+            response.redirect("/home");
+            return "{\"status\":\"error\"}";
+        }
     }
 }

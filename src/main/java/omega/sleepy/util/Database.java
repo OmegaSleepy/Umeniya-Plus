@@ -1,17 +1,9 @@
 package omega.sleepy.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Objects;
 
 import static omega.sleepy.util.FileUtil.readFile;
 
@@ -39,8 +31,8 @@ public class Database {
 
     public static void initDatabase(){
         Log.info("Database initializing...");
-        String blogSchema = readFile("/sql/blogSchema.sql");
-        String userSchema = readFile("/sql/userSchema.sql");
+        String blogSchema = readFile("/sql/schema/blogSchema.sql");
+        String userSchema = readFile("/sql/schema/userSchema.sql");
         //...
 
         executeSQL(blogSchema);

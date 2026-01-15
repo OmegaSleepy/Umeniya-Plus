@@ -6,15 +6,18 @@ import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import spark.Request;
+import spark.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static omega.sleepy.controllers.ApiController.getBlog;
 import static spark.Spark.*;
 
 public class PublicRoutes {
 
-    private static TemplateEngine templateEngine;
+    public static TemplateEngine templateEngine;
 
     public static void init(){
         Log.info("Public routes initializing...");
@@ -48,34 +51,11 @@ public class PublicRoutes {
 
         get("blog/:id", (request, response) -> {
             response.type(MediaType.HTML.getValue());
-
-            Map<String, Object> model = new HashMap<>();
-
-            model.put("id", request.params(":id"));
-
-            return "w";
-
-            //this is business logic,
-
-            /*
-            try {
-                Blog blog = DBUtil.getBlogById(Integer.parseInt(request.params(":id")));
-                model.put("blog", blog);
-
-                Context context = new Context();
-                context.setVariables(model);
-
-                return templateEngine.process("blog_page", context);
-            } catch (Exception e) {
-                response.status(404);
-                response.type(MediaType.JSON.getValue());
-                response.redirect("/home");
-                return "{\"status\":\"error\"}";
-            }
-            */
-
+            return getBlog(request, response);
         });
 
         Log.info("All public rouses initialized");
     }
+
+
 }
