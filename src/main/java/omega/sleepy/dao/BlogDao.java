@@ -5,11 +5,10 @@ import omega.sleepy.exceptions.MissingResource;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.FileUtil;
 import omega.sleepy.util.Log;
+import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static omega.sleepy.util.Database.getConnection;
@@ -30,7 +29,7 @@ public class BlogDao {
     }
 
     public static void addBlog(Blog blog) {
-        Log.error("Logging " + blog.toString());
+        Log.error("Saving " + blog.toString());
         String addBlogSQL = FileUtil.readFile("/sql/blog/addBlog.sql");
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(addBlogSQL);
@@ -41,6 +40,8 @@ public class BlogDao {
             preparedStatement.setString(4, blog.content());
             preparedStatement.setString(5, blog.creator());
             preparedStatement.setString(6, blog.creationDate());
+
+            preparedStatement.execute();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,19 +55,42 @@ public class BlogDao {
 
             preparedStatement.setInt(1, id);
             try (ResultSet rs = preparedStatement.executeQuery()) {
-                return new Blog(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("tag"),
-                        rs.getString("excerpt"),
-                        rs.getString("content"),
-                        rs.getString("creator_username"),
-                        rs.getString("creation_date")
-                );
+                return getBlog(rs);
             }
         } catch (SQLException e) {
             throw new MissingResource(e.getMessage());
         }
     }
+
+    public static List<Blog> getBlogView(){
+        List<Blog> blogList = new ArrayList<>();
+        String sql = "SELECT * FROM blogs LIMIT 10";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                blogList.add(getBlog(rs));
+            }
+            Log.info("Found " + blogList.size() + " blogs");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return blogList;
+    }
+
+    private static @NotNull Blog getBlog(ResultSet rs) throws SQLException {
+        return new Blog(
+                rs.getInt("id"),
+                rs.getString("title"),
+                rs.getString("tag"),
+                rs.getString("excerpt"),
+                rs.getString("content"),
+                rs.getString("creator_username"),
+                rs.getString("created_at")
+        );
+    }
+
 
 }

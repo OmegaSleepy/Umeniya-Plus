@@ -33,6 +33,11 @@ public class ApiRoutes {
             return getFavicon(response);
         });
 
+        get("api/blog/basic_view", (request, response) -> {
+            response.type(MediaType.JSON.getValue());
+            return BlogDao.getBlogView();
+        }, gson::toJson);
+
     }
 
 

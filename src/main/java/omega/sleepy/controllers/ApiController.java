@@ -12,7 +12,6 @@ import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -52,7 +51,6 @@ public class ApiController {
 
         if(!isValidBlog(blog)) return "{\"status\":\"not ok\"}";
 
-        Log.info(blog.toString());
         BlogDao.addBlog(blog);
 
         return "{\"status\":\"ok\"}";
