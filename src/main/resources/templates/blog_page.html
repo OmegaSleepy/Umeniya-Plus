@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${blog.title}">Blog Post</title>
+
+    <link rel="stylesheet" href="/api/style">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
+
+
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a href="/" class="logo">Skills+</a>
+        <a href="/home" class="btn-back">← Back to Feed</a>
+    </div>
+</header>
+
+<main class="article-container">
+    <span class="post-tag" th:text="${blog.tag}">Category</span>
+
+    <h1 class="post-title" th:text="${blog.title}">Post Title Goes Here</h1>
+
+    <p class="post-excerpt" th:text="${blog.excerpt}">This is a short summary of the blog post to hook the reader.</p>
+
+    <hr>
+
+<!--    <div class="post-content" th:text="${blog.content}">-->
+<!--        Full blog content will be injected here.-->
+<!--    </div>-->
+
+    <article id="post"></article>
+
+</main>
+
+<script>
+    async function loadPost(id){
+        const res = await fetch(`/api/posts/${id}`);
+        const markdown = await res.text();
+
+        marked.setOptions({
+            highlight: function(code, lang) {
+                return hljs.highlightAuto(code).value;
+            }
+        });
+
+        const rawHtml = marked.parse(markdown);
+
+        const cleanHtml = DOMPurify.sanitize(rawHtml);
+
+        document.getElementById("post").innerHTML = cleanHtml;
+    }
+
+    const pathParts = window.location.pathname.split("/");
+    const postId = pathParts[pathParts.length - 1];
+
+    console.log(postId);
+
+    loadPost(postId)
+</script>
+
+</body>
+</html>

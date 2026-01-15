@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Blog Post</title>
+    <link rel="stylesheet" href="/api/style">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+<body>
+
+<header>
+    <div class="header-container">
+        <a href="/" class="logo">Skills+</a>
+        <a href="/home" class="btn-create">View Posts</a>
+    </div>
+</header>
+
+<div class="editor-wrapper" id="mainWrapper">
+    <div class="form-container" id="formSide">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Create New Post</h2>
+            <button type="button" id="togglePreview" class="btn-toggle">Show Preview</button>
+        </div>
+
+        <form id="blogForm">
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter a catchy title..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="excerpt">Short Summary</label>
+                <input type="text" id="excerpt" name="excerpt" placeholder="A brief overview of the post">
+            </div>
+
+            <div class="form-group">
+
+                <a href="/help/markdown-info">
+                    <label for="content">Content (Markdown)</label>
+                </a>
+                <textarea id="content" name="content" placeholder="Write your story here..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Publish Post</button>
+        </form>
+    </div>
+
+    <div id="preview-panel" class="article-container" style="margin-top: 0; display: none;">
+        <span class="post-tag" id="preview-tag">Category</span>
+        <h1 class="post-title" id="preview-title">Title Preview</h1>
+        <div class="post-excerpt" id="preview-excerpt">Your summary will appear here...</div>
+        <hr>
+        <div id="markdown-body" class="post-content"></div>
+    </div>
+</div>
+
+<script>
+
+    const contentInput = document.getElementById('content');
+    const titleInput = document.getElementById('title');
+    const excerptInput = document.getElementById('excerpt');
+    const categoryInput = document.getElementById('category');
+    const previewPanel = document.getElementById('preview-panel');
+    const formSide = document.getElementById('formSide');
+    const toggleBtn = document.getElementById('togglePreview');
+    const mainWrapper = document.getElementById('mainWrapper');
+
+    // Live Update Function
+    function updatePreview() {
+        document.getElementById('preview-title').textContent = titleInput.value || "Title Preview";
+        document.getElementById('preview-excerpt').textContent = excerptInput.value || "Your summary will appear here...";
+        document.getElementById('preview-tag').textContent = categoryInput.value || "Category";
+
+        const rawValue = contentInput.value;
+        // Parse markdown and inject into the preview body
+        document.getElementById('markdown-body').innerHTML = marked.parse(rawValue);
+    }
+
+    // Toggle Preview Panel
+    toggleBtn.addEventListener('click', () => {
+        const isShowing = previewPanel.style.display === 'block';
+
+        if (isShowing) {
+            previewPanel.style.display = 'none';
+            formSide.classList.remove('split-mode');
+            // Reset wrapper to single column center
+            mainWrapper.style.display = 'block';
+            mainWrapper.style.maxWidth = '600px'; // Keep form width tight
+            toggleBtn.textContent = "Show Preview";
+        } else {
+            previewPanel.style.display = 'block';
+            formSide.classList.add('split-mode');
+            // Switch to side-by-side
+            mainWrapper.style.display = 'flex';
+            mainWrapper.style.maxWidth = '1400px'; // Expand to fit both
+            toggleBtn.textContent = "Hide Preview";
+            updatePreview();
+        }
+    });
+
+    // Listeners for instant feedback
+    [contentInput, titleInput, excerptInput, categoryInput].forEach(el => {
+        el.addEventListener('input', updatePreview);
+    });
+
+    // --- Your Existing Functions ---
+
+    async function loadCategories() {
+        try {
+            const response = await fetch("/api/blog/tags");
+            if (!response.ok) throw new Error("Failed to fetch tags");
+            const tags = await response.json();
+            const select = document.getElementById("category");
+            select.innerHTML = "";
+            tags.forEach(tag => {
+                const option = document.createElement("option");
+                option.value = tag;
+                option.textContent = tag;
+                select.appendChild(option);
+            });
+        } catch (err) {
+            console.error("Error loading categories:", err);
+        }
+    }
+
+    document.getElementById("blogForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = {
+            title: titleInput.value,
+            category: categoryInput.value,
+            excerpt: excerptInput.value,
+            content: contentInput.value
+        };
+
+        try {
+            const response = await fetch("/api/blog/content", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) throw new Error("Network response was not OK");
+            alert("Blog post submitted successfully!");
+            document.getElementById("blogForm").reset();
+            updatePreview();
+        } catch (err) {
+            console.error("Error submitting blog post:", err);
+            alert("Failed to submit blog post.");
+        }
+    });
+
+    loadCategories();
+
+    loadCategories();
+</script>
+</body>
+
+
+</html>

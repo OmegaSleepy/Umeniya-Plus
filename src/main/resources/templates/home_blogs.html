@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="/api/style">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a href="/" class="logo">Skills+</a>
+        <a href="/create" class="btn-create">+ Create Post</a>
+    </div>
+</header>
+
+<div id="search" class="search">
+    <label for="category">Category</label>
+    <select id="category" name="category">
+    </select>
+
+    <br>
+
+    <label for="blog-name">Name</label>
+    <input type="text" id="blog-name">
+    <br>
+
+    <button id="show">
+        Search
+    </button>
+
+    <button id="clear">
+        Clear filters
+    </button>
+</div>
+
+
+
+
+
+<div id="holder">
+</div>
+
+<script>
+
+    async function loadCategories() {
+        try {
+            const response = await fetch("/api/blog/tags");
+            if (!response.ok) throw new Error("Failed to fetch tags");
+            const tags = await response.json();
+            const select = document.getElementById("category");
+            select.innerHTML = "";
+            tags.forEach(tag => {
+                const option = document.createElement("option");
+                option.value = tag;
+                option.textContent = tag;
+                select.appendChild(option);
+            });
+            select.selectedIndex = select.options.length-1;
+        } catch (err) {
+            console.error("Error loading categories:", err);
+        }
+    }
+
+    function createElement(tag, text, classname){
+        const element = document.createElement(tag);
+        element.innerHTML = text;
+        if(classname){element.classList.add(classname);}
+        return element;
+    }
+
+    document.getElementById("show").addEventListener("click", function(){
+        const category = document.getElementById("category").value
+        const name = document.getElementById("blog-name").value
+
+        const parameters = new URLSearchParams({
+            name: name,
+            category: category
+        });
+        loadStuff(`/api/filter/post/?${parameters.toString()}`)
+    })
+
+    document.getElementById("clear").addEventListener("click", function (){
+        const category_select = document.getElementById("category");
+        category_select.selectedIndex = category_select.options.length-1;
+        document.getElementById("blog-name").value = '';
+        loadStuff(`/api/filter/post/`)
+    })
+
+    async function loadStuff(url) {
+        try {
+            const response = await fetch(url);
+            const select = document.getElementById("holder");
+            const data = await response.json();
+
+            select.replaceChildren();
+
+            data.forEach(element => {
+                const blog = document.createElement("div");
+                blog.classList.add("blog");
+
+                blog.style.cursor = "pointer";
+                blog.onclick = () => {
+                    window.location.href = `/blog/${element.id}`;
+                };
+
+                blog.append(
+                    createElement("h1", element.title,"blog-title"),
+                    createElement("p", element.tag,"blog-tag"),
+                    createElement("p", element.excerpt,"blog-excerpt")
+                )
+                select.append(blog);
+            })
+        } catch (err) {
+            console.error("Failed to load blogs:", err);
+        }
+    }
+
+    loadStuff("/api/blog/blogs");
+    loadCategories();
+</script>
+</body>
+</html>
