@@ -21,7 +21,9 @@
 
     <label for="order-by">Подреди по</label>
     <select id="order-by" name="order-by">
-
+        <option value="normal">По подразбиране</option>
+        <option value="oldest-first">Най - стари първо</option>
+        <option value="newest-first">Най - нови първо</option>
     </select>
 
     <br>
@@ -38,10 +40,6 @@
         Изчисти филтрите
     </button>
 </div>
-
-
-
-
 
 <div id="holder">
 </div>
@@ -77,10 +75,12 @@
     document.getElementById("show").addEventListener("click", function(){
         const category = document.getElementById("category").value
         const name = document.getElementById("blog-name").value
+        const orderBy = document.getElementById("order-by").value;
 
         const parameters = new URLSearchParams({
             name: name,
-            category: category
+            category: category,
+            order: orderBy
         });
         loadStuff(`/api/filter/post/?${parameters.toString()}`)
     })
@@ -113,7 +113,7 @@
                     createElement("h1", element.title,"blog-title"),
                     createElement("p", element.tag,"blog-tag"),
                     createElement("p", element.excerpt,"blog-excerpt")
-                )
+                )uh
                 select.append(blog);
             })
         } catch (err) {
