@@ -97,4 +97,19 @@ public class ApiController {
 
         return "";
     }
+
+    public static String getBlogContents(Request request, Response response) {
+        var id = Integer.parseInt(request.params(":id"));
+        Blog blog;
+        try{
+            blog = BlogDao.getBlogById(id);
+            return blog.content();
+
+        } catch (Exception e){
+            response.status(404);
+            response.type(MediaType.JSON.getValue());
+            response.redirect("/home");
+            return "{\"status\":\"error\"}";
+        }
+    }
 }

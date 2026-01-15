@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import omega.sleepy.controllers.ApiController;
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.data.Blog;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import spark.Request;
@@ -37,6 +38,12 @@ public class ApiRoutes {
             response.type(MediaType.JSON.getValue());
             return BlogDao.getBlogView();
         }, gson::toJson);
+
+        get("/api/posts/:id", (request, response) -> {
+            response.type(MediaType.TXT.getValue());
+
+            return getBlogContents(request, response);
+        });
 
     }
 
