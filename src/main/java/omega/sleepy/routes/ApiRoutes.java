@@ -45,10 +45,12 @@ public class ApiRoutes {
             return getBlogContents(request, response);
         });
 
-        get("api/blog/short_blogs", (request, response) -> {
+        get("/api/blog/short_blogs", (request, response) -> {
             response.type(MediaType.JSON.getValue());
             return BlogDao.getBlogWithoutContents();
         }, gson::toJson);
+
+        get("/api/filter/post/", (request, response) -> ApiController.getFilteredView(request, response), gson::toJson);
 
     }
 

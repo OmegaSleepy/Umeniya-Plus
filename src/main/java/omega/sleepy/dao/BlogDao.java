@@ -122,4 +122,36 @@ public class BlogDao {
     }
 
 
+    public static Object getBlogsByCategory(String category, String name) {
+        List<Blog> blogList = new ArrayList<>();
+
+        boolean isAny = category.equalsIgnoreCase("any");
+        String sql = isAny
+                ? "SELECT * FROM blogs WHERE title LIKE ? ORDER BY id desc LIMIT 15"
+                : "SELECT * FROM blogs WHERE tag = ? AND title LIKE ? ORDER BY id desc LIMIT 15";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String nameSearch = "%" + name + "%";
+
+            if (isAny) {
+                pstmt.setString(1, nameSearch);
+            } else {
+                pstmt.setString(1, category);
+                pstmt.setString(2, nameSearch);
+            }
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    blogList.add(getBlog(rs));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return blogList;
+    }
 }

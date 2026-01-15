@@ -112,4 +112,24 @@ public class ApiController {
             return "{\"status\":\"error\"}";
         }
     }
+
+    public static Object getFilteredView(Request request, Response response) {
+        String category = request.queryParams("category");
+        String name = request.queryParams("name");
+
+        Log.exec("Queried for " + category + " '" + name + "'");
+
+        if(name == null) name = "";
+
+        if(category == null){
+            return BlogDao.getBlogWithoutContents();
+        }
+
+        if(BlogDao.getCategories().contains(category) && name.length()<32){
+            return BlogDao.getBlogsByCategory(category, name);
+        }
+
+        response.status(400);
+        return "Error";
+    }
 }
