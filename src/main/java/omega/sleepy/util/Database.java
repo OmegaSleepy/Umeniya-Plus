@@ -38,6 +38,7 @@ public class Database {
     }
 
     public static void initDatabase(){
+        Log.info("Database initializing...");
         String blogSchema = readFile("/sql/blogSchema.sql");
         String userSchema = readFile("/sql/userSchema.sql");
         //...
