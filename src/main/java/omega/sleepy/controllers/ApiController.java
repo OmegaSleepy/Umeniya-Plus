@@ -119,6 +119,8 @@ public class ApiController {
         String name = request.queryParams("name");
         String order = request.queryParams("order");
 
+        if(order == null) order = "";
+
         Direction orderDirection = order.equals("oldest-first") ? Direction.ASC : Direction.DESC;
 
         Log.exec("Queried for " + category + " '" + name + "'");
@@ -130,7 +132,7 @@ public class ApiController {
         }
 
         if(BlogDao.getCategories().contains(category) && name.length()<32){
-            return BlogDao.getBlogsByCategory(category, name, orderDirection);
+            return BlogDao.getFilteredView(category, name, orderDirection, 0);
         }
 
         response.status(400);
