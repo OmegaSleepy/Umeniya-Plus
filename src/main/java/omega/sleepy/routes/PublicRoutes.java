@@ -50,7 +50,13 @@ public class PublicRoutes {
             return templateEngine.process("404", new Context());
         });
 
+        notFound((request, response) -> {
+            response.redirect("/404");
+            return null;
+        });
+
         Log.info("All public rouses initialized");
+
     }
 
 
