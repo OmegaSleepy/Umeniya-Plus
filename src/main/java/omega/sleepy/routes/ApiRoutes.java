@@ -11,21 +11,20 @@ public class ApiRoutes {
 
         get("/favicon.ico", ApiController::getFavicon);
 
-        //TODO rename to /api/blog/:id
-        get("/api/posts/:id", ApiController::getBlogContentsById);
-
-        //TODO rename to /api/blog/get-filtered-view/
-        get("/api/filter/post/", ApiController::getFilteredView);
 
         path("/api/blog", () ->{
             //TODO deprecated, use /api/filer/post/
-            get("/basic_view", ApiController::getFilteredView);
-            //TODO rename to /api/blog/create
-            post("/content", ApiController::createBlog);
-            //TODO deprecated, use /api/filter/post/
-            get("/short_blogs", ApiController::getFilteredView);
+//            get("basic_view", ApiController::getFilteredView);
 
+            post("/create", ApiController::createBlog);
+            //TODO deprecated, use /api/filter/post/
+//            get("short_blogs", ApiController::getFilteredView);
+
+            get("/get-filtered-view/", ApiController::getFilteredView);
             get("/tags", ApiController::getCategories);
+
+            get("/:id", ApiController::getBlogContentsById);
+
         });
 
     }
