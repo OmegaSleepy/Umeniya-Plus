@@ -46,8 +46,7 @@ public class ApiController {
 
         try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
             if (inputStream == null) {
-                response.status(404);
-                return "";
+                return missingResource(response);
             }
 
             byte[] bytes = IOUtils.toByteArray(inputStream);
@@ -112,8 +111,7 @@ public class ApiController {
 
         return body;
     }
-    //return List<Blog> with stripped contents
-    //use BlogDao filtered get always
+
     public static Object getFilteredView(Request request, Response response) {
         response.type(MediaType.JSON.getValue());
         String category = request.queryParams("category");
