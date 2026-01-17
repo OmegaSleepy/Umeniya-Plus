@@ -76,10 +76,10 @@ public class ApiController {
         int id = Integer.parseInt(request.params(":id"));
         Blog blog = BlogService.getBlogById(id);
 
-        if(blog == null) {
+        if(blog.isNull()) {
             response.status(404);
             response.type(MediaType.JSON.getValue());
-            response.redirect("/home");
+            response.redirect("/404");
             return "{\"status\":\"error\"}";
         }
 
@@ -94,19 +94,18 @@ public class ApiController {
     }
 
 
-    public static String getBlogContents(Request request, Response response) {
+    public static String getBlogContentsById(Request request, Response response) {
         var id = Integer.parseInt(request.params(":id"));
-        Blog blog;
-        try{
-            blog = BlogDao.getBlogById(id);
-            return blog.content();
+        String body = BlogService.getBlogBodyById(id);
 
-        } catch (Exception e){
+        if(body == null) {
             response.status(404);
             response.type(MediaType.JSON.getValue());
             response.redirect("/home");
             return "{\"status\":\"error\"}";
         }
+
+        return body;
     }
 
     public static Object getFilteredView(Request request, Response response) {

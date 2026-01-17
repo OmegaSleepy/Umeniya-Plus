@@ -36,7 +36,7 @@ public class ApiRoutes {
         get("/api/posts/:id", (request, response) -> {
             response.type(MediaType.TXT.getValue());
 
-            return getBlogContents(request, response);
+            return getBlogContentsById(request, response);
         });
 
         get("/api/blog/short_blogs", (request, response) -> {

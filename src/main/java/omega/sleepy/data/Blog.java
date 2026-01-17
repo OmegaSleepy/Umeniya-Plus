@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 public record Blog (int id, String title, String tag, String excerpt, String content, String creator, String creationDate) {
 
+    public boolean isNull(){
+        return title == null;
+    }
+
     @NotNull
     @Override
     public String toString() {
