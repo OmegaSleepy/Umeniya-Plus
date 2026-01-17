@@ -131,6 +131,7 @@ public class BlogDao {
     }
 
 
+    public static Object getFilteredView(String category, String name, Direction orderDirection, int page) {
     public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
         List<Blog> blogList = new ArrayList<>();
 
@@ -142,19 +143,17 @@ public class BlogDao {
 
         boolean isAny = category.equalsIgnoreCase(any);
 
-        if(isAny) category = "tag";
+        StringBuilder sql = new StringBuilder("SELECT * FROM blogs where ");
 
-        String sql = "SELECT * FROM blogs WHERE tag = " + (isAny ? "tag" : "?") + " AND title LIKE ? ORDER BY created_at " + order + " LIMIT 15";
+        if(!isAny) sql.append("tag = '%s' AND ".formatted(category));
+        sql.append("title like '%%%s%%' ".formatted(name));
+        sql.append("ORDER BY created_at %s ".formatted(order));
+        sql.append("LIMIT 15 OFFSET %d;".formatted(page*15));
+
+        Log.info(sql.toString());
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            String nameSearch = "%" + name + "%";
-
-            if(!isAny) pstmt.setString(1, category);
-            pstmt.setString((isAny ? 1 : 2), nameSearch);
-
-            System.out.printf("Executing query: %s\n", pstmt);
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
