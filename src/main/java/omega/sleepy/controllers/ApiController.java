@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.routes.ApiRoutes;
+import omega.sleepy.services.BlogService;
 import omega.sleepy.util.Direction;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
@@ -14,12 +15,10 @@ import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import static omega.sleepy.routes.PublicRoutes.templateEngine;
-import static omega.sleepy.validation.BlogValidator.isValidBlog;
 
 public class ApiController {
 
@@ -38,6 +37,28 @@ public class ApiController {
         }
     }
 
+    public static Object getFavicon(Response response) {
+        response.type(MediaType.ICON.getValue());
+        response.header("Cache-Control", "public, max-age=604800"); // 1 week
+
+        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
+            if (inputStream == null) {
+                response.status(404);
+                return "";
+            }
+
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            response.raw().getOutputStream().write(bytes);
+            response.raw().getOutputStream().flush();
+        } catch (IOException e) {
+            response.status(500);
+            return "";
+        }
+
+        return "";
+    }
+
+
     public static String saveBlog(Request request) {
         JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
 
@@ -46,15 +67,9 @@ public class ApiController {
         String excerpt = body.get("excerpt").getAsString();
         String content = body.get("content").getAsString();
 
-        if(category.equalsIgnoreCase("Any")) category = "None";
+        boolean success = BlogService.saveBlog(title, category, excerpt, content);
 
-        Blog blog = new Blog(0, title,category,excerpt,content, "None", LocalTime.now().toString());
-
-        if(!isValidBlog(blog)) return "{\"status\":\"not ok\"}";
-
-        BlogDao.addBlog(blog);
-
-        return "{\"status\":\"ok\"}";
+        return success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}";
     }
 
     public static String getBlog(Request request, Response response) {
@@ -78,26 +93,6 @@ public class ApiController {
         }
     }
 
-    public static Object getFavicon(spark.Response response) {
-        response.type(MediaType.ICON.getValue());
-        response.header("Cache-Control", "public, max-age=604800"); // 1 week
-
-        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
-            if (inputStream == null) {
-                response.status(404);
-                return "";
-            }
-
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            response.raw().getOutputStream().write(bytes);
-            response.raw().getOutputStream().flush();
-        } catch (IOException e) {
-            response.status(500);
-            return "";
-        }
-
-        return "";
-    }
 
     public static String getBlogContents(Request request, Response response) {
         var id = Integer.parseInt(request.params(":id"));
