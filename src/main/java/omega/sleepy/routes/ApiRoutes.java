@@ -1,36 +1,33 @@
 package omega.sleepy.routes;
 
-import com.google.gson.Gson;
 import omega.sleepy.controllers.ApiController;
-import omega.sleepy.dao.BlogDao;
-import omega.sleepy.util.MediaType;
 
-import static omega.sleepy.controllers.ApiController.*;
 import static spark.Spark.*;
 
 public class ApiRoutes {
     public static void init(){
 
-
-        get("api/style", ApiController::getStyleSheet);
-
-        get("/api/blog/tags", ApiController::getCategories);
-
-        post("/api/blog/content", ApiController::createBlog);
+        get("/api/style", ApiController::getStyleSheet);
 
         get("/favicon.ico", ApiController::getFavicon);
 
-        get("api/blog/basic_view", ApiController::getFilteredView);
-
+        //TODO rename to /api/blog/:id
         get("/api/posts/:id", ApiController::getBlogContentsById);
 
-        get("/api/blog/short_blogs", ApiController::getFilteredView);
-
+        //TODO rename to /api/blog/get-filtered-view/
         get("/api/filter/post/", ApiController::getFilteredView);
 
+        path("/api/blog", () ->{
+            //TODO deprecated, use /api/filer/post/
+            get("/basic_view", ApiController::getFilteredView);
+            //TODO rename to /api/blog/create
+            post("/content", ApiController::createBlog);
+            //TODO deprecated, use /api/filter/post/
+            get("/short_blogs", ApiController::getFilteredView);
+
+            get("/tags", ApiController::getCategories);
+        });
+
     }
-
-
-
 
 }
