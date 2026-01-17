@@ -56,11 +56,11 @@ public class BlogFilter {
 
         public Builder direction(String direction) {
             Direction directionValue;
-            if (direction == null) {
-                directionValue = Direction.ASC;
-            } else {
-                directionValue = Direction.valueOf(direction.toUpperCase());
-            }
+            if(direction == null) direction = "";
+            directionValue = switch (direction) {
+                case "oldest-first" ->  Direction.DESC;
+                default -> Direction.ASC;
+            };
             this.direction = directionValue;
             return this;
         }
