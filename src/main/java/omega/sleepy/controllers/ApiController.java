@@ -79,6 +79,7 @@ public class ApiController {
     }
 
     public static String getBlogById(Request request, Response response) {
+        response.type(MediaType.HTML.getValue());
         int id = Integer.parseInt(request.params(":id"));
         Blog blog = BlogService.getBlogById(id);
 

@@ -1,6 +1,7 @@
 package omega.sleepy.routes;
 
 
+import omega.sleepy.controllers.ApiController;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
@@ -27,26 +28,26 @@ public class PublicRoutes {
         resolver.setCacheable(false); // за разработка: true в продукция
         templateEngine.setTemplateResolver(resolver);
 
-        get("/", ((request, response) -> {
+        get("/", (request, response) -> {
             response.type(MediaType.HTML.getValue());
             return templateEngine.process("start", new Context());
-        }));
-
-        get("/create", (req,res) ->{
-
-            res.type(MediaType.HTML.getValue());
-            return templateEngine.process("create_blog", new Context());
-
         });
 
-        get("/home", ((request, response) -> {
+        get("/create", (req,res) ->{
+            res.type(MediaType.HTML.getValue());
+            return templateEngine.process("create_blog", new Context());
+        });
+
+        get("/home", (request, response) -> {
             response.type(MediaType.HTML.getValue());
             return templateEngine.process("home_blogs", new Context());
-        }));
+        });
 
-        get("blog/:id", (request, response) -> {
+        get("blog/:id", ApiController::getBlogById);
+
+        get("/404", (request, response) -> {
             response.type(MediaType.HTML.getValue());
-            return getBlogById(request, response);
+            return templateEngine.process("404", new Context());
         });
 
         Log.info("All public rouses initialized");
