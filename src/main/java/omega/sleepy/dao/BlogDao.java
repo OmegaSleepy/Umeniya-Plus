@@ -41,7 +41,7 @@ public class BlogDao {
         Log.error("Saving " + blog.toString());
         String addBlogSQL = FileUtil.readFile("/sql/blog/addBlog.sql");
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(addBlogSQL);
+             PreparedStatement preparedStatement = connection.prepareStatement(addBlogSQL)
         ) {
             preparedStatement.setString(1, blog.title());
             preparedStatement.setString(2, blog.tag());
@@ -120,10 +120,10 @@ public class BlogDao {
         );
     }
 
-    private static String getResultSetString(ResultSet rs, String coloumn) throws SQLException {
+    private static String getResultSetString(ResultSet rs, String column) {
         String string;
         try{
-            string = rs.getString(coloumn);
+            string = rs.getString(column);
         } catch (SQLException e) {
             string = "?";
         }

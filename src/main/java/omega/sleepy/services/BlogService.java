@@ -3,7 +3,6 @@ package omega.sleepy.services;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.util.BlogFilter;
-import omega.sleepy.util.Direction;
 
 import java.time.LocalTime;
 import java.util.ArrayList;

@@ -23,8 +23,8 @@ import static omega.sleepy.routes.PublicRoutes.templateEngine;
 
 public class ApiController {
 
-    private static JsonParser jsonParser = new JsonParser();
-    private static Gson gson = new Gson();
+    private static final JsonParser jsonParser = new JsonParser();
+    private static final Gson gson = new Gson();
 
     public static String getStyleSheet(Request request, Response response) {
         response.type("text/css");
