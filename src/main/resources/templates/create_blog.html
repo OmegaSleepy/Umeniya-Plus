@@ -85,6 +85,7 @@
     }
 
     // Toggle Preview Panel
+    //TODO just make the UI stay the same, but the preview must hide
     toggleBtn.addEventListener('click', () => {
         const isShowing = previewPanel.style.display === 'block';
 
@@ -138,7 +139,7 @@
         };
 
         try {
-            const response = await fetch("/api/blog/content", {
+            const response = await fetch("/api/blog/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
@@ -152,8 +153,6 @@
             alert("Failed to submit blog post.");
         }
     });
-
-    loadCategories();
 
     loadCategories();
 </script>

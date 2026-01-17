@@ -40,7 +40,7 @@
 
 <script>
     async function loadPost(id){
-        const res = await fetch(`/api/posts/${id}`);
+        const res = await fetch(`/api/blog/${id}`);
         const markdown = await res.text();
 
         marked.setOptions({

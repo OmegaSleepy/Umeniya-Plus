@@ -82,14 +82,14 @@
             category: category,
             order: orderBy
         });
-        loadStuff(`/api/filter/post/?${parameters.toString()}`)
+        loadStuff(`/api/blog/get-filtered-view/?${parameters.toString()}`)
     })
 
     document.getElementById("clear").addEventListener("click", function (){
         const category_select = document.getElementById("category");
         category_select.selectedIndex = category_select.options.length-1;
         document.getElementById("blog-name").value = '';
-        loadStuff(`/api/filter/post/`)
+        loadStuff(`/api/blog/get-filtered-view/`)
     })
 
     async function loadStuff(url) {
@@ -121,7 +121,7 @@
         }
     }
 
-    loadStuff("/api/blog/short_blogs");
+    loadStuff("/api/blog/get-filtered-view/");
     loadCategories();
 </script>
 </body>
