@@ -15,7 +15,6 @@ import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,8 @@ public class ApiController {
     private static JsonParser jsonParser = new JsonParser();
     private static Gson gson = new Gson();
 
-    public static String getStyleSheet(Response response) {
+    public static String getStyleSheet(Request request, Response response) {
+        response.type("text/css");
         try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/umeniyaStyleSheet.css")) {
             if (inputStream == null) {
                 response.status(404);
@@ -61,8 +61,12 @@ public class ApiController {
         return "";
     }
 
+    public static String getCategories(Request request, Response response) {
+        return gson.toJson(BlogDao.getCategories());
+    }
 
-    public static String createBlog(Request request) {
+
+    public static String createBlog(Request request, Response response) {
         JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
 
         String title = body.get("title").getAsString();
@@ -72,7 +76,7 @@ public class ApiController {
 
         boolean success = BlogService.saveBlog(title, category, excerpt, content);
 
-        return success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}";
+        return gson.toJson(success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}");
     }
 
     public static String getBlogById(Request request, Response response) {
@@ -121,7 +125,7 @@ public class ApiController {
 
         Log.exec("Queried for " + category + " '" + name + "'");
 
-        return (blogs);
+        return gson.toJson(blogs);
 
     }
 

@@ -11,27 +11,22 @@ import static spark.Spark.*;
 public class ApiRoutes {
     public static void init(){
 
-        Gson gson = new Gson();
 
-        get("api/style", (request, response) -> {
-            response.type("text/css");
+        get("api/style", ApiController::getStyleSheet);
 
-            return getStyleSheet(response);
-        });
+        get("/api/blog/tags", ApiController::getCategories);
 
-        get("/api/blog/tags", (request, response) -> BlogDao.getCategories(), gson::toJson);
-
-        post("/api/blog/content", (request, response) -> createBlog(request), gson::toJson);
+        post("/api/blog/content", ApiController::createBlog);
 
         get("/favicon.ico", ApiController::getFavicon);
 
-        get("api/blog/basic_view", (request, response) -> BlogDao.getBlogView(), gson::toJson);
+        get("api/blog/basic_view", ApiController::getFilteredView);
 
         get("/api/posts/:id", ApiController::getBlogContentsById);
 
-        get("/api/blog/short_blogs", (request, response) -> BlogDao.getBlogWithoutContents(), gson::toJson);
+        get("/api/blog/short_blogs", ApiController::getFilteredView);
 
-        get("/api/filter/post/", ApiController::getFilteredView, gson::toJson);
+        get("/api/filter/post/", ApiController::getFilteredView);
 
     }
 
