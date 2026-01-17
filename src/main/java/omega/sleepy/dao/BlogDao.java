@@ -67,7 +67,7 @@ public class BlogDao {
                 return getBlog(rs);
             }
         } catch (SQLException e) {
-            throw new MissingResource(e.getMessage());
+            return null;
         }
     }
 

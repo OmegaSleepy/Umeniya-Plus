@@ -6,13 +6,8 @@ import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import spark.Request;
-import spark.Response;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static omega.sleepy.controllers.ApiController.getBlog;
+import static omega.sleepy.controllers.ApiController.getBlogById;
 import static spark.Spark.*;
 
 public class PublicRoutes {
@@ -51,7 +46,7 @@ public class PublicRoutes {
 
         get("blog/:id", (request, response) -> {
             response.type(MediaType.HTML.getValue());
-            return getBlog(request, response);
+            return getBlogById(request, response);
         });
 
         Log.info("All public rouses initialized");

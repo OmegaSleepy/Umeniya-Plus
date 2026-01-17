@@ -59,7 +59,7 @@ public class ApiController {
     }
 
 
-    public static String saveBlog(Request request) {
+    public static String createBlog(Request request) {
         JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
 
         String title = body.get("title").getAsString();
@@ -72,25 +72,25 @@ public class ApiController {
         return success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}";
     }
 
-    public static String getBlog(Request request, Response response) {
-        Map<String, Object> model = new HashMap<>();
+    public static String getBlogById(Request request, Response response) {
+        int id = Integer.parseInt(request.params(":id"));
+        Blog blog = BlogService.getBlogById(id);
 
-        model.put("id", request.params(":id"));
-
-        try {
-            Blog blog = BlogDao.getBlogById(Integer.parseInt(request.params(":id")));
-            model.put("blog", blog);
-
-            Context context = new Context();
-            context.setVariables(model);
-
-            return templateEngine.process("blog_page", context);
-        } catch (Exception e) {
+        if(blog == null) {
             response.status(404);
             response.type(MediaType.JSON.getValue());
             response.redirect("/home");
             return "{\"status\":\"error\"}";
         }
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("id", request.params(":id"));
+        model.put("blog", blog);
+
+        Context context = new Context();
+        context.setVariables(model);
+        return templateEngine.process("blog_page", context);
+
     }
 
 

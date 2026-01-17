@@ -22,4 +22,8 @@ public class BlogService {
 
     }
 
+
+    public static Blog getBlogById(int id) {
+        return BlogDao.getBlogById(id);
+    }
 }
