@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Страницата не е намерена | Умения+</title>
+  <link rel="stylesheet" href="/api/style">
+  <style>
+    .error-container {
+      text-align: center;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+
+    .error-code {
+      font-size: 8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 0;
+      line-height: 1;
+      text-shadow: 2px 4px var(--tag-bg);
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      color: var(--text-dark);
+      margin-bottom: 30px;
+    }
+
+    .error-description {
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .illustration {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <a href="/" class="logo">Умения+</a>
+    <a href="/home" class="btn-create">Начална Страница</a>
+  </div>
+</header>
+
+<main id="holder">
+  <div class="article-container error-container">
+    <div class="illustration">🔍</div>
+    <h1 class="error-code">404</h1>
+    <p class="error-message">Опалянка! Страницата не съществува?!</p>
+    <br>
+    <hr>
+    <p class="error-description">
+      Както изглежда, нещо се обърка...
+      Прегледайте страницата, която се опитахте да отворите и опитайте отново.
+    </p>
+    <hr>
+
+    <div style="display: flex; gap: 15px;">
+      <a href="javascript:history.back()" class="btn-back">
+        ← Назад
+      </a>
+      <a href="/home" class="btn-create">Към Началото</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
