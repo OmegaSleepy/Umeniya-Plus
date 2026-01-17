@@ -48,8 +48,6 @@ public class BlogService {
 
     public static List<Blog> getBlogsByFilter(String name, String category, String order) {
 
-        if(order == null) order = "";
-        if(name == null) name = "";
         Direction orderDirection = order.equals("oldest-first") ? Direction.ASC : Direction.DESC;
 
         BlogFilter filter = new BlogFilter.Builder()

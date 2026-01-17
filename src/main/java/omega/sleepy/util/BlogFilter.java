@@ -1,5 +1,7 @@
 package omega.sleepy.util;
 
+import omega.sleepy.dao.BlogDao;
+
 public class BlogFilter {
 
     private final String title;
@@ -30,14 +32,17 @@ public class BlogFilter {
         private Direction direction;
 
         public Builder title(String title) {
+            if (title == null) title = "";
             this.title = title;
             return this;
         }
         public Builder category(String category) {
+            if (category == null) category = BlogDao.getDefaultCategory();
             this.category = category;
             return this;
         }
         public Builder direction(Direction direction) {
+            if (direction == null) direction = Direction.ASC;
             this.direction = direction;
             return this;
         }

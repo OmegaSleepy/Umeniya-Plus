@@ -22,7 +22,7 @@ public class BlogDao {
         return categories;
     }
 
-    public static String getAnyString(){
+    public static String getDefaultCategory(){
         return any;
     }
 
