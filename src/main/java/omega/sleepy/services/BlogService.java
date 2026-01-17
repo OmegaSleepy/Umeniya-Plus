@@ -46,14 +46,13 @@ public class BlogService {
         return filteredBlogs;
     }
 
-    public static List<Blog> getBlogsByFilter(String name, String category, String order) {
-
-        Direction orderDirection = order.equals("oldest-first") ? Direction.ASC : Direction.DESC;
+    public static List<Blog> getBlogsByFilter(String name, String category, String order, int page) {
 
         BlogFilter filter = new BlogFilter.Builder()
-                .direction(orderDirection)
+                .direction(order)
                 .title(name)
-                .category(category).build();
+                .category(category)
+                .page(page).build();
 
         return getBlogsByFilter(filter);
     }

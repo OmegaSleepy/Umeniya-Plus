@@ -131,24 +131,10 @@ public class BlogDao {
     }
 
 
-    public static Object getFilteredView(String category, String name, Direction orderDirection, int page) {
     public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
         List<Blog> blogList = new ArrayList<>();
 
-        String name = blogFilter.getTitle();
-        Direction orderDirection = blogFilter.getDirection();
-        String category = blogFilter.getCategory();
-
-        String order = orderDirection.toString().toLowerCase();
-
-        boolean isAny = category.equalsIgnoreCase(any);
-
-        StringBuilder sql = new StringBuilder("SELECT * FROM blogs where ");
-
-        if(!isAny) sql.append("tag = '%s' AND ".formatted(category));
-        sql.append("title like '%%%s%%' ".formatted(name));
-        sql.append("ORDER BY created_at %s ".formatted(order));
-        sql.append("LIMIT 15 OFFSET %d;".formatted(page*15));
+        StringBuilder sql = getSQLByBlogFilter(blogFilter);
 
         Log.info(sql.toString());
 
@@ -166,5 +152,24 @@ public class BlogDao {
             throw new RuntimeException(e);
         }
         return blogList;
+    }
+
+    private static @NotNull StringBuilder getSQLByBlogFilter(BlogFilter blogFilter) {
+        String name = blogFilter.getTitle();
+        Direction orderDirection = blogFilter.getDirection();
+        String category = blogFilter.getCategory();
+        int page = blogFilter.getPage();
+
+        String order = orderDirection.toString().toLowerCase();
+
+        boolean isAny = category.equalsIgnoreCase(any);
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM blogs where ");
+
+        if(!isAny) sql.append("tag = '%s' AND ".formatted(category));
+        sql.append("title like '%%%s%%' ".formatted(name));
+        sql.append("ORDER BY created_at %s ".formatted(order));
+        sql.append("LIMIT 15 OFFSET %d;".formatted(page*15));
+        return sql;
     }
 }

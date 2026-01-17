@@ -117,9 +117,11 @@ public class ApiController {
         String category = request.queryParams("category");
         String name = request.queryParams("name");
         String order = request.queryParams("order");
+        String pageString = request.queryParams("page");
 
+        int page = pageString == null ? 0 : Integer.parseInt(pageString);
 
-        List<Blog> blogs = BlogService.getBlogsByFilter(name, category, order);
+        List<Blog> blogs = BlogService.getBlogsByFilter(name, category, order, page);
 
         Log.exec("Queried for " + category + " '" + name + "'");
 
