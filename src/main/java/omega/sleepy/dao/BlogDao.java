@@ -1,7 +1,7 @@
 package omega.sleepy.dao;
 
 import omega.sleepy.data.Blog;
-import omega.sleepy.exceptions.MissingResource;
+import omega.sleepy.util.BlogFilter;
 import omega.sleepy.util.Direction;
 import omega.sleepy.util.FileUtil;
 import omega.sleepy.util.Log;
@@ -131,9 +131,12 @@ public class BlogDao {
     }
 
 
-    public static Object getBlogsByCategory(String category, String name, Direction orderDirection) {
+    public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
         List<Blog> blogList = new ArrayList<>();
-        //TODO fix this ugly spaghetti mess
+
+        String name = blogFilter.getTitle();
+        Direction orderDirection = blogFilter.getDirection();
+        String category = blogFilter.getCategory();
 
         String order = orderDirection.toString().toLowerCase();
 

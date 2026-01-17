@@ -23,26 +23,13 @@ public class ApiRoutes {
 
         post("/api/blog/content", (request, response) -> createBlog(request), gson::toJson);
 
-        get("/favicon.ico", (request, response) -> {
-            response.type(MediaType.ICON.getValue());
-            return getFavicon(response);
-        });
+        get("/favicon.ico", ApiController::getFavicon);
 
-        get("api/blog/basic_view", (request, response) -> {
-            response.type(MediaType.JSON.getValue());
-            return BlogDao.getBlogView();
-        }, gson::toJson);
+        get("api/blog/basic_view", (request, response) -> BlogDao.getBlogView(), gson::toJson);
 
-        get("/api/posts/:id", (request, response) -> {
-            response.type(MediaType.TXT.getValue());
+        get("/api/posts/:id", ApiController::getBlogContentsById);
 
-            return getBlogContentsById(request, response);
-        });
-
-        get("/api/blog/short_blogs", (request, response) -> {
-            response.type(MediaType.JSON.getValue());
-            return BlogDao.getBlogWithoutContents();
-        }, gson::toJson);
+        get("/api/blog/short_blogs", (request, response) -> BlogDao.getBlogWithoutContents(), gson::toJson);
 
         get("/api/filter/post/", ApiController::getFilteredView, gson::toJson);
 

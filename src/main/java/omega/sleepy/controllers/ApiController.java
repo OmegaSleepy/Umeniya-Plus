@@ -1,12 +1,12 @@
 package omega.sleepy.controllers;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.BlogService;
-import omega.sleepy.util.Direction;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.context.Context;
@@ -15,7 +15,9 @@ import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static omega.sleepy.routes.PublicRoutes.templateEngine;
@@ -23,6 +25,7 @@ import static omega.sleepy.routes.PublicRoutes.templateEngine;
 public class ApiController {
 
     private static JsonParser jsonParser = new JsonParser();
+    private static Gson gson = new Gson();
 
     public static String getStyleSheet(Response response) {
         try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/umeniyaStyleSheet.css")) {
@@ -37,7 +40,7 @@ public class ApiController {
         }
     }
 
-    public static Object getFavicon(Response response) {
+    public static Object getFavicon(Request request, Response response) {
         response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
 
@@ -95,39 +98,38 @@ public class ApiController {
 
 
     public static String getBlogContentsById(Request request, Response response) {
+        response.type(MediaType.TXT.getValue());
         var id = Integer.parseInt(request.params(":id"));
         String body = BlogService.getBlogBodyById(id);
 
         if(body == null) {
-            response.status(404);
-            response.type(MediaType.JSON.getValue());
-            response.redirect("/home");
-            return "{\"status\":\"error\"}";
+            return missingResource(response);
         }
 
         return body;
     }
-
+    //return List<Blog> with stripped contents
+    //use BlogDao filtered get always
     public static Object getFilteredView(Request request, Response response) {
+        response.type(MediaType.JSON.getValue());
         String category = request.queryParams("category");
         String name = request.queryParams("name");
         String order = request.queryParams("order");
 
-        Direction orderDirection = order.equals("oldest-first") ? Direction.ASC : Direction.DESC;
+
+        List<Blog> blogs = BlogService.getBlogsByFilter(name, category, order);
 
         Log.exec("Queried for " + category + " '" + name + "'");
 
-        if(name == null) name = "";
+        return (blogs);
 
-        if(category == null){
-            return BlogDao.getBlogWithoutContents();
-        }
+    }
 
-        if(BlogDao.getCategories().contains(category) && name.length()<32){
-            return BlogDao.getBlogsByCategory(category, name, orderDirection);
-        }
 
-        response.status(400);
-        return "Error";
+    private static String missingResource(Response response) {
+        response.status(404);
+        response.type(MediaType.JSON.getValue());
+        response.redirect("/404");
+        return "{\"status\":\"error\"}";
     }
 }
