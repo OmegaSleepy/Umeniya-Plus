@@ -10,7 +10,12 @@
 <header>
     <div class="header-container">
         <a href="/" class="logo">Умения+</a>
-        <a href="/create" class="btn-create">+ Създай Пост</a>
+        <div class="header-actions">
+            <button id="toggle-search-btn" class="btn-create" style="background-color: var(--text-light); margin-right: 10px;">
+                🔍 Филтри
+            </button>
+            <a href="/create" class="btn-create">+ Създай Пост</a>
+        </div>
     </div>
 </header>
 
@@ -32,19 +37,48 @@
     <input type="text" id="blog-name">
     <br>
 
-    <button id="show">
+    <button id="show" class="fancy-button">
         Потърси
     </button>
 
-    <button id="clear">
+    <button id="clear" class="fancy-button">
         Изчисти филтрите
     </button>
 </div>
 
-<div id="holder">
-</div>
+<div id="pagination-top" class="pagination-wrapper"></div>
+
+<div id="holder"></div>
+
+<div id="pagination-bottom" class="pagination-wrapper"></div>
 
 <script>
+    let currentPage = 0;
+
+    const searchSection = document.getElementById("search");
+    const toggleBtn = document.getElementById("toggle-search-btn");
+
+    searchSection.classList.add("hidden");
+
+
+    toggleBtn.addEventListener("click", function() {
+        const isHidden = searchSection.classList.toggle("hidden");
+        this.style.backgroundColor = !isHidden ? "var(--primary-color)" : "var(--text-light)";
+    });
+
+    document.getElementById("show").addEventListener("click", function(){
+        currentPage = 0;
+        triggerFetch();
+    });
+
+    document.getElementById("clear").addEventListener("click", function (){
+        const category_select = document.getElementById("category");
+        category_select.selectedIndex = category_select.options.length - 1;
+        document.getElementById("blog-name").value = '';
+        currentPage = 0;
+        triggerFetch();
+    });
+
 
     async function loadCategories() {
         try {
@@ -59,7 +93,7 @@
                 option.textContent = tag;
                 select.appendChild(option);
             });
-            select.selectedIndex = select.options.length-1;
+            select.selectedIndex = select.options.length - 1;
         } catch (err) {
             console.error("Error loading categories:", err);
         }
@@ -72,56 +106,89 @@
         return element;
     }
 
-    document.getElementById("show").addEventListener("click", function(){
-        const category = document.getElementById("category").value
-        const name = document.getElementById("blog-name").value
+    function triggerFetch() {
+        const category = document.getElementById("category").value;
+        const name = document.getElementById("blog-name").value;
         const orderBy = document.getElementById("order-by").value;
 
         const parameters = new URLSearchParams({
             name: name,
             category: category,
-            order: orderBy
+            order: orderBy,
+            page: currentPage
         });
-        loadStuff(`/api/blog/get-filtered-view/?${parameters.toString()}`)
-    })
-
-    document.getElementById("clear").addEventListener("click", function (){
-        const category_select = document.getElementById("category");
-        category_select.selectedIndex = category_select.options.length-1;
-        document.getElementById("blog-name").value = '';
-        loadStuff(`/api/blog/get-filtered-view/`)
-    })
+        loadStuff(`/api/blog/get-filtered-view/?${parameters.toString()}`);
+    }
 
     async function loadStuff(url) {
         try {
             const response = await fetch(url);
-            const select = document.getElementById("holder");
+            const holder = document.getElementById("holder");
             const data = await response.json();
 
-            select.replaceChildren();
+            holder.replaceChildren();
 
             data.forEach(element => {
                 const blog = document.createElement("div");
                 blog.classList.add("blog");
-
                 blog.style.cursor = "pointer";
-                blog.onclick = () => {
-                    window.location.href = `/blog/${element.id}`;
-                };
+                blog.onclick = () => { window.location.href = `/blog/${element.id}`; };
 
                 blog.append(
-                    createElement("h1", element.title,"blog-title"),
-                    createElement("p", element.tag,"blog-tag"),
-                    createElement("p", element.excerpt,"blog-excerpt")
-                )
-                select.append(blog);
-            })
+                    createElement("h1", element.title, "blog-title"),
+                    createElement("p", element.tag, "blog-tag"),
+                    createElement("p", element.excerpt, "blog-excerpt")
+                );
+                holder.append(blog);
+            });
+
+            renderPagination(data.length);
+
         } catch (err) {
             console.error("Failed to load blogs:", err);
         }
     }
 
-    loadStuff("/api/blog/get-filtered-view/");
+    function renderPagination(itemsCount) {
+        const containers = [
+            document.getElementById("pagination-top"),
+            document.getElementById("pagination-bottom")
+        ];
+
+        containers.forEach(container => {
+            if (!container) return;
+            container.innerHTML = "";
+
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "← Назад";
+            prevBtn.classList.add("nav-btn");
+            prevBtn.disabled = currentPage === 0;
+            prevBtn.onclick = () => {
+                currentPage--;
+                triggerFetch();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            const indicator = document.createElement("span");
+            indicator.textContent = `Страница ${currentPage + 1}`;
+            indicator.classList.add("current-page-display");
+
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Напред →";
+            nextBtn.classList.add("nav-btn");
+            nextBtn.disabled = itemsCount < 15;
+            nextBtn.onclick = () => {
+                currentPage++;
+                triggerFetch();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            container.append(prevBtn, indicator, nextBtn);
+        });
+    }
+
+    //init
+    loadStuff("/api/blog/get-filtered-view/?page=0");
     loadCategories();
 </script>
 </body>
