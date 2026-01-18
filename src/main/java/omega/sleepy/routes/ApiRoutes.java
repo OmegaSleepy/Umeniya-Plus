@@ -11,6 +11,8 @@ public class ApiRoutes {
 
         get("/favicon.ico", ApiController::getFavicon);
 
+        get("/favicon-logo.ico", ApiController::getFaviconLogo);
+
 
         path("/api/blog", () ->{
 
