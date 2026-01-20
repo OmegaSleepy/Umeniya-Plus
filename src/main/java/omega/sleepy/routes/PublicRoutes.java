@@ -7,8 +7,8 @@ import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import spark.Response;
 
-import static omega.sleepy.controllers.ApiController.getBlogById;
 import static spark.Spark.*;
 
 public class PublicRoutes {
@@ -28,27 +28,19 @@ public class PublicRoutes {
         resolver.setCacheable(false); // за разработка: true в продукция
         templateEngine.setTemplateResolver(resolver);
 
-        get("/", (request, response) -> {
-            response.type(MediaType.HTML.getValue());
-            return templateEngine.process("start", new Context());
-        });
+        get("/", (request, response) -> getSimpleTemplate("start", response));
 
-        get("/create", (req,res) ->{
-            res.type(MediaType.HTML.getValue());
-            return templateEngine.process("create_blog", new Context());
-        });
+        get("/create", (request,response) -> getSimpleTemplate("create_blog", response));
 
-        get("/home", (request, response) -> {
-            response.type(MediaType.HTML.getValue());
-            return templateEngine.process("home_blogs", new Context());
-        });
+        get("/home", (request, response) -> getSimpleTemplate("home_blogs", response));
 
         get("blog/:id", ApiController::getBlogById);
 
-        get("/404", (request, response) -> {
-            response.type(MediaType.HTML.getValue());
-            return templateEngine.process("404", new Context());
-        });
+        get("/404", (request, response) -> getSimpleTemplate("404", response));
+
+        get("/login", (request, response) -> getSimpleTemplate("login", response));
+
+        get("/register", (request, response) -> getSimpleTemplate("register", response));
 
         notFound((request, response) -> {
             response.redirect("/404");
@@ -57,6 +49,11 @@ public class PublicRoutes {
 
         Log.info("All public rouses initialized");
 
+    }
+
+    private static String getSimpleTemplate(String pageName, Response response){
+        response.type(MediaType.HTML.getValue());
+        return templateEngine.process(pageName, new Context());
     }
 
 
