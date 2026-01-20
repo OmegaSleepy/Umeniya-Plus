@@ -1,8 +1,8 @@
-CREATE TABLE if not exists USERS
+CREATE TABLE if not exists users
 (
     username TEXT PRIMARY KEY,
     password_hash TEXT,
-    role TEXT NOT NULL,
+    permittion_level TEXT NOT NULL,
     registrated_at TIMESTAMP,
     last_login TIMESTAMP
 )
