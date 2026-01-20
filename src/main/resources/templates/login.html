@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Впиши се</title>
+    <link rel="stylesheet" href="/api/style">
+    <style>
+        body {
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            box-sizing: border-box;
+        }
+
+        .auth-container h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .auth-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-container input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .auth-container input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            box-sizing: border-box;
+
+            font-family: var(--font-main);
+
+            height: 45px;
+
+            margin: 0;
+            display: block;
+            width: 100%;
+        }
+
+        #message {
+            display: block;
+            min-height: 20px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #dc3545;
+            text-align: center;
+        }
+
+        .auth-container .fancy-button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: var(--radius-md);
+            margin-top: 10px;
+        }
+
+        .auth-container .fancy-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .auth-container .fancy-button:active {
+            transform: translateY(0);
+        }
+
+        .auth-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div id="log-in-box" class="auth-container">
+    <h2>Вход в системата</h2>
+    <form action="/auth/credentials/log-in" method="post">
+        <div class="form-group">
+            <label for="username">Потребителско име</label>
+            <input id="username" name="username" type="text" placeholder="Въведете име..." required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Парола</label>
+            <input id="password" name="password" type="password" placeholder="••••••••" required>
+        </div>
+
+        <span id="message"></span> <button type="submit" class="fancy-button">Впиши се</button>
+    </form>
+
+    <div class="auth-footer">
+        Нямате профил? <a href="/register">Регистрирайте се</a>
+    </div>
+</div>
+
+</body>
+</html>
