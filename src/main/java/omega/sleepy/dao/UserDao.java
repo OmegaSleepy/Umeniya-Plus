@@ -1,5 +1,7 @@
 package omega.sleepy.dao;
 
+import omega.sleepy.exceptions.UserAlreadyExists;
+import omega.sleepy.exceptions.UserDoesNotExist;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.Log;
@@ -21,12 +23,11 @@ public class UserDao {
 
             return preparedStatement.executeQuery().getString(1);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
-
     }
 
-    public static boolean createUser(String username, String passwordHash){
+    public static void createUser(String username, String passwordHash){
         String sql = "INSERT into users values(?, ?, ?, ?, ?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)){
@@ -37,28 +38,25 @@ public class UserDao {
             preparedStatement.setString(5, LocalDateTime.now().toString());
 
             preparedStatement.execute();
-            Log.info("Created new user acc by - " + username); //TODO remove this and put it in /service
-            return true;
         } catch (SQLException e) {
-            return false;
+            throw new UserAlreadyExists("User by the same username %s already exists".formatted(username));
         }
     }
 
-    public static boolean deleteUser(String username){
+    public static void deleteUser(String username){
         String sql = "DELETE from users where username = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, username);
             preparedStatement.execute();
 
-            return true;
         } catch (SQLException e) {
-            return false;
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
 
     }
 
-    public static boolean changePassword(String username, String newPasswordHash){
+    public static void changePassword(String username, String newPasswordHash){
         String sql = "UPDATE users set password_hash = ? where username = ?";
         try (Connection connection = Database.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql))   {
@@ -67,14 +65,13 @@ public class UserDao {
             preparedStatement.setString(2, username);
 
             preparedStatement.execute();
-            return true;
 
         } catch (SQLException e) {
-            return false;
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
     }
 
-    public static boolean changeUserPrivalages(String username, PermittingLevel permittingLevel){
+    public static void changeUserPrivalages(String username, PermittingLevel permittingLevel){
         String sql = "UPDATE users set permittion_level = ? where username = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql))   {
@@ -83,37 +80,10 @@ public class UserDao {
             preparedStatement.setString(2, username);
 
             preparedStatement.execute();
-            return true;
 
         } catch (SQLException e) {
-            return false;
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
-    }
-
-    public static void main(String[] args) {
-        String username = "Martin";
-        String plainTextPass = "I-love-birds";
-        String hash = AuthService.hashPassword(plainTextPass);
-        if (createUser(username, hash)) {
-            Log.info("Successful profile creation");
-        } else {
-            Log.error("User already exists with the same username");
-        }
-        if(AuthService.isPasswordValid(username, plainTextPass)){
-            Log.info("Password is correct");
-        } else {
-            Log.error("Password is incorrect");
-        }
-        changeUserPrivalages("OmegaSleepy", PermittingLevel.ADMIN);
-
-        plainTextPass = "I-love-pigeons";
-        hash = AuthService.hashPassword(plainTextPass);
-        if(changePassword(username, hash)) {
-            Log.info("Successful password change for user %s".formatted(username));
-        } else {
-            Log.error("Unsuccessful password change for user %s".formatted(username));
-        }
-
     }
 
 }
