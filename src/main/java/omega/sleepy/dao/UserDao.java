@@ -99,7 +99,7 @@ public class UserDao {
         } else {
             Log.error("User already exists with the same username");
         }
-        if(AuthService.checkValidity(username, plainTextPass)){
+        if(AuthService.isPasswordValid(username, plainTextPass)){
             Log.info("Password is correct");
         } else {
             Log.error("Password is incorrect");
