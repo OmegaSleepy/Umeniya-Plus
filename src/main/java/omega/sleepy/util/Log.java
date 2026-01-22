@@ -11,17 +11,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Log {
 
     public static final String LOG_VERSION = "1.5.0";
-    public static int MAX_LOGS = 16;
+    public static final int MAX_LOGS = 16;
     public static final String LOG_DIR = "logs";
     public static final String CRASH_DIR = "crash";
     public static final String SUCCESSFUL_DIR = "regular";
 
 
-    public static String RESET = "\u001B[0m";
-    public static String GREEN = "\u001B[32m";
-    public static String BLUE = "\u001B[34m";
-    public static String YELLOW = "\u001B[33m";
-    public static String RED = "\u001B[31m";
+    private static final String RESET = "\u001B[0m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String BLUE = "\u001B[34m";
+    private static final String YELLOW = "\u001B[33m";
+    private static final String RED = "\u001B[31m";
 
 
     public static DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss:ms");
