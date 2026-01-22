@@ -10,7 +10,6 @@ public class BlogValidator {
         if(titleL > 64) return false;
         if(!BlogDao.getCategories().contains(blog.tag())) return false;
         if(blog.excerpt().length() > 64) return false;
-        if(blog.content().length() > 8000) return false;
-        return true;
+        return blog.content().length() <= 8000;
     }
 }
