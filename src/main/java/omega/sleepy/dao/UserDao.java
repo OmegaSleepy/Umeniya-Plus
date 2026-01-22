@@ -3,7 +3,7 @@ package omega.sleepy.dao;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.PermutationLevel;
+import omega.sleepy.util.PermittingLevel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +32,7 @@ public class UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, passwordHash);
-            preparedStatement.setString(3, PermutationLevel.USER.toString());
+            preparedStatement.setString(3, PermittingLevel.USER.toString());
             preparedStatement.setString(4, LocalDateTime.now().toString());
             preparedStatement.setString(5, LocalDateTime.now().toString());
 
@@ -74,12 +74,12 @@ public class UserDao {
         }
     }
 
-    public static boolean changeUserPrivalages(String username, PermutationLevel permutationLevel){
+    public static boolean changeUserPrivalages(String username, PermittingLevel permittingLevel){
         String sql = "UPDATE users set permittion_level = ? where username = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql))   {
 
-            preparedStatement.setString(1, permutationLevel.toString());
+            preparedStatement.setString(1, permittingLevel.toString());
             preparedStatement.setString(2, username);
 
             preparedStatement.execute();
@@ -104,7 +104,7 @@ public class UserDao {
         } else {
             Log.error("Password is incorrect");
         }
-        changeUserPrivalages("OmegaSleepy", PermutationLevel.ADMIN);
+        changeUserPrivalages("OmegaSleepy", PermittingLevel.ADMIN);
 
         plainTextPass = "I-love-pigeons";
         hash = AuthService.hashPassword(plainTextPass);
