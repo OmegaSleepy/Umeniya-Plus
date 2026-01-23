@@ -1,9 +1,11 @@
 package omega.sleepy.validation;
 
+import omega.sleepy.util.Log;
+
 public class UserValidator {
 
     public static final int MIN_ALPHANUMERICAL = 6;
-    public static final int MIN_SPECIAL = 2;
+    public static final int MIN_SPECIAL = 1;
     public static final int MIN_NUMBER = 2;
     public static final int MIN_LENGTH = 12;
 
@@ -23,6 +25,10 @@ public class UserValidator {
                 specials++;
             }
         }
+        //TODO return those as throwables
+        if(letters < MIN_ALPHANUMERICAL) Log.error("Too little alphanumerical");
+        if(digits < MIN_NUMBER) Log.error("Too little digits");
+        if(specials < MIN_SPECIAL) Log.error("Too little special characters");
 
         return letters >= MIN_ALPHANUMERICAL &&
                 digits >= MIN_NUMBER &&

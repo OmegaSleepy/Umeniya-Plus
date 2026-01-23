@@ -1,8 +1,6 @@
 package omega.sleepy.controllers;
 
 import omega.sleepy.exceptions.MalformedPassword;
-import omega.sleepy.services.AuthService;
-import omega.sleepy.util.Log;
 import spark.Request;
 import spark.Response;
 
@@ -15,6 +13,8 @@ public class AuthController {
         String username = request.queryParams("username");
 
         createUser(username, password);
+
+        //return profile cookie
 
         return "";
     }
