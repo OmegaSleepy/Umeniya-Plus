@@ -12,26 +12,30 @@ import static omega.sleepy.validation.UserValidator.*;
 
 public class AuthService {
 	
-	public static boolean isPasswordValid(String username, String plainTextPassword){
+	private static boolean isPasswordInvalid(String username, String plainTextPassword){
 		String passwordHash = UserDao.getPasswordHashFromUsername(username);
-		return BCrypt.checkpw(plainTextPassword, passwordHash);
+		return !BCrypt.checkpw(plainTextPassword, passwordHash);
 	}
 
 	public static void changePassword(String username, String newPasswordPT, String oldPasswordPT) throws InvalidPassword, MalformedPassword, InvalidParameterException{
 		if(username.equals(newPasswordPT)) throw new InvalidParameterException("New and Old password match");
-		if(!isPasswordValid(username, oldPasswordPT)) throw new InvalidPassword("Old password is not correct");
-		if(!isPasswordFormatValid(newPasswordPT)) throw new MalformedPassword("New password does not have correct format");
+		if(isPasswordInvalid(username, oldPasswordPT)) throw new InvalidPassword("Old password is not correct");
+		if(isPasswordFormatInvalid(newPasswordPT)) throw new MalformedPassword("New password does not have correct format");
 
 		UserDao.changePassword(username, hashPassword(newPasswordPT));
 	}
 
 	public static void deleteProfile(String username, String plainTextPassword) throws InvalidPassword{
-		if(!isPasswordValid(username, plainTextPassword)) throw new InvalidPassword("Password is not correct");
+		if(isPasswordInvalid(username, plainTextPassword)) throw new InvalidPassword("Password is not correct");
 		UserDao.deleteUser(username);
 	}
 
+	public static void login(String username, String plainTextPassword) throws InvalidPassword{
+		if(isPasswordInvalid(username, plainTextPassword)) throw new InvalidPassword("Password is not correct");
+	}
+
 	public static void createUser(String username, String plainTextPassword) throws MalformedPassword{
-		if(!isPasswordFormatValid(plainTextPassword)) throw new MalformedPassword("Password format is not correct");
+		if(isPasswordFormatInvalid(plainTextPassword)) throw new MalformedPassword("Password format is not correct");
 		UserDao.createUser(username, hashPassword(plainTextPassword));
 		Log.exec("Created a new userprofile by %s".formatted(username));
 	}
