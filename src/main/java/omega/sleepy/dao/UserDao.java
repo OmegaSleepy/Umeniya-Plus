@@ -2,7 +2,6 @@ package omega.sleepy.dao;
 
 import omega.sleepy.exceptions.UserAlreadyExists;
 import omega.sleepy.exceptions.UserDoesNotExist;
-import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.PermittingLevel;
@@ -86,4 +85,31 @@ public class UserDao {
         }
     }
 
+    public static void addSession(String token, String username, long expiration){
+        String sql = "INSERT into sessions (token, username, expires_at) values (?, ?, ?)";
+        try (Connection connection = Database.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, token);
+            preparedStatement.setString(2, username);
+            preparedStatement.setLong(3, expiration);
+
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeSession(String token) {
+        String sql = "DELETE from sessions where token = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, token);
+            preparedStatement.execute();
+            Log.info("Removed session with UUID " + token);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
