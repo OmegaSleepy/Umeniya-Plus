@@ -33,10 +33,12 @@ public class Database {
         Log.info("Database initializing...");
         String blogSchema = readFile("/sql/schema/blogSchema.sql");
         String userSchema = readFile("/sql/schema/userSchema.sql");
+        String sessionSchema = readFile("/sql/schema/userSessions.sql");
         //...
 
         executeSQL(blogSchema);
         executeSQL(userSchema);
+        executeSQL(sessionSchema);
 
     }
 
