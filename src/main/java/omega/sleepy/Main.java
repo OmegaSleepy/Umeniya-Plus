@@ -3,6 +3,8 @@ package omega.sleepy;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.routes.RouteMain;
 import omega.sleepy.util.Database;
+import omega.sleepy.util.Log;
+import spark.Spark;
 
 import static spark.Spark.*;
 
@@ -16,5 +18,9 @@ public class Main {
         BlogDao.init();
         Database.initDatabase();
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Log.exec("Shutting down server...");
+            Spark.stop();
+        }));
     }
 }
