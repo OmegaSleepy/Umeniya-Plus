@@ -1,8 +1,11 @@
 package omega.sleepy.services;
 
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.Blog;
+import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.util.BlogFilter;
+import omega.sleepy.util.Log;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,4 +58,20 @@ public class BlogService {
 
         return getBlogsByFilter(filter);
     }
+
+    public static void validateToken(String token) throws InvalidCredentials{
+        if (token == null) {
+            Log.warn("No token!");
+            Log.warn("No cookie!");
+            throw new InvalidCredentials("No token, No cookie");
+        }
+        Log.info(token);
+        if(UserDao.containsToken(token)) {
+            Log.info("Valid session");
+        } else {
+            Log.warn("Invalid session");
+            throw new InvalidCredentials("Token either expired or is no valid");
+        }
+    }
+
 }
