@@ -1,6 +1,7 @@
 package omega.sleepy;
 
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.dao.UserDao;
 import omega.sleepy.routes.RouteMain;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.Log;
@@ -16,7 +17,9 @@ public class Main {
 
         RouteMain.init();
         BlogDao.init();
+        UserDao.deleteOldTokens();
         Database.initDatabase();
+
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Log.exec("Shutting down server...");
