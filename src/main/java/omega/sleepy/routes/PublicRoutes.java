@@ -2,6 +2,7 @@ package omega.sleepy.routes;
 
 
 import omega.sleepy.controllers.ApiController;
+import omega.sleepy.controllers.AuthController;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
@@ -41,6 +42,10 @@ public class PublicRoutes {
         get("/login", (request, response) -> getSimpleTemplate("login", response));
 
         get("/register", (request, response) -> getSimpleTemplate("register", response));
+
+        get("/dashboard", AuthController::dashboard);
+
+        get("/logout", AuthController::logout);
 
         notFound((request, response) -> {
             response.redirect("/404");

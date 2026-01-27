@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.UserDao;
+import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
 import omega.sleepy.exceptions.MalformedPassword;
-import omega.sleepy.services.AuthService;
-import org.eclipse.jetty.util.ajax.JSON;
+import omega.sleepy.exceptions.UserAlreadyExists;
+import omega.sleepy.util.Log;
+import omega.sleepy.util.MediaType;
 import spark.Request;
 import spark.Response;
 
@@ -17,11 +19,13 @@ import java.util.UUID;
 
 import static omega.sleepy.services.AuthService.createUser;
 import static omega.sleepy.services.AuthService.login;
+import static omega.sleepy.services.BlogService.validateToken;
 
 public class AuthController {
 
     private static final JsonParser jsonParser = new JsonParser();
     private static final Gson gson = new Gson();
+    private static final String AUTH_COOKIE = "auth_cookie";
 
     public static String logIn(Request request, Response response){
         String password = request.queryParams("password");
@@ -29,11 +33,7 @@ public class AuthController {
 
         try{
             login(username,password);
-            String token = UUID.randomUUID().toString();
-            long expiration = Instant.now().plus(Duration.ofDays(7)).getEpochSecond();
-
-            UserDao.addSession(token, username, expiration);
-            response.cookie("auth_cookie", token,60*60*24*7, false, true);
+            generateCookie(response, username);
 
             response.redirect("/home");
 
@@ -45,15 +45,37 @@ public class AuthController {
         return "";
     }
 
+    private static void generateCookie(Response response, String username) {
+        String token = UUID.randomUUID().toString();
+        long expiration = Instant.now().plus(Duration.ofDays(7)).getEpochSecond();
+
+        UserDao.addSession(token, username, expiration);
+        response.cookie("/", AUTH_COOKIE, token,60*60*24*7, false, true);
+    }
+
     public static String signUp(Request request, Response response){
 
         JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
         String password = body.get("password").getAsString();
         String username = body.get("username").getAsString();
 
+        String token = request.cookie(AUTH_COOKIE);
+
+        //TODO move this to the register public route
+        if (token != null) {
+            try{
+                validateToken(token);
+                response.redirect("/home");
+            } catch (InvalidCredentials e) {
+                response.removeCookie(AUTH_COOKIE);
+                Log.error(e.getMessage());
+            }
+        }
+
         try{
             createUser(username, password);
-        } catch (MalformedPassword e) {
+            generateCookie(response, username);
+        } catch (MalformedPassword | UserAlreadyExists e) {
             response.status(400);
             return e.getMessage();
         }
@@ -62,14 +84,26 @@ public class AuthController {
     }
 
     public static String logout(Request request, Response response) {
-        String token = request.cookie("auth_cookie");
+        String token = request.cookie(AUTH_COOKIE);
 
         if (token != null) {
             UserDao.removeSession(token);
-            response.removeCookie("auth_cookie");
+            response.removeCookie(AUTH_COOKIE);
         }
 
         response.redirect("/");
         return null;
+    }
+
+    public static String dashboard(Request request, Response response) {
+        response.type(MediaType.TXT.getValue());
+        String token = request.cookie(AUTH_COOKIE);
+        try {
+            validateToken(token);
+            return "Valid";
+        } catch (InvalidCredentials e) {
+            Log.error(e.getMessage());
+            return e.getMessage();
+        }
     }
 }
