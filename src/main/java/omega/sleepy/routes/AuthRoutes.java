@@ -9,9 +9,9 @@ public class AuthRoutes {
         path("/auth/credentials/", () ->{
             post("/log-in", AuthController::logIn);
             post("/sign-up", AuthController::signUp);
-            post("/logout",AuthController::logout);
         });
 
+        post("/auth/logout",AuthController::logout);
 
     }
 }

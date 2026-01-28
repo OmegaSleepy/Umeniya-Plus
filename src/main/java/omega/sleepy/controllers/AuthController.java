@@ -25,7 +25,7 @@ public class AuthController {
 
     private static final JsonParser jsonParser = new JsonParser();
     private static final Gson gson = new Gson();
-    private static final String AUTH_COOKIE = "auth_cookie";
+    public static final String AUTH_COOKIE = "auth_cookie";
 
     public static String logIn(Request request, Response response){
         String password = request.queryParams("password");
@@ -36,7 +36,6 @@ public class AuthController {
             generateCookie(response, username);
 
             response.redirect("/home");
-
         } catch (InvalidPassword e) {
             response.status(401);
             return "";
@@ -48,6 +47,7 @@ public class AuthController {
     private static void generateCookie(Response response, String username) {
         String token = UUID.randomUUID().toString();
         long expiration = Instant.now().plus(Duration.ofDays(7)).getEpochSecond();
+        Log.exec("Generated session with token " + token);
 
         UserDao.addSession(token, username, expiration);
         response.cookie("/", AUTH_COOKIE, token,60*60*24*7, false, true);
@@ -59,18 +59,7 @@ public class AuthController {
         String password = body.get("password").getAsString();
         String username = body.get("username").getAsString();
 
-        String token = request.cookie(AUTH_COOKIE);
 
-        //TODO move this to the register public route
-        if (token != null) {
-            try{
-                validateToken(token);
-                response.redirect("/home");
-            } catch (InvalidCredentials e) {
-                response.removeCookie(AUTH_COOKIE);
-                Log.error(e.getMessage());
-            }
-        }
 
         try{
             createUser(username, password);
