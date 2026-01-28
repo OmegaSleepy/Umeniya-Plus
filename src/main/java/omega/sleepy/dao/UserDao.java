@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+import static omega.sleepy.util.Log.error;
+
 public class UserDao {
     public static String getPasswordHashFromUsername(String username) {
         String sql = "SELECT password_hash from users where username = ?";
@@ -121,11 +123,16 @@ public class UserDao {
             preparedStatement.setString(1, token);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return resultSet.getString("token").equals(token);
+                String dBToken = resultSet.getString("token");
+                if (dBToken != null) {
+                    return dBToken.equals(token);
+                }
+                return false;
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            error(e.getMessage());
+	    return false;
         }
     }
 
@@ -152,4 +159,4 @@ public class UserDao {
             throw new RuntimeException(e);
         }
     }
-    }
+}
