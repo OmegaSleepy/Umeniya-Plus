@@ -3,6 +3,7 @@ package omega.sleepy.routes;
 
 import omega.sleepy.controllers.ApiController;
 import omega.sleepy.controllers.AuthController;
+import omega.sleepy.controllers.PublicController;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.TemplateEngine;
@@ -22,11 +23,11 @@ public class PublicRoutes {
         templateEngine = new TemplateEngine();
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-        resolver.setPrefix("/templates/");   // път в resources
+        resolver.setPrefix("/templates/");
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML");
         resolver.setCharacterEncoding("UTF-8");
-        resolver.setCacheable(false); // за разработка: true в продукция
+        resolver.setCacheable(false); //to true in prod
         templateEngine.setTemplateResolver(resolver);
 
         get("/", (request, response) -> getSimpleTemplate("start", response));
@@ -39,13 +40,15 @@ public class PublicRoutes {
 
         get("/404", (request, response) -> getSimpleTemplate("404", response));
 
-        get("/login", (request, response) -> getSimpleTemplate("login", response));
+        get("/login", PublicController::loginInterface);
 
-        get("/register", (request, response) -> getSimpleTemplate("register", response));
+        get("/register", PublicController::register);
 
-        get("/dashboard", AuthController::dashboard);
+        redirect.get("/signup", "/register");
 
-        get("/logout", AuthController::logout);
+        get("/dashboard", AuthController::dashboard); //PublicController::dashboard
+
+        get("/logout", (request, response) -> getSimpleTemplate("logout", response));
 
         notFound((request, response) -> {
             response.redirect("/404");
@@ -56,10 +59,9 @@ public class PublicRoutes {
 
     }
 
-    private static String getSimpleTemplate(String pageName, Response response){
+    public static String getSimpleTemplate(String pageName, Response response){
         response.type(MediaType.HTML.getValue());
         return templateEngine.process(pageName, new Context());
     }
-
 
 }
