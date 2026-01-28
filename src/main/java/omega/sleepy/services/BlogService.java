@@ -70,7 +70,7 @@ public class BlogService {
             Log.info("Valid session");
         } else {
             Log.warn("Invalid session");
-            throw new InvalidCredentials("Token either expired or is no valid");
+            throw new InvalidCredentials("Token either expired or is not valid");
         }
     }
 

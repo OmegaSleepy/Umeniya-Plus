@@ -39,9 +39,9 @@ public class BlogDao {
 
     public static void addBlog(Blog blog) {
         Log.error("Saving " + blog.toString());
-        String addBlogSQL = FileUtil.readFile("/sql/blog/addBlog.sql");
+	String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values ?, ?, ?, ?, ?, ?";
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(addBlogSQL)
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, blog.title());
             preparedStatement.setString(2, blog.tag());
