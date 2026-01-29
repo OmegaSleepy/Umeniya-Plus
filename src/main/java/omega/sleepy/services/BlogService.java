@@ -17,10 +17,12 @@ import static omega.sleepy.validation.BlogValidator.isValidBlog;
 
 public class BlogService {
 
-    public static boolean saveBlog(String title, String category, String excerpt, String content) {
+    public static boolean saveBlog(String title, String category, String excerpt, String content, String creator) {
         if(category.equalsIgnoreCase("Any")) category = "None";
 
-        Blog blog = new Blog(0, title,category,excerpt,content, "None", LocalDateTime.now().toString());
+        Blog blog = new Blog(0, title, category, excerpt, content, creator, LocalDateTime.now().toString());
+
+        Log.info(blog.toString());
 
         if(isValidBlog(blog)) {
             BlogDao.addBlog(blog);

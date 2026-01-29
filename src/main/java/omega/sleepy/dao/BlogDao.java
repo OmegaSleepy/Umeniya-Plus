@@ -39,7 +39,7 @@ public class BlogDao {
 
     public static void addBlog(Blog blog) {
         Log.error("Saving " + blog.toString());
-	String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values ?, ?, ?, ?, ?, ?";
+	String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values (?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {

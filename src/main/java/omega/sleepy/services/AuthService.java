@@ -34,6 +34,10 @@ public class AuthService {
 		if(isPasswordInvalid(username, plainTextPassword)) throw new InvalidPassword("Password is not correct");
 	}
 
+	public static String getUsernameByToken(String token){
+		return UserDao.usernameFromToken(token);
+	}
+
 	public static void createUser(String username, String plainTextPassword) throws MalformedPassword{
 		if(isPasswordFormatInvalid(plainTextPassword)) throw new MalformedPassword("Password format is not correct");
 		UserDao.createUser(username, hashPassword(plainTextPassword));

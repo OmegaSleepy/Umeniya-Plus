@@ -13,6 +13,8 @@ public class ApiRoutes {
 
         get("/favicon-logo.ico", ApiController::getFaviconLogo);
 
+        get("/user/info", ApiController::getUserInformation);
+
 
         path("/api/blog", () ->{
 

@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.Blog;
+import omega.sleepy.dto.UserRequestDTO;
+import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.routes.ApiRoutes;
+import omega.sleepy.services.AuthService;
 import omega.sleepy.services.BlogService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
@@ -14,12 +18,14 @@ import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
+import java.awt.desktop.UserSessionEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static omega.sleepy.routes.PublicRoutes.templateEngine;
+import static omega.sleepy.services.BlogService.validateToken;
 
 public class ApiController {
 
@@ -88,12 +94,26 @@ public class ApiController {
     public static String createBlog(Request request, Response response) {
         JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
 
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+
+        if (token == null) {
+            return missingResource(response);
+        }
+
+        try{
+            validateToken(token);
+        } catch (InvalidCredentials e) {
+            return missingResource(response);
+        }
+
+        String author = UserDao.usernameFromToken(token);
+
         String title = body.get("title").getAsString();
         String category = body.get("category").getAsString();
         String excerpt = body.get("excerpt").getAsString();
         String content = body.get("content").getAsString();
 
-        boolean success = BlogService.saveBlog(title, category, excerpt, content);
+        boolean success = BlogService.saveBlog(title, category, excerpt, content, author);
 
         return gson.toJson(success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}");
     }
@@ -150,7 +170,6 @@ public class ApiController {
 
     }
 
-
     private static String missingResource(Response response) {
         response.status(404);
         response.type(MediaType.JSON.getValue());
@@ -159,4 +178,15 @@ public class ApiController {
     }
 
 
+    public static String getUserInformation(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+
+        if (token == null) {
+            return missingResource(response);
+        }
+
+        String username = AuthService.getUsernameByToken(token);
+
+        return gson.toJson(new UserRequestDTO(username));
+    }
 }

@@ -59,8 +59,6 @@ public class AuthController {
         String password = body.get("password").getAsString();
         String username = body.get("username").getAsString();
 
-
-
         try{
             createUser(username, password);
             generateCookie(response, username);
