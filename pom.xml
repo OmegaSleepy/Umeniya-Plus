@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>omega.sleepy</groupId>
-    <artifactId>Server-Final</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>Umeniya-Plusl</artifactId>
+    <version>6.7</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
