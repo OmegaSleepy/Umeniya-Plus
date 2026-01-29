@@ -27,8 +27,7 @@ public class Log {
     public static DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss:ms");
     public static DateTimeFormatter FILE = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 
-    private Log () {
-    }
+    private Log () {}
 
     private static final List<String> buffer = Collections.synchronizedList(new ArrayList<>());
 
@@ -85,6 +84,12 @@ public class Log {
         message = message.replace(RED, "[ERROR] ");
 
         return message;
+    }
+
+    public static void writeoutBuffer(){
+	
+	
+
     }
 
 
