@@ -16,7 +16,12 @@
             </button>
             <a href="/create" class="btn-create">+ Създай Пост</a>
         </div>
-        <img src="/favicon-logo.ico" alt="Website Logo" style="max-height: 40px; max-width: 40px;">
+        <div class="userInformation" style="display: flex">
+            <label for="profile-icon" id="username" style="margin: 10px">
+                Not Signed In
+            </label>
+            <img id="profile-icon" src="/favicon-logo.ico" alt="Website Logo" style="max-height: 40px; max-width: 40px;">
+        </div>
     </div>
 </header>
 
@@ -137,6 +142,7 @@
 
                 blog.append(
                     createElement("h1", element.title, "blog-title"),
+                    createElement("p", "от " + element.creator, "blog-creator"),
                     createElement("p", element.tag, "blog-tag"),
                     createElement("p", element.excerpt, "blog-excerpt")
                 );
@@ -188,9 +194,17 @@
         });
     }
 
+    async function loadUserInformation(){
+        const username = document.getElementById("username");
+        const response = await fetch("/user/info");
+        const userInformation = await response.json();
+        username.innerText = userInformation.username;
+    }
+
     //init
     loadStuff("/api/blog/get-filtered-view/?page=0");
     loadCategories();
+    loadUserInformation();
 </script>
 </body>
 </html>
