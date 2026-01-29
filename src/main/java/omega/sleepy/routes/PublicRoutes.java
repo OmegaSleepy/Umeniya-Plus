@@ -30,13 +30,15 @@ public class PublicRoutes {
         resolver.setCacheable(false); //to true in prod
         templateEngine.setTemplateResolver(resolver);
 
+        after((req, res) -> Log.info("Matched: " + req.pathInfo()));
+
         get("/", (request, response) -> getSimpleTemplate("start", response));
 
         get("/create", PublicController::createBlog);
 
         get("/home", (request, response) -> getSimpleTemplate("home_blogs", response));
 
-        get("blog/:id", ApiController::getBlogById);
+        get("/blog/:id", ApiController::getBlogById);
 
         get("/404", (request, response) -> getSimpleTemplate("404", response));
 
@@ -50,10 +52,16 @@ public class PublicRoutes {
 
         get("/logout", (request, response) -> getSimpleTemplate("logout", response));
 
+        get("/user/:username", PublicController::userProfile);
+
+        get("/me", PublicController::thisUserProfile);
+
         notFound((request, response) -> {
             response.redirect("/404");
             return null;
         });
+
+
 
         Log.info("All public rouses initialized");
 
