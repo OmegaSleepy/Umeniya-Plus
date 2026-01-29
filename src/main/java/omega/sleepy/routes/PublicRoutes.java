@@ -32,7 +32,7 @@ public class PublicRoutes {
 
         get("/", (request, response) -> getSimpleTemplate("start", response));
 
-        get("/create", (request,response) -> getSimpleTemplate("create_blog", response));
+        get("/create", PublicController::createBlog);
 
         get("/home", (request, response) -> getSimpleTemplate("home_blogs", response));
 

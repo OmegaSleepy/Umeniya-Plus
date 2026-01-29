@@ -34,4 +34,24 @@ public class PublicController {
         }
     }
 
+    public static String createBlog(Request request, Response response) {
+        String token = request.cookie(AUTH_COOKIE);
+
+        if (token == null) {
+            response.status(403);
+            response.redirect("/login");
+            return null;
+        }
+
+        try {
+            validateToken(token);
+        } catch (InvalidCredentials e) {
+            response.status(403);
+            response.redirect("/login");
+            return null;
+        }
+
+
+        return getSimpleTemplate("create_blog", response);
+    }
 }
