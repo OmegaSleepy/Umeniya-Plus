@@ -5,7 +5,7 @@ public enum MediaType {
     JSON("application/json"),
     PNG("image/png"),
     JPG("image/jpeg"),
-    SVG("imagee/svg+xml"),
+    SVG("image/svg+xml"),
     MP3("audio/mpeg"),
     WAV("audio/wav"),
     OGG("audio/ogg"),
