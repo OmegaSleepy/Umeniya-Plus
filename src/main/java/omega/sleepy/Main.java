@@ -14,8 +14,8 @@ public class Main {
         ipAddress("0.0.0.0");
         port(4567);
         staticFileLocation("/public");
-	
-	Log.info("Initializing System Logic");
+
+        Log.info("Initializing System Logic");
 
         RouteMain.init();
         BlogDao.init();

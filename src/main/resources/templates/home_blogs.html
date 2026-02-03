@@ -20,7 +20,7 @@
             <label for="profile-icon" id="username" style="margin: 10px">
                 Not Signed In
             </label>
-            <img id="profile-icon" src="/favicon-logo.ico" alt="Website Logo" style="max-height: 40px; max-width: 40px;">
+            <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon" style="max-height: 40px; max-width: 40px;">
         </div>
     </div>
 </header>
@@ -196,9 +196,12 @@
 
     async function loadUserInformation(){
         const username = document.getElementById("username");
-        const response = await fetch("/user/info");
+        const response = await fetch("/api/user/me-info");
         const userInformation = await response.json();
         username.innerText = userInformation.username;
+
+        const profileIcon = document.getElementById("profile-icon");
+        profileIcon.src = "/api/profile-icon/" + userInformation.icon + ".svg";
     }
 
     //init
