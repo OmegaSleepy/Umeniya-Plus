@@ -11,6 +11,7 @@ import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.services.BlogService;
+import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import org.thymeleaf.context.Context;
@@ -18,8 +19,8 @@ import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
-import java.awt.desktop.UserSessionEvent;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,28 @@ public class ApiController {
         }
 
         return "";
+    }
+
+    public static Object getIcon(Request request, Response response){
+        response.type(MediaType.SVG.getValue());
+        response.header("Cache-Control", "public, max-age=604800"); // 1 week
+        String icon = request.params("icon");
+        Log.info(icon);
+        if (icon == null) {
+            return missingResource(response);
+        }
+        var iconBytes = ProfileService.getProfileIcon(icon);
+        Log.info(Arrays.toString(iconBytes));
+        if (iconBytes == null) {
+            return missingResource(response);
+        }
+        try {
+            response.raw().getOutputStream().write(iconBytes);
+            response.raw().getOutputStream().flush();
+            return "";
+        } catch (IOException e) {
+            return missingResource(response);
+        }
     }
 
     public static String getCategories(Request request, Response response) {
@@ -171,6 +194,7 @@ public class ApiController {
     }
 
     private static String missingResource(Response response) {
+        Log.error("something happened HERE \n" + response.raw());
         response.status(404);
         response.type(MediaType.JSON.getValue());
         response.redirect("/404");
@@ -179,6 +203,7 @@ public class ApiController {
 
 
     public static String getUserInformation(Request request, Response response) {
+        Log.info("HELLO I GOT PINGED MATE");
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
         if (token == null) {
@@ -186,7 +211,8 @@ public class ApiController {
         }
 
         String username = AuthService.getUsernameByToken(token);
+        response.type(MediaType.JSON.getValue());
 
-        return gson.toJson(new UserRequestDTO(username));
+        return gson.toJson(new UserRequestDTO(username, "agent_svgrepo"));
     }
 }

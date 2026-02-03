@@ -5,7 +5,7 @@ import omega.sleepy.controllers.ApiController;
 import static spark.Spark.*;
 
 public class ApiRoutes {
-    public static void init(){
+    public static void init() {
 
         get("/api/style", ApiController::getStyleSheet);
 
@@ -13,10 +13,11 @@ public class ApiRoutes {
 
         get("/favicon-logo.ico", ApiController::getFaviconLogo);
 
-        get("/user/info", ApiController::getUserInformation);
+        get("/api/user/me-info", ApiController::getUserInformation);
 
+        get("/api/profile-icon/:icon", ApiController::getIcon);
 
-        path("/api/blog", () ->{
+        path("/api/blog", () -> {
 
             post("/create", ApiController::createBlog);
 
