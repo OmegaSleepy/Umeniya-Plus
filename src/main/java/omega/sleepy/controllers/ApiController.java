@@ -2,7 +2,6 @@ package omega.sleepy.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.Blog;
@@ -14,13 +13,13 @@ import omega.sleepy.services.BlogService;
 import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
+import omega.sleepy.util.ProfileIcons;
 import org.thymeleaf.context.Context;
 import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ import static omega.sleepy.services.BlogService.validateToken;
 
 public class ApiController {
 
-    private static final JsonParser jsonParser = new JsonParser();
     private static final Gson gson = new Gson();
 
     public static String getStyleSheet(Request request, Response response) {
@@ -91,12 +89,10 @@ public class ApiController {
         response.type(MediaType.SVG.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
         String icon = request.params("icon");
-        Log.info(icon);
         if (icon == null) {
             return missingResource(response);
         }
         var iconBytes = ProfileService.getProfileIcon(icon);
-        Log.info(Arrays.toString(iconBytes));
         if (iconBytes == null) {
             return missingResource(response);
         }
@@ -115,7 +111,7 @@ public class ApiController {
 
 
     public static String createBlog(Request request, Response response) {
-        JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
+        JsonObject body = gson.fromJson(request.body(), JsonObject.class);
 
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
@@ -203,7 +199,6 @@ public class ApiController {
 
 
     public static String getUserInformation(Request request, Response response) {
-        Log.info("HELLO I GOT PINGED MATE");
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
         if (token == null) {
@@ -212,7 +207,11 @@ public class ApiController {
 
         String username = AuthService.getUsernameByToken(token);
         response.type(MediaType.JSON.getValue());
+        System.out.println(username);
+        String iconName = UserDao.getPfp(username);
 
-        return gson.toJson(new UserRequestDTO(username, "agent_svgrepo"));
+        ProfileIcons icon = ProfileIcons.valueOf(iconName.toUpperCase());
+
+        return gson.toJson(new UserRequestDTO(username, icon.name().toLowerCase().replace("_","-")));
     }
 }

@@ -1,13 +1,21 @@
 package omega.sleepy.util;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.random;
+
 public enum ProfileIcons {
     AGENT, BUSINESSMAN, CHEF, DICK, GIRL_NEXT_DOOR, GOBLIN,
     GRANDFATHER, HIP_HOP_BOY, INDIAN_PRINCESS, INDIAN, KNIGHT,
-    LANDLADY, LITERACY_UNCLE, LOLI, PRINCESS, QUACK, SANTA_CLAUS, SCHOOL_GIRL, THIEF, UNCLE;
+    LANDLADY, LITERARY_UNCLE, LOLI, PRINCESS, QUACK, SANTA_CLAUS, SCHOOL_GIRL, THIEF, UNCLE;
     public static final String PAST_FIX = "-svgrepo-com.svg";
 
     @Override
     public String toString() {
-        return String.join(super.toString().toLowerCase().replace("_","-"), PAST_FIX);
+        return super.toString().toLowerCase().replace("_","-") +  PAST_FIX;
+    }
+
+    public static ProfileIcons getRandom(){
+        int random = (int) (abs(random()*100)%ProfileIcons.values().length);
+        return ProfileIcons.values()[random];
     }
 }

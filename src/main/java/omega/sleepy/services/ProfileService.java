@@ -1,10 +1,12 @@
 package omega.sleepy.services;
 
+import omega.sleepy.util.Log;
 import omega.sleepy.util.ProfileIcons;
 import omega.sleepy.util.ProfileIcons.*;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ProfileService {
     public static byte[] getProfileIcon(String name){
@@ -15,7 +17,8 @@ public class ProfileService {
         ProfileIcons icon;
 
         try{
-            icon = ProfileIcons.valueOf(name.toUpperCase());
+            String clean = name.toUpperCase().replace("-","_");
+            icon = ProfileIcons.valueOf(clean);
             return getProfileIcon(icon);
 
         } catch (IllegalArgumentException e) {
