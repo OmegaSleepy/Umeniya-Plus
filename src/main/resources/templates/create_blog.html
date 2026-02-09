@@ -130,6 +130,7 @@
                 option.textContent = tag;
                 select.appendChild(option);
             });
+            select.selectedIndex = select.options.length - 2;
         } catch (err) {
             console.error("Error loading categories:", err);
         }
