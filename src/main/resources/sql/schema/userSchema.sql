@@ -4,5 +4,6 @@ CREATE TABLE if not exists users
     password_hash TEXT,
     permittion_level TEXT NOT NULL,
     registrated_at TIMESTAMP,
-    last_login TIMESTAMP
+    last_login TIMESTAMP,
+    profile_icon TEXT
 )
