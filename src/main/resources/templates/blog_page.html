@@ -21,7 +21,12 @@
     <div class="header-container">
         <a href="/" class="logo">Умения+</a>
         <a href="/home" class="btn-back">← Обратно</a>
-        <img src="/favicon-logo.ico" alt="Website Logo" style="max-height: 40px; max-width: 40px;">
+        <div class="userInformation" style="display: flex">
+            <label for="profile-icon" id="username" style="margin: 10px">
+                Not Signed In
+            </label>
+            <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon" style="max-height: 40px; max-width: 40px;">
+        </div>
     </div>
 </header>
 
@@ -59,6 +64,17 @@
 
     const pathParts = window.location.pathname.split("/");
     const postId = pathParts[pathParts.length - 1];
+
+    async function loadUserInformation(){
+        const username = document.getElementById("username");
+        const response = await fetch("/api/user/me-info");
+        const userInformation = await response.json();
+        username.innerText = userInformation.username;
+
+        const profileIcon = document.getElementById("profile-icon");
+        profileIcon.src = "/api/profile-icon/" + userInformation.icon;
+    }
+    loadUserInformation();
 
     console.log(postId);
 

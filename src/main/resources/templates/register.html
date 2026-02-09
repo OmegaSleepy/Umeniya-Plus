@@ -188,10 +188,12 @@
             };
             const response = await fetch("/auth/credentials/sign-up", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(data)
             });
             console.log(response);
+            window.location.assign("/home");
         } else {
             alert("Паролите не съвпадат!")
         }

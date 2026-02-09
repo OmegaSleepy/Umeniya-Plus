@@ -203,11 +203,11 @@
         const profileIcon = document.getElementById("profile-icon");
         profileIcon.src = "/api/profile-icon/" + userInformation.icon;
     }
+    loadUserInformation();
 
     //init
     loadStuff("/api/blog/get-filtered-view/?page=0");
     loadCategories();
-    loadUserInformation();
 </script>
 </body>
 </html>
