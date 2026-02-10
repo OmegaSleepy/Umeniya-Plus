@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/api/style">
 </head>
 <body>
 <a href="/create">create</a>
 <br>
 <a href="/home">posts</a>
+
+<header>
+    <div class="header-container">
+        <a href="/" class="logo">Умения+</a>
+        <a href="/home" class="btn-back">← Обратно</a>
+        <div class="userInformation" style="display: flex">
+            <label for="profile-icon" id="username" style="margin: 10px">
+                Не сте вписани
+            </label>
+            <a href="/dashboard">
+                <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon"
+                     style="max-height: 40px; max-width: 40px;">
+            </a>
+        </div>
+    </div>
+</header>
 
 </body>
 </html>

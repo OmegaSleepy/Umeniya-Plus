@@ -23,9 +23,12 @@
         <a href="/home" class="btn-back">← Обратно</a>
         <div class="userInformation" style="display: flex">
             <label for="profile-icon" id="username" style="margin: 10px">
-                Not Signed In
+                Не сте вписани
             </label>
-            <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon" style="max-height: 40px; max-width: 40px;">
+            <a href="/dashboard">
+                <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon"
+                     style="max-height: 40px; max-width: 40px;">
+            </a>
         </div>
     </div>
 </header>
@@ -45,12 +48,12 @@
 </main>
 
 <script>
-    async function loadPost(id){
+    async function loadPost(id) {
         const res = await fetch(`/api/blog/${id}`);
         const markdown = await res.text();
 
         marked.setOptions({
-            highlight: function(code, lang) {
+            highlight: function (code, lang) {
                 return hljs.highlightAuto(code).value;
             }
         });
@@ -65,7 +68,7 @@
     const pathParts = window.location.pathname.split("/");
     const postId = pathParts[pathParts.length - 1];
 
-    async function loadUserInformation(){
+    async function loadUserInformation() {
         const username = document.getElementById("username");
         const response = await fetch("/api/user/me-info");
         const userInformation = await response.json();
@@ -74,6 +77,7 @@
         const profileIcon = document.getElementById("profile-icon");
         profileIcon.src = "/api/profile-icon/" + userInformation.icon;
     }
+
     loadUserInformation();
 
     console.log(postId);
