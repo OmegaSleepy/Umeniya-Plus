@@ -19,8 +19,8 @@ public class Main {
 
         RouteMain.init();
         BlogDao.init();
-        UserDao.deleteOldTokens();
         Database.initDatabase();
+        UserDao.deleteOldTokens();
 
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
