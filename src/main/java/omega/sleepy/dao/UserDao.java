@@ -44,7 +44,7 @@ public class UserDao {
 
             preparedStatement.execute();
         } catch (SQLException e) {
-            throw new UserAlreadyExists("User by the same username %s already exists".formatted(username));
+            throw new UserAlreadyExists("Потребителското име е заето");
         }
     }
 
