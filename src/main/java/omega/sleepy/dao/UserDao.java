@@ -5,6 +5,7 @@ import omega.sleepy.exceptions.UserDoesNotExist;
 import omega.sleepy.util.Database;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.PermittingLevel;
+import omega.sleepy.util.ProfileIcons;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,7 +32,7 @@ public class UserDao {
     }
 
     public static void createUser(String username, String passwordHash) {
-        String sql = "INSERT into users values(?, ?, ?, ?, ?)";
+        String sql = "INSERT into users values(?, ?, ?, ?, ?, ?)";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
@@ -39,6 +40,7 @@ public class UserDao {
             preparedStatement.setString(3, PermittingLevel.USER.toString());
             preparedStatement.setString(4, LocalDateTime.now().toString());
             preparedStatement.setString(5, LocalDateTime.now().toString());
+            preparedStatement.setString(6, ProfileIcons.getRandom().name());
 
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -57,6 +59,35 @@ public class UserDao {
             throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
 
+    }
+
+    public static String getPfp(String username){
+        String sql = "SELECT profile_icon from users where username = ?";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, username);
+
+            return preparedStatement.executeQuery().getString(1);
+        } catch (SQLException e) {
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
+    }
+
+    public static void changePfp(String username, String icon){
+        String sql = "UPDATE users set profile_icon = ? where username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, icon);
+            preparedStatement.setString(2, username);
+
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
     }
 
     public static void changePassword(String username, String newPasswordHash) {
