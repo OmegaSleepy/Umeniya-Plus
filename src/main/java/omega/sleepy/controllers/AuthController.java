@@ -89,8 +89,8 @@ public class AuthController {
             validateToken(token);
             return "Valid";
         } catch (InvalidCredentials e) {
-            Log.error(e.getMessage());
-            return e.getMessage();
+            response.redirect("/login");
+            return "";
         }
     }
 }
