@@ -10,6 +10,7 @@ import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.services.BlogService;
+import omega.sleepy.services.MiscService;
 import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
@@ -50,7 +51,7 @@ public class ApiController {
         response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
 
-        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon.ico")) {
+        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/icons/favicon.ico")) {
             if (inputStream == null) {
                 return missingResource(response);
             }
@@ -70,7 +71,7 @@ public class ApiController {
         response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
 
-        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/favicon-logo.ico")) {
+        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/icons/favicon-logo.ico")) {
             if (inputStream == null) {
                 return missingResource(response);
             }
@@ -84,6 +85,14 @@ public class ApiController {
         }
 
         return "";
+    }
+
+    public static Object getImage(Request request, Response response) {
+        response.type(MediaType.ICON.getValue());
+        response.header("Cache-Control", "public, max-age=604800"); // 1 week
+
+        String image = request.params("image");
+        return MiscService.getImage(image, request, response);
     }
 
     public static Object getIcon(Request request, Response response){
@@ -190,7 +199,7 @@ public class ApiController {
 
     }
 
-    private static String missingResource(Response response) {
+    public static String missingResource(Response response) {
         Log.error("something happened HERE \n" + response.raw());
         response.status(404);
         response.type(MediaType.JSON.getValue());
@@ -207,6 +216,7 @@ public class ApiController {
         }
 
         String username = AuthService.getUsernameByToken(token);
+        System.out.println(username);
 
         if (username == null) {
             return missingResource(response);

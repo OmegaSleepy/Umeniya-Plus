@@ -15,6 +15,8 @@ public class ApiRoutes {
 
         get("/api/user/me-info", ApiController::getUserInformation);
 
+        get("/api/image/:image", ApiController::getImage);
+
         get("/api/profile-icon/:icon", ApiController::getIcon);
 
         path("/api/blog", () -> {
