@@ -14,6 +14,7 @@ import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import omega.sleepy.util.ProfileIcons;
+import org.eclipse.jetty.servlet.Holder;
 import org.thymeleaf.context.Context;
 import spark.Request;
 import spark.Response;
@@ -206,6 +207,11 @@ public class ApiController {
         }
 
         String username = AuthService.getUsernameByToken(token);
+
+        if (username == null) {
+            return missingResource(response);
+        }
+
         response.type(MediaType.JSON.getValue());
         System.out.println(username);
         String iconName = UserDao.getPfp(username);

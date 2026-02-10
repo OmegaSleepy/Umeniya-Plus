@@ -14,6 +14,9 @@ public class AuthService {
 	
 	private static boolean isPasswordInvalid(String username, String plainTextPassword){
 		String passwordHash = UserDao.getPasswordHashFromUsername(username);
+		if (passwordHash == null) {
+			return false;
+		}
 		return !BCrypt.checkpw(plainTextPassword, passwordHash);
 	}
 
