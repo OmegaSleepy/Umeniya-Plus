@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import omega.sleepy.dao.UserDao;
+import omega.sleepy.dto.ExceptionDTO;
 import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
 import omega.sleepy.exceptions.MalformedPassword;
@@ -23,7 +24,6 @@ import static omega.sleepy.services.BlogService.validateToken;
 
 public class AuthController {
 
-    private static final JsonParser jsonParser = new JsonParser();
     private static final Gson gson = new Gson();
     public static final String AUTH_COOKIE = "auth_cookie";
 
@@ -53,9 +53,9 @@ public class AuthController {
         response.cookie("/", AUTH_COOKIE, token,60*60*24*7, false, true);
     }
 
-    public static String signUp(Request request, Response response){
+    public static Object signUp(Request request, Response response){
 
-        JsonObject body = jsonParser.parse(request.body()).getAsJsonObject();
+        JsonObject body = gson.fromJson(request.body(), JsonObject.class);
         String password = body.get("password").getAsString();
         String username = body.get("username").getAsString();
 
@@ -64,10 +64,11 @@ public class AuthController {
             generateCookie(response, username);
         } catch (MalformedPassword | UserAlreadyExists e) {
             response.status(400);
-            return e.getMessage();
+            Log.exec(e.toString());
+            return gson.toJson(new ExceptionDTO(e.getMessage()));
         }
 
-        return "Valid SignUp";
+        return "Success";
     }
 
     public static String logout(Request request, Response response) {
