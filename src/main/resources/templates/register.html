@@ -8,6 +8,7 @@
         body {
             min-height: 100vh;
             justify-content: center;
+            background-image: url("/api/image/peak.jpg");
         }
 
         .auth-container {
@@ -156,7 +157,7 @@
         <label for="show-pass">Покажи Парола</label>
     </div>
 
-    <span id="message"></span>
+    <span id="message" style="margin: 0"></span>
     <button id="send-info" type="submit" class="fancy-button">Впиши се</button>
 
     <div class="auth-footer">
@@ -193,7 +194,15 @@
                 body: JSON.stringify(data)
             });
             console.log(response);
-            window.location.assign("/home");
+
+            const body = await response.json();
+
+            if (!response.ok) {
+                const message = document.getElementById("message");
+                message.innerHTML = body.error;
+            } else {
+                // window.location.assign("/home");
+            }
         } else {
             alert("Паролите не съвпадат!")
         }
