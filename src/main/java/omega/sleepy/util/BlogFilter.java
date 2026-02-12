@@ -77,5 +77,13 @@ public class BlogFilter {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "BlogFilter{" +
+                "title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", direction=" + direction +
+                ", page=" + page +
+                '}';
+    }
 }
