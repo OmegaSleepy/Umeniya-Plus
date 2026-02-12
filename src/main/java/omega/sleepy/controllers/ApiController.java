@@ -207,7 +207,6 @@ public class ApiController {
         return "{\"status\":\"error\"}";
     }
 
-
     public static String getUserInformation(Request request, Response response) {
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
@@ -216,11 +215,14 @@ public class ApiController {
         }
 
         String username = AuthService.getUsernameByToken(token);
-        System.out.println(username);
 
         if (username == null) {
             return missingResource(response);
+        } else if (!AuthService.userExists(username)) {
+            return AuthController.logout(request, response);
         }
+
+        System.out.println(username);
 
         response.type(MediaType.JSON.getValue());
         System.out.println(username);

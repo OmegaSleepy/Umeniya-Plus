@@ -9,6 +9,7 @@ import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
 import omega.sleepy.exceptions.MalformedPassword;
 import omega.sleepy.exceptions.UserAlreadyExists;
+import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import spark.Request;
@@ -44,13 +45,20 @@ public class AuthController {
         return "";
     }
 
-    private static void generateCookie(Response response, String username) {
+    private static String generateCookie(Response response, String username) {
+
+        if (!AuthService.userExists(username)) {
+            response.status(401);
+            return new ExceptionDTO("Invalid username or password").toString();
+        }
+
         String token = UUID.randomUUID().toString();
         long expiration = Instant.now().plus(Duration.ofDays(7)).getEpochSecond();
         Log.exec("Generated session with token " + token);
 
         UserDao.addSession(token, username, expiration);
         response.cookie("/", AUTH_COOKIE, token,60*60*24*7, false, true);
+        return "";
     }
 
     public static Object signUp(Request request, Response response){
