@@ -130,6 +130,26 @@ public class BlogDao {
         return string;
     }
 
+    public static List<Blog> getBlogByAuthor(String user) {
+        List<Blog> blogList = new ArrayList<>();
+
+        String sql = "SELECT * FROM blogs WHERE creator_username = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    blogList.add(getBlog(rs));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return blogList;
+
+    }
 
     public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
         List<Blog> blogList = new ArrayList<>();
