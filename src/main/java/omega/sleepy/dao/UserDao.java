@@ -31,6 +31,24 @@ public class UserDao {
         }
     }
 
+    public static boolean userExists(String username) {
+        String sql = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // true if row exists
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static void createUser(String username, String passwordHash) {
         String sql = "INSERT into users values(?, ?, ?, ?, ?, ?)";
         try (Connection connection = Database.getConnection();

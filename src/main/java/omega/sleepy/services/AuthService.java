@@ -47,6 +47,10 @@ public class AuthService {
 		Log.exec("Created a new userprofile by %s".formatted(username));
 	}
 
+	public static boolean userExists(String username){
+		return UserDao.userExists(username);
+	}
+
 	public static String hashPassword(String plainTextPassword){
 		return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
 	}
