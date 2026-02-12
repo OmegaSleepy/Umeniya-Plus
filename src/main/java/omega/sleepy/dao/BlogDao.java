@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 
 import static omega.sleepy.util.Database.getConnection;
 
@@ -22,7 +23,7 @@ public class BlogDao {
         return categories;
     }
 
-    public static String getDefaultCategory(){
+    public static String getDefaultCategory() {
         return any;
     }
 
@@ -39,7 +40,7 @@ public class BlogDao {
 
     public static void addBlog(Blog blog) {
         Log.error("Saving " + blog.toString());
-	String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values (?, ?, ?, ?, ?, ?)";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
@@ -71,7 +72,7 @@ public class BlogDao {
         }
     }
 
-    public static List<Blog> getBlogView(){
+    public static List<Blog> getBlogView() {
         List<Blog> blogList = new ArrayList<>();
         String sql = "SELECT * FROM blogs LIMIT 10";
 
@@ -94,8 +95,8 @@ public class BlogDao {
         String sql = "SELECT id, title, tag, excerpt, creator_username, created_at FROM blogs LIMIT 10";
 
         try (Connection connection = getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql)){
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
                 blogList.add(getBlog(resultSet));
@@ -122,7 +123,7 @@ public class BlogDao {
 
     private static String getResultSetString(ResultSet rs, String column) {
         String string;
-        try{
+        try {
             string = rs.getString(column);
         } catch (SQLException e) {
             string = "?";
@@ -154,12 +155,22 @@ public class BlogDao {
     public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
         List<Blog> blogList = new ArrayList<>();
 
-        StringBuilder sql = getSQLByBlogFilter(blogFilter);
+        Log.info("Searching " + blogFilter.toString());
 
-        Log.info(sql.toString());
+        int isAny = blogFilter.getCategory().equalsIgnoreCase(any) ? 1 : 0;
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+             PreparedStatement pstmt = conn.prepareStatement(getSQLByBlogFilter(blogFilter))) {
+
+            int i = 1;
+
+            if (isAny == 0) {
+                pstmt.setString(i++, blogFilter.getCategory());
+            }
+
+            pstmt.setString(i++, "%"+ blogFilter.getTitle() + "%");
+            pstmt.setInt(i, blogFilter.getPage() * 15);
+
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -171,14 +182,13 @@ public class BlogDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return blogList;
     }
 
-    private static @NotNull StringBuilder getSQLByBlogFilter(BlogFilter blogFilter) {
-        String name = blogFilter.getTitle();
+    private static @NotNull String getSQLByBlogFilter(BlogFilter blogFilter) throws SQLException {
         Direction orderDirection = blogFilter.getDirection();
         String category = blogFilter.getCategory();
-        int page = blogFilter.getPage();
 
         String order = orderDirection.toString().toLowerCase();
 
@@ -186,10 +196,15 @@ public class BlogDao {
 
         StringBuilder sql = new StringBuilder("SELECT * FROM blogs where ");
 
-        if(!isAny) sql.append("tag = '%s' AND ".formatted(category));
-        sql.append("title like '%%%s%%' ".formatted(name));
+        if (!isAny) sql.append("tag = ? AND ");// (category));
+        sql.append("title like ? ");//(name));
         sql.append("ORDER BY created_at %s ".formatted(order));
-        sql.append("LIMIT 15 OFFSET %d;".formatted(page*15));
-        return sql;
+        sql.append("LIMIT 15 OFFSET ? ;");//(page * 15));
+
+        Log.info("SQL: " + sql);
+
+        return sql.toString();
     }
+
+
 }
