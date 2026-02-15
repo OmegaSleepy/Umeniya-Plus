@@ -195,13 +195,12 @@
             });
             console.log(response);
 
-            const body = await response.json();
-
-            if (!response.ok) {
-                const message = document.getElementById("message");
-                message.innerHTML = body.error;
+            if (response.ok) {
+                window.location.href = "/home";
             } else {
-                // window.location.assign("/home");
+                const body = await response.json();
+                const message = document.getElementById("message");
+                message.innerHTML = body.error || "Възникна грешка";
             }
         } else {
             alert("Паролите не съвпадат!")
