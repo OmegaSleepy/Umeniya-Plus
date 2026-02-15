@@ -58,8 +58,8 @@ public class BlogFilter {
             Direction directionValue;
             if(direction == null) direction = "";
             directionValue = switch (direction) {
-                case "oldest-first" ->  Direction.DESC;
-                default -> Direction.ASC;
+                case "oldest-first" ->  Direction.ASC;
+                default -> Direction.DESC;
             };
             this.direction = directionValue;
             return this;
