@@ -48,6 +48,68 @@
         #search select:focus, #search input:focus {
             border-color: var(--primary-color);
         }
+
+        #holder {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            width: 95%;
+            max-width: var(--max-width-large);
+            padding: 20px 0;
+        }
+
+        .blog-excerpt {
+            flex-grow: 1;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .blog {
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            gap: 12px;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .blog-excerpt {
+            margin: 10px 0 20px 0;
+            flex-grow: 1;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.1;
+            height: 3.4rem;
+        }
+
+        .blog-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .read-more {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -182,27 +244,27 @@
             const holder = document.getElementById("holder");
             const data = await response.json();
 
-            holder.replaceChildren();
+            holder.innerHTML = data.map(element => `
+                <div class="blog" onclick="window.location.href='/blog/${element.id}'">
+                    <div class="blog-header">
+                        <span class="blog-tag">${element.tag}</span>
+                        <h2 class="blog-title">${element.title}</h2>
+                    </div>
 
-            data.forEach(element => {
-                const blog = document.createElement("div");
-                blog.classList.add("blog");
-                blog.style.cursor = "pointer";
-                blog.onclick = () => {
-                    window.location.href = `/blog/${element.id}`;
-                };
+                    <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
+                        от <strong>${element.creator}</strong> •
+                        <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
+                    </p>
 
-                blog.append(
-                    createElement("h1", element.title, "blog-title"),
-                    createElement("p", "от " + element.creator, "blog-creator"),
-                    createElement("p", element.tag, "blog-tag"),
-                    createElement("p", element.excerpt, "blog-excerpt")
-                );
-                holder.append(blog);
-            });
+                    <p class="blog-excerpt">${element.excerpt || ''}</p>
+
+                    <div class="blog-footer">
+                        <span class="read-more">Прочети повече →</span>
+                    </div>
+                </div>
+            `).join('');
 
             renderPagination(data.length);
-
         } catch (err) {
             console.error("Failed to load blogs:", err);
         }

@@ -170,7 +170,7 @@ public class BlogDao {
             }
 
             pstmt.setString(i++, "%"+ blogFilter.getTitle() + "%");
-            pstmt.setInt(i, blogFilter.getPage() * 15);
+            pstmt.setInt(i, blogFilter.getPage() * 16);
 
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -200,7 +200,7 @@ public class BlogDao {
         if (!isAny) sql.append("tag = ? AND ");// (category));
         sql.append("title like ? ");//(name));
         sql.append("ORDER BY created_at %s ".formatted(order));
-        sql.append("LIMIT 15 OFFSET ? ;");//(page * 15));
+        sql.append("LIMIT 16 OFFSET ? ;");//(page * 15));
 
         Log.info("SQL: " + sql);
 
