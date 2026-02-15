@@ -208,13 +208,15 @@ public class BlogDao {
     }
 
 
-    public static void deleteBlogById(int id) {
+    public static boolean deleteBlogById(int id) {
         String sql = "DELETE FROM blogs WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
             preparedStatement.setInt(1, id);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
+            Log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

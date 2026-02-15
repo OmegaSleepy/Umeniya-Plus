@@ -62,12 +62,7 @@ public class BlogService {
 
 
     public static boolean deleteBlogById(int id) {
-        try {
-            BlogDao.deleteBlogById(id);
-            return true;
-        } catch (Exception e){
-            return false;
-        }
+        return BlogDao.deleteBlogById(id);
     }
 
     public static boolean canEdit(int id, String username) {
