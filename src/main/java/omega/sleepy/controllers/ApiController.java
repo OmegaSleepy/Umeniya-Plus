@@ -239,4 +239,42 @@ public class ApiController {
 
         return gson.toJson(new UserRequestDTO(username, icon.name().toLowerCase().replace("_","-")));
     }
+
+    public static Object deleteBlog(Request request, Response response) {
+        JsonObject body = gson.fromJson(request.body(), JsonObject.class);
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        if (token == null) {
+            return missingResource(response);
+        }
+
+        String username = AuthService.getUsernameByToken(token);
+
+        if (username == null) {
+            return forbitten(response);
+        }
+
+        String blogId = body.get("id").getAsString();
+
+        int id;
+        try {
+            id = Integer.parseInt(blogId);
+
+            if(BlogService.deleteBlogById(id)) {
+                response.status(200);
+                response.type(MediaType.JSON.getValue());
+                response.redirect("/home");
+                return "{\"status\":\"ok\"}";
+            } else {
+                return missingResource(response);
+            }
+
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
+
+    }
+
+    public static Object editBlog(Request request, Response response) {
+        return "";
+    }
 }

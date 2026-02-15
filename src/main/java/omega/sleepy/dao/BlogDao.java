@@ -207,4 +207,14 @@ public class BlogDao {
     }
 
 
+    public static void deleteBlogById(int id) throws SQLException {
+        String sql = "DELETE FROM blogs WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
