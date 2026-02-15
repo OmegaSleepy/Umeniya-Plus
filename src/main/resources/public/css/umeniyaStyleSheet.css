@@ -17,11 +17,11 @@
     --radius-lg: 12px;
     --radius-md: 8px;
     --radius-sm: 4px;
-    --shadow-light: 0 2px 10px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 15px rgba(0,0,0,0.1);
-    --shadow-hover: 0 8px 25px rgba(0,0,0,0.15);
+    --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
 
-    --font-main: system-ui ! important;
+    --font-main: system-ui;
 }
 
 body {
@@ -164,6 +164,38 @@ header {
     white-space: pre-wrap;
 }
 
+.post-meta {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-style: italic;
+}
+
+.post-author {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-style: normal;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.meta-divider {
+    color: #ccc;
+    font-weight: bold;
+}
+
+.post-date {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.post-author:hover {
+    text-decoration: underline;
+}
+
 article pre {
     background: var(--code-bg);
     color: var(--code-text);
@@ -182,7 +214,9 @@ article pre {
     margin-top: 40px;
 }
 
-.form-group { margin-bottom: 15px; }
+.form-group {
+    margin-bottom: 15px;
+}
 
 label {
     display: block;
@@ -201,7 +235,10 @@ input[type="text"], select, textarea {
     font-family: inherit;
 }
 
-textarea { height: 200px; resize: vertical; }
+textarea {
+    height: 200px;
+    resize: vertical;
+}
 
 hr {
     border: 0;
@@ -210,11 +247,23 @@ hr {
 }
 
 @media (max-width: 600px) {
-    .article-container { padding: 25px; }
-    .post-title { font-size: 1.8rem; }
-    .blog-title { font-size: 1.5rem; }
-    .header-container { width: 95%; }
+    .article-container {
+        padding: 25px;
+    }
+
+    .post-title {
+        font-size: 1.8rem;
+    }
+
+    .blog-title {
+        font-size: 1.5rem;
+    }
+
+    .header-container {
+        width: 95%;
+    }
 }
+
 .editor-wrapper {
     display: flex;
     gap: 20px;
@@ -328,17 +377,9 @@ hr {
     transition: all 0.2s;
 }
 
-#search {
-    width: 90%;
-    max-width: var(--max-width-large);
-    background-color: var(--bg-card);
-    padding: 20px;
-    margin: 20px 10px;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    box-sizing: border-box;
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
+.button-group {
+    display: flex;
+    gap: 10px;
 }
 
 .hidden {

@@ -4,6 +4,51 @@
     <meta charset="UTF-8">
     <title>Умения+</title>
     <link rel="stylesheet" href="/api/style">
+    <style>
+        #search {
+            width: 90%;
+            max-width: var(--max-width-large);
+            background-color: var(--bg-card);
+            padding: 25px;
+            margin: 20px auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            box-sizing: border-box;
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        #search div.filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        #search label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        #search select, #search input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #search select:focus, #search input:focus {
+            border-color: var(--primary-color);
+        }
+    </style>
 </head>
 <body>
 
@@ -11,7 +56,8 @@
     <div class="header-container">
         <a href="/" class="logo">Умения+</a>
         <div class="header-actions">
-            <button id="toggle-search-btn" class="btn-create" style="background-color: var(--text-light); margin-right: 10px;">
+            <button id="toggle-search-btn" class="btn-create"
+                    style="background-color: var(--text-light); margin-right: 10px;">
                 🔍 Филтри
             </button>
             <a href="/create" class="btn-create">+ Създай Пост</a>
@@ -29,30 +75,29 @@
 </header>
 
 <div id="search" class="search">
-    <label for="category">Категория</label>
-    <select id="category" name="category">
-    </select>
+    <div class="filter-group">
+        <label for="category">Категория</label>
+        <select id="category" name="category"></select>
+    </div>
 
-    <label for="order-by">Подреди по</label>
-    <select id="order-by" name="order-by">
-        <option value="normal">По подразбиране</option>
-        <option value="oldest-first">Най - стари първо</option>
-        <option value="newest-first">Най - нови първо</option>
-    </select>
+    <div class="filter-group">
+        <label for="order-by">Подреди по</label>
+        <select id="order-by" name="order-by">
+            <option value="normal">По подразбиране</option>
+            <option value="oldest-first">Най-стари първо</option>
+            <option value="newest-first">Най-нови първо</option>
+        </select>
+    </div>
 
-    <br>
+    <div class="filter-group">
+        <label for="blog-name">Име</label>
+        <input type="text" id="blog-name" placeholder="Търси по име...">
+    </div>
 
-    <label for="blog-name">Име</label>
-    <input type="text" id="blog-name">
-    <br>
-
-    <button id="show" class="fancy-button">
-        Потърси
-    </button>
-
-    <button id="clear" class="fancy-button">
-        Изчисти филтрите
-    </button>
+    <div class="button-group">
+        <button id="show" class="fancy-button">Потърси</button>
+        <button id="clear" class="fancy-button outline">Изчисти</button>
+    </div>
 </div>
 
 <div id="pagination-top" class="pagination-wrapper"></div>
@@ -70,17 +115,17 @@
     searchSection.classList.add("hidden");
 
 
-    toggleBtn.addEventListener("click", function() {
+    toggleBtn.addEventListener("click", function () {
         const isHidden = searchSection.classList.toggle("hidden");
         this.style.backgroundColor = !isHidden ? "var(--primary-color)" : "var(--text-light)";
     });
 
-    document.getElementById("show").addEventListener("click", function(){
+    document.getElementById("show").addEventListener("click", function () {
         currentPage = 0;
         triggerFetch();
     });
 
-    document.getElementById("clear").addEventListener("click", function (){
+    document.getElementById("clear").addEventListener("click", function () {
         const category_select = document.getElementById("category");
         category_select.selectedIndex = category_select.options.length - 1;
         document.getElementById("blog-name").value = '';
@@ -108,10 +153,12 @@
         }
     }
 
-    function createElement(tag, text, classname){
+    function createElement(tag, text, classname) {
         const element = document.createElement(tag);
         element.innerHTML = text;
-        if(classname){element.classList.add(classname);}
+        if (classname) {
+            element.classList.add(classname);
+        }
         return element;
     }
 
@@ -141,7 +188,9 @@
                 const blog = document.createElement("div");
                 blog.classList.add("blog");
                 blog.style.cursor = "pointer";
-                blog.onclick = () => { window.location.href = `/blog/${element.id}`; };
+                blog.onclick = () => {
+                    window.location.href = `/blog/${element.id}`;
+                };
 
                 blog.append(
                     createElement("h1", element.title, "blog-title"),
@@ -176,7 +225,7 @@
             prevBtn.onclick = () => {
                 currentPage--;
                 triggerFetch();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({top: 0, behavior: 'smooth'});
             };
 
             const indicator = document.createElement("span");
@@ -190,14 +239,14 @@
             nextBtn.onclick = () => {
                 currentPage++;
                 triggerFetch();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({top: 0, behavior: 'smooth'});
             };
 
             container.append(prevBtn, indicator, nextBtn);
         });
     }
 
-    async function loadUserInformation(){
+    async function loadUserInformation() {
         const username = document.getElementById("username");
         const response = await fetch("/api/user/me-info");
         const userInformation = await response.json();
@@ -206,6 +255,7 @@
         const profileIcon = document.getElementById("profile-icon");
         profileIcon.src = "/api/profile-icon/" + userInformation.icon;
     }
+
     loadUserInformation();
 
     //init

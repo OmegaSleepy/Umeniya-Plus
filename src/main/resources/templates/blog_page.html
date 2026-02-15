@@ -18,6 +18,7 @@
             display: flex;
             gap: 10px;
         }
+
         .btn-edit, .btn-delete {
             padding: 8px 15px;
             border: none;
@@ -26,17 +27,24 @@
             font-weight: bold;
             transition: 0.3s;
         }
+
         .btn-edit {
             background-color: #4CAF50;
             color: white;
         }
-        .btn-edit:hover { background-color: #45a049; }
+
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
 
         .btn-delete {
             background-color: #f44336;
             color: white;
         }
-        .btn-delete:hover { background-color: #da190b; }
+
+        .btn-delete:hover {
+            background-color: #da190b;
+        }
     </style>
 
 
@@ -64,7 +72,12 @@
 
     <h1 class="post-title" th:text="${blog.title}">Заглавието на поста</h1>
 
-    <p class="post-title" th:text="${blog.creator}">Създател на поста</p>
+    <div class="post-meta">
+        от <span class="post-author" th:text="${blog.creator}">Автор</span>
+        <span class="meta-divider">•</span>
+        <span id="post-date" class="post-date" th:data-date="${blog.creationDate}">
+        </span>
+    </div>
 
     <div id="admin-controls" style="display: none; margin-bottom: 20px;">
         <button onclick="editPost()" class="btn-edit">✎ Редактирай</button>
@@ -148,6 +161,24 @@
     loadPost(postId);
     canEdit();
 
+    function formatPostDate() {
+        const dateElement = document.getElementById("post-date");
+        const rawDate = dateElement.getAttribute("data-date");
+
+        if (rawDate) {
+            const date = new Date(rawDate);
+
+            const formattedDate = date.toLocaleDateString('bg-BG', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            dateElement.innerText = formattedDate;
+        }
+    }
+
+    formatPostDate();
 
     console.log(postId);
 

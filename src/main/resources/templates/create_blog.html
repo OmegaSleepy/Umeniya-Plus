@@ -55,7 +55,8 @@
                 <a href="/help/markdown-info">
                     <label for="content">Съдържание (Markdown)</label>
                 </a>
-                <textarea id="content" name="content" placeholder="Въведи тялото на вашата статия тук..." required></textarea>
+                <textarea id="content" name="content" placeholder="Въведи тялото на вашата статия тук..."
+                          required></textarea>
             </div>
 
             <button type="submit" class="btn-submit">Публикувай</button>
@@ -151,7 +152,7 @@
         try {
             const response = await fetch("/api/blog/create", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
             });
             if (!response.ok) throw new Error("Network response was not OK");
@@ -164,7 +165,7 @@
         }
     });
 
-    async function loadUserInformation(){
+    async function loadUserInformation() {
         const username = document.getElementById("username");
         const response = await fetch("/api/user/me-info");
         const userInformation = await response.json();
@@ -173,6 +174,7 @@
         const profileIcon = document.getElementById("profile-icon");
         profileIcon.src = "/api/profile-icon/" + userInformation.icon;
     }
+
     loadUserInformation();
 
     loadCategories();

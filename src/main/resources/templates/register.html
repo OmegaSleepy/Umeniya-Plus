@@ -169,7 +169,7 @@
     function showPassword() {
         const password_field = document.getElementById("password");
         const confirm_password_field = document.getElementById("confirm-password");
-        if(password_field.type === "password"){
+        if (password_field.type === "password") {
             password_field.type = "text"
             confirm_password_field.type = "text"
         } else {
@@ -189,7 +189,7 @@
             };
             const response = await fetch("/auth/credentials/sign-up", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 credentials: "include",
                 body: JSON.stringify(data)
             });
