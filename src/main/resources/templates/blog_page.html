@@ -73,7 +73,9 @@
     <h1 class="post-title" th:text="${blog.title}">Заглавието на поста</h1>
 
     <div class="post-meta">
-        от <span class="post-author" th:text="${blog.creator}">Автор</span>
+        от  <a id="author-profile" href="/user/" style="text-decoration: none">
+        <span class="post-author" id="post-author" th:text="${blog.creator}">Автор</span>
+            </a>
         <span class="meta-divider">•</span>
         <span id="post-date" class="post-date" th:data-date="${blog.creationDate}">
         </span>
@@ -175,6 +177,19 @@
             });
 
             dateElement.innerText = formattedDate;
+        }
+
+        link();
+    }
+
+    function link() {
+        const authorLink = document.getElementById("author-profile");
+        const authorNameElement = document.getElementById("post-author");
+
+        const username = authorNameElement.innerText;
+
+        if (username) {
+            authorLink.href = `/user/${username}`;
         }
     }
 
