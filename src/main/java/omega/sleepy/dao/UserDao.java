@@ -62,6 +62,7 @@ public class UserDao {
 
             preparedStatement.execute();
         } catch (SQLException e) {
+            Log.error(e.getMessage());
             throw new UserAlreadyExists("Потребителското име е заето");
         }
     }

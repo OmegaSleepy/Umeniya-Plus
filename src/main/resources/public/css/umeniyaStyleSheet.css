@@ -386,3 +386,13 @@ hr {
     font-size: 1.1rem;
     margin: 5px;
 }
+
+.content img {
+    display: block;
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 8px;
+}

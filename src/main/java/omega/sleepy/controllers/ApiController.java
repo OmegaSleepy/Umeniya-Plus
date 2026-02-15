@@ -149,7 +149,14 @@ public class ApiController {
 
     public static String getBlogById(Request request, Response response) {
         response.type(MediaType.HTML.getValue());
-        int id = Integer.parseInt(request.params(":id"));
+        int id = 0;
+
+        try {
+            id = Integer.parseInt(request.params(":id"));
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
+
         Blog blog = BlogService.getBlogById(id);
 
         if(blog.isNull()) {
