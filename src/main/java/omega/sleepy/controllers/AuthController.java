@@ -27,10 +27,16 @@ public class AuthController {
 
     private static final Gson gson = new Gson();
     public static final String AUTH_COOKIE = "auth_cookie";
+    public static final String LOGIN_ERROR = "Потребителят не съществува или паролата е грешна!";
 
-    public static String logIn(Request request, Response response){
+    public static Object logIn(Request request, Response response){
         String password = request.queryParams("password");
         String username = request.queryParams("username");
+
+        if (!AuthService.userExists(username)) {
+            response.status(400);
+            return gson.toJson(new ExceptionDTO(LOGIN_ERROR));
+        }
 
         try{
             login(username,password);
@@ -39,7 +45,7 @@ public class AuthController {
             response.redirect("/home");
         } catch (InvalidPassword e) {
             response.status(401);
-            return "";
+            return gson.toJson(new ExceptionDTO(LOGIN_ERROR));
         }
 
         return "";
