@@ -15,7 +15,6 @@ import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import omega.sleepy.util.ProfileIcons;
-import org.eclipse.jetty.servlet.Holder;
 import org.thymeleaf.context.Context;
 import spark.Request;
 import spark.Response;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static omega.sleepy.routes.PublicRoutes.templateEngine;
-import static omega.sleepy.services.BlogService.validateToken;
+import static omega.sleepy.services.AuthService.validateToken;
 
 public class ApiController {
 
@@ -211,6 +210,13 @@ public class ApiController {
         response.status(404);
         response.type(MediaType.JSON.getValue());
         response.redirect("/404");
+        return "{\"status\":\"error\"}";
+    }
+
+    public static String forbitten(Response response) {
+        Log.error("something happened HERE \n" + response.raw());
+        response.status(401);
+        response.type(MediaType.JSON.getValue());
         return "{\"status\":\"error\"}";
     }
 

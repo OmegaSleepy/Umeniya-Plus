@@ -6,11 +6,9 @@ import omega.sleepy.util.MediaType;
 import spark.Request;
 import spark.Response;
 
-import java.awt.*;
-
 import static omega.sleepy.controllers.AuthController.AUTH_COOKIE;
 import static omega.sleepy.routes.PublicRoutes.getSimpleTemplate;
-import static omega.sleepy.services.BlogService.validateToken;
+import static omega.sleepy.services.AuthService.validateToken;
 
 public class PublicController {
     public static String loginInterface(Request request, Response response) {

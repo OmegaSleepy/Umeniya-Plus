@@ -138,6 +138,8 @@ public class BlogDao {
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     blogList.add(getBlog(rs));

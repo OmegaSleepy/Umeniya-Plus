@@ -2,7 +2,6 @@ package omega.sleepy.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.dto.ExceptionDTO;
 import omega.sleepy.exceptions.InvalidCredentials;
@@ -19,9 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
-import static omega.sleepy.services.AuthService.createUser;
-import static omega.sleepy.services.AuthService.login;
-import static omega.sleepy.services.BlogService.validateToken;
+import static omega.sleepy.services.AuthService.*;
 
 public class AuthController {
 

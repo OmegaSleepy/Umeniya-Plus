@@ -1,6 +1,7 @@
 package omega.sleepy.services;
 
 import omega.sleepy.dao.UserDao;
+import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
 import omega.sleepy.exceptions.MalformedPassword;
 import omega.sleepy.util.Log;
@@ -12,7 +13,7 @@ import static omega.sleepy.validation.UserValidator.*;
 
 public class AuthService {
 	
-	private static boolean isPasswordInvalid(String username, String plainTextPassword){
+	public static boolean isPasswordInvalid(String username, String plainTextPassword){
 		String passwordHash = UserDao.getPasswordHashFromUsername(username);
 		if (passwordHash == null) {
 			return false;
@@ -53,5 +54,20 @@ public class AuthService {
 
 	public static String hashPassword(String plainTextPassword){
 		return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+	}
+
+	public static void validateToken(String token) throws InvalidCredentials {
+		if (token == null) {
+			Log.warn("No token!");
+			Log.warn("No cookie!");
+			throw new InvalidCredentials("No token, No cookie");
+		}
+		Log.info(token);
+		if(UserDao.containsToken(token)) {
+			Log.info("Valid session");
+		} else {
+			Log.warn("Invalid session");
+			throw new InvalidCredentials("Token either expired or is not valid");
+		}
 	}
 }
