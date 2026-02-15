@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
     <title>Впиши се</title>
@@ -7,7 +7,13 @@
     <style>
         body {
             min-height: 100vh;
+            display: flex;
             justify-content: center;
+            align-items: center;
+            background-image: url("/api/image/peak.jpg");
+            background-size: cover;
+            background-position: center;
+            margin: 0;
         }
 
         .auth-container {
@@ -17,7 +23,6 @@
             box-shadow: var(--shadow-md);
             width: 100%;
             max-width: 400px;
-            margin: auto;
             box-sizing: border-box;
         }
 
@@ -48,6 +53,9 @@
             font-size: 1rem;
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+            height: 45px;
         }
 
         .auth-container input:focus {
@@ -55,17 +63,25 @@
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
 
-        input[type="text"],
-        input[type="password"] {
-            box-sizing: border-box;
+        /* Стил за чекбокса "Покажи парола" */
+        .show-password-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-            font-family: var(--font-main);
-
-            height: 45px;
-
+        .show-password-container input[type="checkbox"] {
+            width: auto !important;
+            height: auto !important;
             margin: 0;
-            display: block;
-            width: 100%;
+            cursor: pointer;
+        }
+
+        .show-password-container label {
+            margin-bottom: 0;
+            cursor: pointer;
+            display: inline-block;
         }
 
         #message {
@@ -86,6 +102,8 @@
             font-size: 1rem;
             border-radius: var(--radius-md);
             margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
         }
 
         .auth-container .fancy-button:hover {
@@ -113,26 +131,70 @@
     </style>
 </head>
 <body>
+
 <div id="log-in-box" class="auth-container">
     <h2>Вход в системата</h2>
-    <form action="/auth/credentials/log-in" method="post">
-        <div class="form-group">
-            <label for="username">Потребителско име</label>
-            <input id="username" name="username" type="text" placeholder="Въведете име..." required>
-        </div>
 
-        <div class="form-group">
-            <label for="password">Парола</label>
-            <input id="password" name="password" type="password" placeholder="••••••••" required>
-        </div>
+    <div class="form-group">
+        <label for="username">Потребителско име</label>
+        <input id="username" type="text" placeholder="Въведете име..." required>
+    </div>
 
-        <span id="message"></span> <button type="submit" class="fancy-button">Впиши се</button>
-    </form>
+    <div class="form-group">
+        <label for="password">Парола</label>
+        <input id="password" type="password" placeholder="••••••••" required>
+    </div>
+
+    <div class="form-group show-password-container">
+        <input type="checkbox" id="show-pass" onclick="togglePassword()">
+        <label for="show-pass">Покажи Парола</label>
+    </div>
+
+    <span id="message"></span>
+    <button id="login-btn" type="button" class="fancy-button">Впиши се</button>
 
     <div class="auth-footer">
         Нямате профил? <a href="/register">Регистрирайте се</a>
     </div>
 </div>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById("password");
+        passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+
+    document.getElementById("login-btn").addEventListener("click", async function () {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const messageElement = document.getElementById("message");
+
+        if (!username || !password) {
+            messageElement.innerText = "Моля, попълнете всички полета.";
+            return;
+        }
+
+        try {
+            const response = await fetch("/auth/credentials/log-in", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ username, password })
+            });
+
+            if (!response.ok) {
+                const body = await response.json();
+                messageElement.innerText = body.error || "Грешно име или парола";
+            } else {
+                window.location.assign("/home");
+            }
+        } catch (error) {
+            messageElement.innerText = error.message;
+        }
+    });
+
+    document.getElementById("show-pass").checked = false;
+</script>
 
 </body>
 </html>
