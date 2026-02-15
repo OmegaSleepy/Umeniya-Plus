@@ -209,4 +209,26 @@ public class UserDao {
             throw new RuntimeException(e);
         }
     }
+
+    public static List<String> getUserInfo(String username) {
+        String sql = "SELECT * from users where username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<String> list = new ArrayList<>();
+                list.add(username);
+                list.add(resultSet.getString("password_hash"));
+                list.add(resultSet.getString("permittion_level"));
+                list.add(resultSet.getString("registrated_at"));
+                list.add(resultSet.getString("last_login"));
+                list.add(resultSet.getString("profile_icon"));
+                return list;
+            }
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
+    }
 }
