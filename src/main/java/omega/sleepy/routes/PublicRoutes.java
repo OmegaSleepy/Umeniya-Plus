@@ -38,7 +38,7 @@ public class PublicRoutes {
 
         get("/home", (request, response) -> getSimpleTemplate("home_blogs", response));
 
-        get("/blog/:id", ApiController::getBlogById);
+        get("/blog/:id", ApiController::getBlogPageById);
 
         get("/404", (request, response) -> getSimpleTemplate("404", response));
 

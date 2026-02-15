@@ -2,8 +2,10 @@ package omega.sleepy.services;
 
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.data.Blog;
+import omega.sleepy.data.User;
 import omega.sleepy.util.BlogFilter;
 import omega.sleepy.util.Log;
+import omega.sleepy.util.PermittingLevel;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,4 +70,16 @@ public class BlogService {
         }
     }
 
+    public static boolean canEdit(int id, String username) {
+        User user = ProfileService.getProfile(username);
+
+        if(user == null) return false;
+
+        Blog blog = BlogDao.getBlogById(id);
+        if(Objects.isNull(blog)) return false;
+        if(blog.creator().equals(username)) return true;
+
+        if(user.permittingLevel() != PermittingLevel.ADMIN) return false;
+        return false;
+    }
 }

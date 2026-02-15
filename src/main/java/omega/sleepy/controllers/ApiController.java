@@ -146,7 +146,7 @@ public class ApiController {
         return gson.toJson(success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}");
     }
 
-    public static String getBlogById(Request request, Response response) {
+    public static String getBlogPageById(Request request, Response response) {
         response.type(MediaType.HTML.getValue());
         int id = 0;
 
@@ -159,10 +159,7 @@ public class ApiController {
         Blog blog = BlogService.getBlogById(id);
 
         if(blog.isNull()) {
-            response.status(404);
-            response.type(MediaType.JSON.getValue());
-            response.redirect("/404");
-            return "{\"status\":\"error\"}";
+            return missingResource(response);
         }
 
         Map<String, Object> model = new HashMap<>();
@@ -172,7 +169,6 @@ public class ApiController {
         Context context = new Context();
         context.setVariables(model);
         return templateEngine.process("blog_page", context);
-
     }
 
 
@@ -247,7 +243,48 @@ public class ApiController {
     }
 
     public static Object deleteBlog(Request request, Response response) {
-        JsonObject body = gson.fromJson(request.body(), JsonObject.class);
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+
+        if (token == null) {
+            return forbitten(response);
+        }
+
+        String username = AuthService.getUsernameByToken(token);
+
+        if (username == null) {
+            return forbitten(response);
+        }
+
+        String blogId = request.params("id");
+
+        int id;
+        try {
+            id = Integer.parseInt(blogId);
+
+            if(!BlogService.canEdit(id, username)){
+                return forbitten(response);
+            }
+
+            if(BlogService.deleteBlogById(id)) {
+                response.status(200);
+                response.type(MediaType.JSON.getValue());
+                return "{\"status\":\"ok\"}";
+
+            } else {
+                return forbitten(response);
+            }
+
+        } catch (NumberFormatException e) {
+            return forbitten(response);
+        }
+
+    }
+
+    public static Object editBlog(Request request, Response response) {
+        return "";
+    }
+
+    public static Object checkCanEdit(Request request, Response response) {
         String token = request.cookie(AuthController.AUTH_COOKIE);
         if (token == null) {
             return missingResource(response);
@@ -258,29 +295,23 @@ public class ApiController {
         if (username == null) {
             return forbitten(response);
         }
-
-        String blogId = body.get("id").getAsString();
-
+        String blogId = request.params(":id");
         int id;
+
         try {
             id = Integer.parseInt(blogId);
 
-            if(BlogService.deleteBlogById(id)) {
+            if(BlogService.canEdit(id, username)){
                 response.status(200);
                 response.type(MediaType.JSON.getValue());
-                response.redirect("/home");
                 return "{\"status\":\"ok\"}";
             } else {
-                return missingResource(response);
+                return forbitten(response);
             }
 
         } catch (NumberFormatException e) {
             return missingResource(response);
         }
 
-    }
-
-    public static Object editBlog(Request request, Response response) {
-        return "";
     }
 }

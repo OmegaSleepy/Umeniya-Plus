@@ -151,7 +151,6 @@ public class BlogDao {
             throw new RuntimeException(e);
         }
         return blogList;
-
     }
 
     public static List<Blog> getBlogsByFilter(BlogFilter blogFilter) {
@@ -209,7 +208,7 @@ public class BlogDao {
     }
 
 
-    public static void deleteBlogById(int id) throws SQLException {
+    public static void deleteBlogById(int id) {
         String sql = "DELETE FROM blogs WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {

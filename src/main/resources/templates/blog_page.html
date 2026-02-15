@@ -13,6 +13,32 @@
 
     <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
 
+    <style>
+        #admin-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-edit, .btn-delete {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-edit:hover { background-color: #45a049; }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-delete:hover { background-color: #da190b; }
+    </style>
+
 
 </head>
 <body>
@@ -38,7 +64,14 @@
 
     <h1 class="post-title" th:text="${blog.title}">Заглавието на поста</h1>
 
-    <p class="post-excerpt" th:text="${blog.excerpt}">Това е крадко описание на
+    <p class="post-title" th:text="${blog.creator}">Създател на поста</p>
+
+    <div id="admin-controls" style="display: none; margin-bottom: 20px;">
+        <button onclick="editPost()" class="btn-edit">✎ Редактирай</button>
+        <button onclick="deletePost()" class="btn-delete">🗑 Изтрий</button>
+    </div>
+
+    <p class="post-excerpt" th:text="${blog.excerpt}">Това е кратко описание на
         съдържанието, целящо да грабне вниманието на читателя</p>
     <hr>
 
@@ -77,11 +110,47 @@
         profileIcon.src = "/api/profile-icon/" + userInformation.icon;
     }
 
+    async function canEdit() {
+        const response = await fetch(`/api/blog/can-edit/${postId}`);
+
+        if (response.ok) {
+            document.getElementById("admin-controls").style.display = "block";
+        }
+    }
+
+    async function deletePost() {
+        if (!confirm("Сигурен ли си?")) return;
+
+        try {
+            const response = await fetch(`/api/blog/delete/${postId}`, {
+                method: 'POST'
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === "ok") {
+                alert("Изтрито успешно!");
+                window.location.href = "/home";
+            } else {
+                console.error("Сървърът отказа триене:", result);
+                alert("Нямаш права или постът не съществува.");
+            }
+        } catch (err) {
+            console.error("Fatal error:", err);
+        }
+    }
+
+    function editPost() {
+        window.location.href = `/api/blog/edit/${postId}`;
+    }
+
     loadUserInformation();
+    loadPost(postId);
+    canEdit();
+
 
     console.log(postId);
 
-    loadPost(postId)
 </script>
 
 </body>
