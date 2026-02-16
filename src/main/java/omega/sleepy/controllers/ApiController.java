@@ -66,26 +66,6 @@ public class ApiController {
         return "";
     }
 
-    public static Object getFaviconLogo(Request request, Response response) {
-        response.type(MediaType.ICON.getValue());
-        response.header("Cache-Control", "public, max-age=604800"); // 1 week
-
-        try (var inputStream = ApiController.class.getResourceAsStream("/public/img/icons/favicon-logo.ico")) {
-            if (inputStream == null) {
-                return missingResource(response);
-            }
-
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            response.raw().getOutputStream().write(bytes);
-            response.raw().getOutputStream().flush();
-        } catch (IOException e) {
-            response.status(500);
-            return "";
-        }
-
-        return "";
-    }
-
     public static Object getImage(Request request, Response response) {
         response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
@@ -158,7 +138,7 @@ public class ApiController {
 
         Blog blog = BlogService.getBlogById(id);
 
-        if(blog.isNull()) {
+        if(blog == null) {
             return missingResource(response);
         }
 
