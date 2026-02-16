@@ -10,17 +10,38 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 
 import static omega.sleepy.util.Database.getConnection;
 
 public class BlogDao {
 
-    private static List<String> categories;
-    private static String any;
+    private static final String DEFAULT_COLOR = "#F2F2F2";
 
-    public static List<String> getCategories() {
-        return categories;
+    private static final String any = "Всякакви";
+
+    private static final Map<String, String> CATEGORIES = Map.ofEntries(
+            Map.entry("Математика", "#DCEBFF"),
+            Map.entry("Наука", "#D9F4F1"),
+            Map.entry("Биология", "#E3F6E8"),
+            Map.entry("Химия", "#EFE3FF"),
+            Map.entry("Физика", "#E1F0FF"),
+            Map.entry("Английски език", "#FFE3E3"),
+            Map.entry("История", "#F5EAD6"),
+            Map.entry("География", "#EEF3D9"),
+            Map.entry("Изкуство", "#FFEBD6"),
+            Map.entry("Музика", "#F2E6FF"),
+            Map.entry("Компютърни науки", "#E3EAF5"),
+            Map.entry("Икономика", "#E6F7F1"),
+            Map.entry("Философия", "#ECE9F4"),
+            Map.entry("Литература", "#FFF4E1"),
+            Map.entry("Няма", DEFAULT_COLOR),
+            Map.entry(any, DEFAULT_COLOR)
+    );
+
+    public static Map<String, String> getCategories() {
+        return CATEGORIES;
     }
 
     public static String getDefaultCategory() {
@@ -28,14 +49,6 @@ public class BlogDao {
     }
 
     public static void init() {
-
-        any = "Всякакви";
-
-        categories = List.of("Математика", "Наука", "Биология", "Химия", "Физика", "Английски език", "История",
-                "География", "Изкуство", "Музика", "Компютърни науки", "Икономика", "Философия",
-                "Литература", "Няма", any);
-
-
     }
 
     public static void addBlog(Blog blog) {
@@ -59,7 +72,7 @@ public class BlogDao {
     }
 
     public static Blog getBlogById(int id) {
-        String sql = "SELECT * FROM blogs WHERE id = ?";
+        String sql = "SELECT * FROM blogs WHERE id = ? limit 1";
         try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
@@ -209,7 +222,7 @@ public class BlogDao {
 
 
     public static boolean deleteBlogById(int id) {
-        String sql = "DELETE FROM blogs WHERE id = ?";
+        String sql = "DELETE FROM blogs WHERE id = ? limit 1";
         try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
