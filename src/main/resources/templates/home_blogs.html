@@ -239,7 +239,7 @@
             const data = await response.json();
 
             holder.innerHTML = data.map(element => `
-                <div class="blog ${element.tag.toString().toLowerCase()}" onclick="window.location.href='/blog/${element.id}'">
+                <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
                     <div class="blog-header">
                         <span class="blog-tag">${element.tag}</span>
                         <h2 class="blog-title">${element.title}</h2>
