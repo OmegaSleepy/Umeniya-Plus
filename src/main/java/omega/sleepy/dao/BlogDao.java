@@ -3,15 +3,11 @@ package omega.sleepy.dao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.util.BlogFilter;
 import omega.sleepy.util.Direction;
-import omega.sleepy.util.FileUtil;
 import omega.sleepy.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Condition;
+import java.util.*;
 
 import static omega.sleepy.util.Database.getConnection;
 
@@ -21,24 +17,31 @@ public class BlogDao {
 
     private static final String any = "Всякакви";
 
-    private static final Map<String, String> CATEGORIES = Map.ofEntries(
-            Map.entry("Математика", "#DCEBFF"),
-            Map.entry("Наука", "#D9F4F1"),
-            Map.entry("Биология", "#E3F6E8"),
-            Map.entry("Химия", "#EFE3FF"),
-            Map.entry("Физика", "#E1F0FF"),
-            Map.entry("Английски език", "#FFE3E3"),
-            Map.entry("История", "#F5EAD6"),
-            Map.entry("География", "#EEF3D9"),
-            Map.entry("Изкуство", "#FFEBD6"),
-            Map.entry("Музика", "#F2E6FF"),
-            Map.entry("Компютърни науки", "#E3EAF5"),
-            Map.entry("Икономика", "#E6F7F1"),
-            Map.entry("Философия", "#ECE9F4"),
-            Map.entry("Литература", "#FFF4E1"),
-            Map.entry("Няма", DEFAULT_COLOR),
-            Map.entry(any, DEFAULT_COLOR)
-    );
+    private static final Map<String, String> CATEGORIES;
+
+    static {
+        Map<String, String> map = new LinkedHashMap<>();
+
+        map.put("Математика", "#DCEBFF");
+        map.put("Наука", "#D9F4F1");
+        map.put("Биология", "#E3F6E8");
+        map.put("Химия", "#EFE3FF");
+        map.put("Физика", "#E1F0FF");
+        map.put("Английски език", "#FFE3E3");
+        map.put("История", "#F5EAD6");
+        map.put("География", "#EEF3D9");
+        map.put("Изкуство", "#FFEBD6");
+        map.put("Музика", "#F2E6FF");
+        map.put("Компютърни науки", "#E3EAF5");
+        map.put("Икономика", "#E6F7F1");
+        map.put("Философия", "#ECE9F4");
+        map.put("Литература", "#FFF4E1");
+        map.put("Няма", DEFAULT_COLOR);
+        map.put(any, DEFAULT_COLOR);
+
+        CATEGORIES = Collections.unmodifiableMap(map);
+    }
+
 
     public static Map<String, String> getCategories() {
         return CATEGORIES;

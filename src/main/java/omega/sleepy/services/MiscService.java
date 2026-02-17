@@ -7,7 +7,7 @@ import spark.utils.IOUtils;
 
 import java.io.IOException;
 
-import static omega.sleepy.controllers.ApiController.missingResource;
+import static omega.sleepy.controllers.ApiController.missingResourcePage;
 
 public class MiscService {
 
@@ -16,7 +16,7 @@ public class MiscService {
         try (var inputStream = ApiController.class.getResourceAsStream("/public/img/"+image)) {
 
             if (inputStream == null) {
-                return missingResource(response);
+                return missingResourcePage(response);
             }
 
             byte[] bytes = IOUtils.toByteArray(inputStream);
