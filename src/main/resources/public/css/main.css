@@ -1,12 +1,13 @@
 :root {
-    --primary-color: #5ad53d;
-    --primary-hover: #42a22b;
+    --primary-color: #96e884;
+    --primary-hover: #5ad53d;
     --bg-body: #f5f5f5;
     --bg-card: #ffffff;
     --text-main: #333333;
     --text-muted: #666666;
     --text-light: #888888;
     --text-dark: #222222;
+    --tag-border: #dddddd65;
     --border-color: #dddddd;
     --tag-bg: #e9ecef;
     --code-bg: #111111;
@@ -116,6 +117,7 @@ header {
 .blog-title {
     font-size: 1.8rem;
     color: var(--text-dark);
+    text-align: center;
     margin: 0 0 10px 0;
 }
 
@@ -125,6 +127,9 @@ header {
     background: var(--tag-bg);
     padding: 5px 12px;
     border-radius: 20px;
+    border-color: #27283372;
+    border-width: 2px;
+    border-style: dashed;
     display: inline-block;
     text-transform: uppercase;
     font-weight: 600;
