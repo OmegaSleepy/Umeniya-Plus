@@ -7,7 +7,7 @@ import static spark.Spark.*;
 public class ApiRoutes {
     public static void init() {
 
-        get("/api/style", ApiController::getStyleSheet);
+        get("/api/style/:styleSheet", ApiController::getStyleSheet);
 
         get("/favicon.ico", ApiController::getFavicon);
 

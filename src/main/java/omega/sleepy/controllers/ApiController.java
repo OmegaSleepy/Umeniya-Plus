@@ -105,13 +105,13 @@ public class ApiController {
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
         if (token == null) {
-            return missingResource(response);
+            return forbitten(response);
         }
 
         try{
             validateToken(token);
         } catch (InvalidCredentials e) {
-            return missingResource(response);
+            return forbitten(response);
         }
 
         String author = UserDao.usernameFromToken(token);
@@ -133,13 +133,13 @@ public class ApiController {
         try {
             id = Integer.parseInt(request.params(":id"));
         } catch (NumberFormatException e) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
         Blog blog = BlogService.getBlogById(id);
 
         if(blog == null) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
         Map<String, Object> model = new HashMap<>();
@@ -158,7 +158,7 @@ public class ApiController {
         String body = BlogService.getBlogBodyById(id);
 
         if(body == null) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
         return body;
@@ -181,11 +181,18 @@ public class ApiController {
 
     }
 
-    public static String missingResource(Response response) {
+    public static String missingResourcePage(Response response) {
         Log.error("something happened HERE \n" + response.raw());
         response.status(404);
         response.type(MediaType.JSON.getValue());
         response.redirect("/404");
+        return "{\"status\":\"error\"}";
+    }
+
+    public static String missingResource(Response response){
+        Log.error("something happened HERE \n" + response.raw());
+        response.status(404);
+        response.type(MediaType.JSON.getValue());
         return "{\"status\":\"error\"}";
     }
 
@@ -200,13 +207,13 @@ public class ApiController {
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
         if (token == null) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
         String username = AuthService.getUsernameByToken(token);
 
         if (username == null) {
-            return missingResource(response);
+            return missingResourcePage(response);
         } else if (!AuthService.userExists(username)) {
             return AuthController.logout(request, response);
         }
@@ -267,7 +274,7 @@ public class ApiController {
     public static Object checkCanEdit(Request request, Response response) {
         String token = request.cookie(AuthController.AUTH_COOKIE);
         if (token == null) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
         String username = AuthService.getUsernameByToken(token);
@@ -290,7 +297,7 @@ public class ApiController {
             }
 
         } catch (NumberFormatException e) {
-            return missingResource(response);
+            return missingResourcePage(response);
         }
 
     }
