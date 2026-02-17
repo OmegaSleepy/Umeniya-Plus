@@ -33,11 +33,11 @@ public class ApiController {
     private static final Gson gson = new Gson();
 
     public static String getStyleSheet(Request request, Response response) {
+        String styleSheetName = request.params("styleSheet");
         response.type("text/css");
-        try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/umeniyaStyleSheet.css")) {
+        try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/" + styleSheetName)) {
             if (inputStream == null) {
-                response.status(404);
-                return "/* CSS file not found in classpath */";
+                return missingResource(response);
             }
             return IOUtils.toString(inputStream);
         } catch (Exception e) {
