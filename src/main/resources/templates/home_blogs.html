@@ -115,6 +115,39 @@
             font-weight: 700;
             font-size: 0.9rem;
         }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 2px dashed #ddd;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .hidden-pagination {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -242,7 +275,8 @@
             const holder = document.getElementById("holder");
             const data = await response.json();
 
-            holder.innerHTML = data.map(element => `
+            if (data && data.length > 0) {
+                holder.innerHTML = data.map(element => `
                 <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
                     <div class="blog-header">
                         <span class="blog-tag">${element.tag}</span>
@@ -262,9 +296,44 @@
                 </div>
             `).join('');
 
-            renderPagination(data.length);
+                togglePaginationVisibility(true);
+                renderPagination(data.length);
+            } else {
+                holder.innerHTML = "";
+                checkEmpty();
+            }
         } catch (err) {
             console.error("Failed to load blogs:", err);
+            holder.innerHTML = "<p style='text-align:center;'>Възникна грешка при зареждането.</p>";
+        }
+    }
+
+    function togglePaginationVisibility(show) {
+        const paginations = [
+            document.getElementById("pagination-top"),
+            document.getElementById("pagination-bottom")
+        ];
+
+        paginations.forEach(p => {
+            if (p) {
+                if (show) p.classList.remove("hidden-pagination");
+                else p.classList.add("hidden-pagination");
+            }
+        });
+    }
+
+    function checkEmpty() {
+        const holder = document.getElementById("holder");
+
+        if (holder.innerHTML.trim() === "") {
+            holder.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-state-icon">🔍</span>
+                <h3>Опа! Нищо не открихме.</h3>
+                <p>Изглежда, че няма публикации, отговарящи на вашите критерии. Опитайте да промените филтрите или потърсете нещо друго.</p>
+            </div>
+        `;
+            togglePaginationVisibility(false);
         }
     }
 
