@@ -1,0 +1,58 @@
+.content img {
+    display: block;
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 8px;
+}
+
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+}
+
+.content thead tr {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content th,
+.content td {
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+}
+
+.content tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+.content tbody tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.content tbody tr:last-of-type {
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.content tbody tr:hover {
+    background-color: rgba(90, 213, 61, 0.05);
+}
+
+.content td code {
+    background: var(--tag-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    color: var(--text-dark);
+}
