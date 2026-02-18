@@ -47,7 +47,7 @@
 
             <div class="form-group">
                 <label for="excerpt">Кратко описание</label>
-                <input type="text" id="excerpt" name="excerpt" placeholder="Както описание на съдържанието на поста">
+                <input type="text" id="excerpt" name="excerpt" placeholder="Както и описание на съдържанието на публикацията">
             </div>
 
             <div class="form-group">
@@ -55,7 +55,7 @@
                 <a href="/help/markdown-info">
                     <label for="content">Съдържание (Markdown)</label>
                 </a>
-                <textarea id="content" name="content" placeholder="Въведи тялото на вашата статия тук..."
+                <textarea id="content" name="content" placeholder="Въведи тялото на твоята статия тук..."
                           required></textarea>
             </div>
 
@@ -83,7 +83,6 @@
     const toggleBtn = document.getElementById('togglePreview');
     const mainWrapper = document.getElementById('mainWrapper');
 
-    // Live Update Function
     function updatePreview() {
         document.getElementById('preview-title').textContent = titleInput.value || "Преглед на заглавието";
         document.getElementById('preview-excerpt').textContent = excerptInput.value || "Краткото описание ще се появи тук...";
@@ -94,7 +93,6 @@
         document.getElementById('markdown-body').innerHTML = marked.parse(rawValue);
     }
 
-    // Toggle Preview Panel
     //TODO just make the UI stay the same, but the preview must hide
     toggleBtn.addEventListener('click', () => {
         const isShowing = previewPanel.style.display === 'block';
@@ -104,14 +102,14 @@
             formSide.classList.remove('split-mode');
 
             mainWrapper.style.display = 'block';
-            mainWrapper.style.maxWidth = '600px'; // Keep form width tight
+            mainWrapper.style.maxWidth = '600px';
             toggleBtn.textContent = "Show Preview";
         } else {
             previewPanel.style.display = 'block';
             formSide.classList.add('split-mode');
 
             mainWrapper.style.display = 'flex';
-            mainWrapper.style.maxWidth = '1400px'; // Expand to fit both
+            mainWrapper.style.maxWidth = '1400px';
             toggleBtn.textContent = "Hide Preview";
             updatePreview();
         }
@@ -128,10 +126,10 @@
             const tags = await response.json();
             const select = document.getElementById("category");
             select.innerHTML = "";
-            tags.forEach(tag => {
+            Object.entries(tags).forEach(([key, value]) => {
                 const option = document.createElement("option");
-                option.value = tag;
-                option.textContent = tag;
+                option.value = key;
+                option.textContent = key;
                 select.appendChild(option);
             });
             select.selectedIndex = select.options.length - 2;
