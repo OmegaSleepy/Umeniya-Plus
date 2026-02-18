@@ -4,11 +4,88 @@
     <meta charset="UTF-8">
     <title>Умения+ | Твоят път към знанието</title>
     <link rel="stylesheet" href="/api/style/main.css">
+    <style>
+        .hero {
+            width: 100%;
+            background-color: var(--primary-color);
+            background-image: url("/api/image/peak.jpg");
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: var(--primary-hover);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: var(--max-width-large);
+            margin: -50px auto 60px auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.5rem; }
+            .cta-group { flex-direction: column; width: 100%; }
+            .features { margin-top: 20px; }
+        }
+    </style>
 </head>
 <body>
-<a href="/create">create</a>
-<br>
-<a href="/home">posts</a>
 
 <header>
     <div class="header-container">
@@ -26,6 +103,41 @@
         </div>
     </div>
 </header>
+
+<main style="width: 100%;">
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Развивай своите <span>Умения+</span> и вдъхновявай другите</h1>
+            <p>Платформата, в която знам се среща с мога. Чети практически съвети, споделяй своите проекти и учи с общността.</p>
+            <div class="cta-group">
+                <a href="/home" class="btn-submit fancier-button" style="padding: 15px 40px; font-size: 1.1rem;">Към всички статии</a>
+                <a href="/create" class="btn-submit fancier-button" style="padding: 15px 40px; font-size: 1.1rem;">Създай пост</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <span class="feature-icon">🚀</span>
+            <h3>Бърз старт</h3>
+            <p>Сподели наученото за броени минути с интуитивения редактор.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">📚</span>
+            <h3>Богата библиотека</h3>
+            <p>От програмиране до литература, до химия – намери всичко необходимо на едно място.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🤝</span>
+            <h3>Общност</h3>
+            <p>Свържи се с хора, които имат същите интереси и цели като теб.</p>
+        </div>
+    </section>
+</main>
+
+<footer style="margin-top: 50px; padding: 40px; text-align: center; color: var(--text-light); border-top: 1px solid var(--border-color);">
+    <p> Умения+ за НОИТ 2026г.</p>
+</footer>
 
 </body>
 </html>
