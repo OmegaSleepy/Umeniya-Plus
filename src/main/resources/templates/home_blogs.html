@@ -225,13 +225,15 @@
         triggerFetch();
     });
 
-    document.getElementById("clear").addEventListener("click", function () {
+    document.getElementById("clear").addEventListener("click", clearFilter);
+
+    function clearFilter(){
         const category_select = document.getElementById("category");
         category_select.selectedIndex = category_select.options.length - 1;
         document.getElementById("blog-name").value = '';
         currentPage = 0;
         triggerFetch();
-    });
+    }
 
 
     async function loadCategories() {
@@ -331,6 +333,7 @@
                 <span class="empty-state-icon">🔍</span>
                 <h3>Опа! Нищо не открихме.</h3>
                 <p>Изглежда, че няма публикации, отговарящи на вашите критерии. Опитайте да промените филтрите или потърсете нещо друго.</p>
+                <button id="clear" onclick="clearFilter()" class="fancy-button outline" style="margin-top: 10px">Изчисти</button>
             </div>
         `;
             togglePaginationVisibility(false);
