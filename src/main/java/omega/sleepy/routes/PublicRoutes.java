@@ -56,12 +56,14 @@ public class PublicRoutes {
 
         get("/me", PublicController::thisUserProfile);
 
+        path("/help", () -> {
+            get("/markdown-info", (request, response) -> getSimpleTemplate("markdown", response));
+        });
+
         notFound((request, response) -> {
             response.redirect("/404");
             return null;
         });
-
-
 
         Log.info("All public rouses initialized");
 
