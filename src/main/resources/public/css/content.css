@@ -97,3 +97,41 @@
     cursor: pointer;
     transition: color 0.2s;
 }
+
+.post-content {
+    white-space: normal;
+}
+
+.post-content td,
+.post-content th,
+.post-content tr {
+    border: 1px solid var(--border-color);
+}
+
+.post-content ul,
+.post-content ol {
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content ul ul,
+.post-content ul ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.post-content p {
+    margin-bottom: 1.2rem;
+}
