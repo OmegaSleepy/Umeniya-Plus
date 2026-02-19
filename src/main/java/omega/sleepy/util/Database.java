@@ -40,11 +40,13 @@ public class Database {
         String blogSchema = readFile("/sql/schema/blogSchema.sql");
         String userSchema = readFile("/sql/schema/userSchema.sql");
         String sessionSchema = readFile("/sql/schema/userSessions.sql");
+        String userExtraSchema = readFile("/sql/schema/userExtras.sql");
         //...
 
         executeSQL(blogSchema);
         executeSQL(userSchema);
         executeSQL(sessionSchema);
+        executeSQL(userExtraSchema);
 
     }
 }

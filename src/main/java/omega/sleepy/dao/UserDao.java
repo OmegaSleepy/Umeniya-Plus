@@ -42,7 +42,7 @@ public class UserDao {
             ps.setString(1, username);
 
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // true if row exists
+                return rs.next();
             }
 
         } catch (SQLException e) {
@@ -66,6 +66,20 @@ public class UserDao {
         } catch (SQLException e) {
             Log.error(e.getMessage());
             throw new UserAlreadyExists("Потребителското име е заето");
+        }
+
+        sql = "INSERT into user_extras values(?, ?, ?)";
+
+        Log.info(sql);
+
+        try (Connection connection = Database.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setInt(2, 250);
+            preparedStatement.setString(3, "");
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
