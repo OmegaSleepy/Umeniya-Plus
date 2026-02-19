@@ -45,6 +45,9 @@ function createUserIsland() {
 }
 
 async function loadUserInformation() {
+    const iskri = document.getElementById("badge");
+    iskri.style.display = "none";
+
     try {
         const response = await fetch("/api/user/me-info");
         const userInformation = await response.json();
@@ -60,12 +63,11 @@ async function loadUserInformation() {
         if (profileIcon) {
             profileIcon.src = "/api/profile-icon/" + userInformation.icon;
         }
-
+        iskri.style.display = "inline-block";
         setVisualFlames(userInformation.flames);
 
     } catch (error) {
-        const iskri = document.getElementById("badge");
-        iskri.style.display = "none";
+
         console.error("Failed to load user info:", error);
     }
 }
