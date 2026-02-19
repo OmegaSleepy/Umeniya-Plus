@@ -34,7 +34,7 @@ public class UserDao {
     }
 
     public static boolean userExists(String username) {
-        String sql = "SELECT 1 FROM users WHERE username = ? LIMIT 1";
+        String sql = "SELECT 1 FROM users WHERE username = ?";
 
         try (Connection connection = Database.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
