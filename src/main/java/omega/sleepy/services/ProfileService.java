@@ -2,6 +2,7 @@ package omega.sleepy.services;
 
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.User;
+import omega.sleepy.data.UserWithExtras;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.PermittingLevel;
 import omega.sleepy.util.ProfileIcons;
@@ -21,7 +22,8 @@ public class ProfileService {
         ProfileIcons icon;
 
         try{
-            String clean = name.toUpperCase().replace("-","_");
+            String clean = ProfileIcons.getProfileStyle(name);
+            Log.warn(clean);
             icon = ProfileIcons.valueOf(clean);
             return getProfileIcon(icon);
 
@@ -31,7 +33,7 @@ public class ProfileService {
     }
 
     public static byte[] getProfileIcon(ProfileIcons icon){
-        try (var inputStream = ProfileService.class.getResourceAsStream("/public/img/profileIcons/"+icon.toString())){
+        try (var inputStream = ProfileService.class.getResourceAsStream("/public/img/profileIcons/"+icon.location())){
             if (inputStream == null) {
                 return null;
             }
@@ -54,5 +56,21 @@ public class ProfileService {
                         userInfo.get(3),
                         userInfo.get(4),
                         ProfileIcons.valueOf(userInfo.get(5).toUpperCase()));
+    }
+
+    public static UserWithExtras getFullProfile(String username){
+        List<String> userInfo = UserDao.getAllUserInfo(username);
+        if (userInfo.isEmpty()) {
+            return null;
+        }
+
+        return new UserWithExtras(username,
+                userInfo.get(1),
+                PermittingLevel.valueOf(userInfo.get(2).toUpperCase()),
+                userInfo.get(3),
+                userInfo.get(4),
+                ProfileIcons.valueOf(userInfo.get(5).toUpperCase()),
+                Integer.parseInt(userInfo.get(7)),
+                userInfo.get(8));
     }
 }

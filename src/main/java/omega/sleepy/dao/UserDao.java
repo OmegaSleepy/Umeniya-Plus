@@ -198,7 +198,7 @@ public class UserDao {
 
         } catch (SQLException e) {
             error(e.getMessage());
-	    return false;
+	        return false;
         }
     }
 
@@ -246,5 +246,30 @@ public class UserDao {
             Log.error(e.getMessage());
             throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
+    }
+
+    public static List<String> getAdditionalUserInfo(String username) {
+        String sql = "SELECT * from user_extras where username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<String> list = new ArrayList<>();
+                list.add(username);
+                list.add(String.valueOf(resultSet.getInt("flames")));
+                list.add(resultSet.getString("style_profile"));
+                return list;
+            }
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
+    }
+
+    public static List<String> getAllUserInfo(String username) {
+        var list = getUserInfo(username);
+        list.addAll(getAdditionalUserInfo(username));
+        return list;
     }
 }

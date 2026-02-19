@@ -11,7 +11,15 @@ public enum ProfileIcons {
 
     @Override
     public String toString() {
-        return super.toString().toLowerCase().replace("_","-") +  PAST_FIX;
+        return super.toString().toLowerCase().replace("_","-");
+    }
+
+    public String location(){
+        return super.toString().toLowerCase().replace("_","-")+PAST_FIX;
+    }
+
+    public static String getProfileStyle(String name){
+        return name.toUpperCase().replace("-","_");
     }
 
     public static ProfileIcons getRandom(){

@@ -218,15 +218,15 @@ public class ApiController {
             return AuthController.logout(request, response);
         }
 
+        var user = ProfileService.getFullProfile(username);
+
         System.out.println(username);
+
+        assert user != null;
+        ProfileIcons icon = user.ProfileIcon();
 
         response.type(MediaType.JSON.getValue());
-        System.out.println(username);
-        String iconName = UserDao.getPfp(username);
-
-        ProfileIcons icon = ProfileIcons.valueOf(iconName.toUpperCase());
-
-        return gson.toJson(new UserRequestDTO(username, icon.name().toLowerCase().replace("_","-")));
+        return gson.toJson(new UserRequestDTO(username, icon.toString(), user.permittingLevel().toString(), user.flames()));
     }
 
     public static Object deleteBlog(Request request, Response response) {
