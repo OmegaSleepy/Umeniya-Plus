@@ -73,7 +73,7 @@ public class AuthController {
         try{
             createUser(username, password);
             generateCookie(response, username);
-        } catch (MalformedPassword | UserAlreadyExists e) {
+        } catch (RuntimeException e) {
             response.status(400);
             Log.exec(e.toString());
             return gson.toJson(new ExceptionDTO(e.getMessage()));

@@ -42,7 +42,7 @@ public class AuthService {
 		return UserDao.usernameFromToken(token);
 	}
 
-	public static void createUser(String username, String plainTextPassword) throws MalformedPassword{
+	public static void createUser(String username, String plainTextPassword) throws RuntimeException{
 		if(isPasswordFormatInvalid(plainTextPassword)) throw new MalformedPassword("Паролата не е достатъчно силна");
 		UserDao.createUser(username, hashPassword(plainTextPassword));
 		Log.exec("Created a new userprofile by %s".formatted(username));
