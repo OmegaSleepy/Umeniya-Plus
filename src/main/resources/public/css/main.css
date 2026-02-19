@@ -312,13 +312,6 @@ hr {
     transition: all 0.2s;
 }
 
-.fancier-button {
-    background-color: var(--tetra-1);
-}
-.fancier-button:hover {
-    background-color: var(--tetra-1-dark);
-}
-
 .button-group {
     display: flex;
     gap: 10px;

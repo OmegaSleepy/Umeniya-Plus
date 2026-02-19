@@ -6,11 +6,16 @@
     <link rel="stylesheet" href="/api/style/main.css">
     <script src="/api/js/loadUserInfo.js" defer></script>
     <style>
+
         .hero {
             width: 100%;
-            background-color: var(--primary-color);
-            background-image: url("/api/image/peak.jpg");
-            padding: 80px 20px;
+            background: linear-gradient(
+                    rgba(0, 0, 0, 0.4),
+                    rgba(0, 0, 0, 0.2)
+            ), url("/api/image/peak.jpg");
+
+            background-size: cover;
+            padding: 100px 20px 140px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -24,20 +29,25 @@
 
         .hero h1 {
             font-size: 3.5rem;
-            color: var(--text-dark);
+            color: #ffffff;
             margin-bottom: 20px;
             line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .hero h1 span {
-            color: var(--primary-hover);
+            color: #4ade80;
         }
 
         .hero p {
             font-size: 1.25rem;
-            color: var(--text-dark);
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
             margin-bottom: 35px;
             line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-group {
@@ -104,8 +114,8 @@
             <h1>Развивай своите <span>Умения+</span> и вдъхновявай другите</h1>
             <p>Платформата, в която знам се среща с мога. Чети практически съвети, споделяй своите проекти и учи с общността.</p>
             <div class="cta-group">
-                <a href="/home" class="btn-submit fancier-button" style="padding: 15px 40px; font-size: 1.1rem;">Към всички статии</a>
-                <a href="/create" class="btn-submit fancier-button" style="padding: 15px 40px; font-size: 1.1rem;">Създай пост</a>
+                <a href="/home" class="btn-submit" style="padding: 15px 40px; font-size: 1.1rem;">Към всички статии</a>
+                <a href="/create" class="btn-submit" style="padding: 15px 40px; font-size: 1.1rem;">Създай пост</a>
             </div>
         </div>
     </section>
