@@ -34,7 +34,7 @@ public class ApiController {
 
     public static String getStyleSheet(Request request, Response response) {
         String styleSheetName = request.params("styleSheet");
-        response.type("text/css");
+        response.type(MediaType.CSS.getValue());
         try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/css/" + styleSheetName)) {
             if (inputStream == null) {
                 return missingResource(response);
@@ -48,7 +48,7 @@ public class ApiController {
 
     public static String getJavaScriptFile(Request request, Response response) {
         String styleSheetName = request.params("js");
-        response.type("text/css");
+        response.type(MediaType.JS.getValue());
         try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/js/" + styleSheetName)) {
             if (inputStream == null) {
                 return missingResource(response);

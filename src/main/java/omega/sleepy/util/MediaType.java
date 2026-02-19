@@ -20,7 +20,8 @@ public enum MediaType {
     CSS("text/css"),
     CSV("text/csv"),
     PDF("application/pdf"),
-    EXE("application/octet-stream");
+    EXE("application/octet-stream"),
+    JS("application/javascript");
 
     final String value;
     MediaType(String value){
