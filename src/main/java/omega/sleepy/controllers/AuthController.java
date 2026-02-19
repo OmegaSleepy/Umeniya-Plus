@@ -27,10 +27,13 @@ public class AuthController {
     public static final String LOGIN_ERROR = "Потребителят не съществува или паролата е грешна!";
 
     public static Object logIn(Request request, Response response){
-        String password = request.queryParams("password");
-        String username = request.queryParams("username");
+        JsonObject jsonObject = gson.fromJson(request.body(), JsonObject.class);
+
+        String password = jsonObject.get("password").getAsString();
+        String username = jsonObject.get("username").getAsString();
 
         if (!AuthService.userExists(username)) {
+            Log.error("Username " + username + " not found");
             response.status(400);
             return gson.toJson(new ExceptionDTO(LOGIN_ERROR));
         }
@@ -38,10 +41,11 @@ public class AuthController {
         try{
             login(username,password);
             generateCookie(response, username);
-
             response.redirect("/home");
+
         } catch (InvalidPassword e) {
-            response.status(401);
+            Log.error("Invalid password for " + username);
+            response.status(400);
             return gson.toJson(new ExceptionDTO(LOGIN_ERROR));
         }
 
