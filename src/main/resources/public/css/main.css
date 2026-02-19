@@ -83,6 +83,7 @@ header {
     cursor: pointer;
     font-size: 16px;
     display: inline-block;
+    margin: 0 10px;
 }
 
 .btn-create:hover, .btn-submit:hover {
