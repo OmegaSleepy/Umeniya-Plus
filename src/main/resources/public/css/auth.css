@@ -1,0 +1,128 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/api/image/peak.jpg");
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+}
+
+.auth-container {
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.auth-container h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+.auth-container .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+    height: 45px;
+}
+
+input[type="text"],
+input[type="password"] {
+    margin: 0;
+    display: block;
+}
+
+.auth-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.show-password-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.show-password-container input[type="checkbox"] {
+    width: auto !important;
+    height: auto !important;
+    margin: 0;
+    cursor: pointer;
+}
+
+.show-password-container label {
+    margin-bottom: 0;
+    cursor: pointer;
+    display: inline-block;
+}
+
+#message {
+    display: block;
+    min-height: 20px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: #dc3545;
+    text-align: center;
+}
+
+.auth-container .fancy-button {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.auth-container .fancy-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.auth-container .fancy-button:active {
+    transform: translateY(0);
+}
+
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
