@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Умения+ | Твоят път към знанието</title>
     <link rel="stylesheet" href="/api/style/main.css">
+    <script src="/api/js/loadUserInfo.js" defer></script>
     <style>
         .hero {
             width: 100%;
@@ -88,18 +89,11 @@
 <body>
 
 <header>
-    <div class="header-container">
+    <div class="header-container" id="header-container">
         <a href="/" class="logo">Умения+</a>
         <div class="header-actions">
             <a href="/home" class="btn-create" style="background: transparent; color: var(--text-main); margin-right: 15px;">Разгледай</a>
             <a href="/create" class="btn-create">+ Сподели опит</a>
-        </div>
-        <div class="userInformation" style="display: flex; align-items: center;">
-            <label id="username" style="margin-right: 10px; display: none;">Потребител</label>
-            <a href="/dashboard">
-                <img id="profile-icon" src="/favicon-logo.ico" alt="Профил"
-                     style="max-height: 35px; border-radius: 50%; border: 2px solid var(--primary-color);">
-            </a>
         </div>
     </div>
 </header>

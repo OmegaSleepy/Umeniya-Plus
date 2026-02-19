@@ -46,6 +46,21 @@ public class ApiController {
         }
     }
 
+    public static String getJavaScriptFile(Request request, Response response) {
+        String styleSheetName = request.params("js");
+        response.type("text/css");
+        try (var inputStream = ApiRoutes.class.getResourceAsStream("/public/js/" + styleSheetName)) {
+            if (inputStream == null) {
+                return missingResource(response);
+            }
+            return IOUtils.toString(inputStream);
+        } catch (Exception e) {
+            response.status(500);
+            return "/* Server Error loading JS */";
+        }
+    }
+
+
     public static Object getFavicon(Request request, Response response) {
         response.type(MediaType.ICON.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week

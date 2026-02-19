@@ -14,6 +14,7 @@
           href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
+    <script src="/api/js/loadUserInfo.js" defer></script>
 
     <style>
         #admin-controls {
@@ -54,7 +55,7 @@
 <body>
 
 <header>
-    <div class="header-container">
+    <div class="header-container" id="header-container">
         <a href="/" class="logo">Умения+</a>
         <a href="/home" class="btn-back">← Обратно</a>
         <div class="userInformation" style="display: flex">
@@ -117,16 +118,6 @@
     const pathParts = window.location.pathname.split("/");
     const postId = pathParts[pathParts.length - 1];
 
-    async function loadUserInformation() {
-        const username = document.getElementById("username");
-        const response = await fetch("/api/user/me-info");
-        const userInformation = await response.json();
-        username.innerText = userInformation.username;
-
-        const profileIcon = document.getElementById("profile-icon");
-        profileIcon.src = "/api/profile-icon/" + userInformation.icon;
-    }
-
     async function canEdit() {
         const response = await fetch(`/api/blog/can-edit/${postId}`);
 
@@ -161,7 +152,6 @@
         window.location.href = `/api/blog/edit/${postId}`;
     }
 
-    loadUserInformation();
     loadPost(postId);
     canEdit();
 

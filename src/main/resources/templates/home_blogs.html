@@ -149,11 +149,12 @@
             display: none !important;
         }
     </style>
+    <script src="/api/js/loadUserInfo.js" defer></script>
 </head>
 <body>
 
 <header>
-    <div class="header-container">
+    <div class="header-container" id="header-container">
         <a href="/" class="logo">Умения+</a>
         <div class="header-actions">
             <button id="toggle-search-btn" class="btn-create"
@@ -161,15 +162,6 @@
                 🔍 Филтри
             </button>
             <a href="/create" class="btn-create">+ Създай Пост</a>
-        </div>
-        <div class="userInformation" style="display: flex">
-            <label for="profile-icon" id="username" style="margin: 10px">
-                Не сте вписани
-            </label>
-            <a href="/dashboard">
-                <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon"
-                     style="max-height: 40px; max-width: 40px;">
-            </a>
         </div>
     </div>
 </header>
@@ -377,18 +369,6 @@
             container.append(prevBtn, indicator, nextBtn);
         });
     }
-
-    async function loadUserInformation() {
-        const username = document.getElementById("username");
-        const response = await fetch("/api/user/me-info");
-        const userInformation = await response.json();
-        username.innerText = userInformation.username;
-
-        const profileIcon = document.getElementById("profile-icon");
-        profileIcon.src = "/api/profile-icon/" + userInformation.icon;
-    }
-
-    loadUserInformation();
 
     //init
     loadCategories(); //0

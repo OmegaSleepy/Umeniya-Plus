@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Страницата не е намерена | Умения+</title>
     <link rel="stylesheet" href="/api/style/main.css">
+    <script src="/api/js/loadUserInfo.js" defer></script>
     <style>
         .error-container {
             text-align: center;
@@ -46,18 +47,9 @@
 </head>
 <body>
 <header>
-    <div class="header-container">
+    <div class="header-container" id="header-container">
         <a href="/" class="logo">Умения+</a>
         <a href="/home" class="btn-create">Начална Страница</a>
-        <div class="userInformation" style="display: flex">
-            <label for="profile-icon" id="username" style="margin: 10px">
-                Не сте вписани
-            </label>
-            <a href="/dashboard">
-                <img id="profile-icon" src="/favicon-logo.ico" alt="Your Profile Icon"
-                     style="max-height: 40px; max-width: 40px;">
-            </a>
-        </div>
     </div>
 </header>
 
@@ -81,20 +73,6 @@
         </div>
     </div>
 </main>
-
-<script>
-    async function loadUserInformation() {
-        const username = document.getElementById("username");
-        const response = await fetch("/api/user/me-info");
-        const userInformation = await response.json();
-        username.innerText = userInformation.username;
-
-        const profileIcon = document.getElementById("profile-icon");
-        profileIcon.src = "/api/profile-icon/" + userInformation.icon;
-    }
-
-    loadUserInformation();
-</script>
 
 </body>
 </html>

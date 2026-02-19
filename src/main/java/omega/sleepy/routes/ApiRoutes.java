@@ -8,16 +8,17 @@ public class ApiRoutes {
     public static void init() {
 
         get("/api/style/:styleSheet", ApiController::getStyleSheet);
+        get("/api/js/:js", ApiController::getJavaScriptFile);
+        get("/api/image/:image", ApiController::getImage);
+
 
         get("/favicon.ico", ApiController::getFavicon);
-
         get("/favicon-logo.ico", ApiController::getFavicon);
+        get("/api/profile-icon/:icon", ApiController::getIcon);
+
 
         get("/api/user/me-info", ApiController::getUserInformation);
 
-        get("/api/image/:image", ApiController::getImage);
-
-        get("/api/profile-icon/:icon", ApiController::getIcon);
 
         path("/api/blog", () -> {
 
