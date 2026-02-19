@@ -9,9 +9,11 @@ import static omega.sleepy.util.FileUtil.readFile;
 
 public class Database {
 
+    public static final String dbName = "main.db";
+
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:sqlite:main.db");
+            return DriverManager.getConnection("jdbc:sqlite:"+dbName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,6 +33,10 @@ public class Database {
 
     public static void initDatabase(){
         Log.info("Database initializing...");
+
+        String pragmaSchema = readFile("/sql/pragma.sql");
+        executeSQL(pragmaSchema);
+
         String blogSchema = readFile("/sql/schema/blogSchema.sql");
         String userSchema = readFile("/sql/schema/userSchema.sql");
         String sessionSchema = readFile("/sql/schema/userSessions.sql");
@@ -41,5 +47,4 @@ public class Database {
         executeSQL(sessionSchema);
 
     }
-
 }
