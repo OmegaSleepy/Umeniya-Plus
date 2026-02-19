@@ -173,7 +173,7 @@ public class ApiController {
         String body = BlogService.getBlogBodyById(id);
 
         if(body == null) {
-            return missingResourcePage(response);
+            return missingResource(response);
         }
 
         return body;
@@ -222,13 +222,13 @@ public class ApiController {
         String token = request.cookie(AuthController.AUTH_COOKIE);
 
         if (token == null) {
-            return missingResourcePage(response);
+            return missingResource(response);
         }
 
         String username = AuthService.getUsernameByToken(token);
 
         if (username == null) {
-            return missingResourcePage(response);
+            return missingResource(response);
         } else if (!AuthService.userExists(username)) {
             return AuthController.logout(request, response);
         }
@@ -289,7 +289,7 @@ public class ApiController {
     public static Object checkCanEdit(Request request, Response response) {
         String token = request.cookie(AuthController.AUTH_COOKIE);
         if (token == null) {
-            return missingResourcePage(response);
+            return missingResource(response);
         }
 
         String username = AuthService.getUsernameByToken(token);
@@ -312,7 +312,7 @@ public class ApiController {
             }
 
         } catch (NumberFormatException e) {
-            return missingResourcePage(response);
+            return missingResource(response);
         }
 
     }
