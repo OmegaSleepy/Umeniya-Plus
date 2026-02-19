@@ -50,11 +50,18 @@ async function loadUserInformation() {
 
     try {
         const response = await fetch("/api/user/me-info");
+        const username = document.getElementById("username");
+
+
+        if(!response.ok){
+            username.innerText = "Не си вписан"
+            username.style.display = "inline-block";
+
+        } return;
+
         const userInformation = await response.json();
 
-        const username = document.getElementById("username");
         const profileIcon = document.getElementById("profile-icon");
-
         if (username) {
             username.innerText = userInformation.username;
             username.style.display = "inline-block";
