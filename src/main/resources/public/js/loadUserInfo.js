@@ -56,8 +56,8 @@ async function loadUserInformation() {
         if(!response.ok){
             username.innerText = "Не си вписан"
             username.style.display = "inline-block";
-
-        } return;
+            return;
+        }
 
         const userInformation = await response.json();
 
