@@ -1,11 +1,14 @@
 package omega.sleepy.controllers;
 
 import omega.sleepy.exceptions.InvalidCredentials;
+import omega.sleepy.routes.PublicRoutes;
+import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
 import spark.Request;
 import spark.Response;
 
+import static omega.sleepy.controllers.ApiController.missingResourcePage;
 import static omega.sleepy.controllers.AuthController.AUTH_COOKIE;
 import static omega.sleepy.routes.PublicRoutes.getSimpleTemplate;
 import static omega.sleepy.services.AuthService.validateToken;
@@ -60,8 +63,13 @@ public class PublicController {
         response.type(MediaType.HTML.getValue());
         response.status(200);
         String username = request.params("username");
-        Log.info(username);
-        return username;
+        if(username == null){
+            return missingResourcePage(response);
+        }
+        if(!AuthService.userExists(username)){
+            return missingResourcePage(response);
+        }
+        return PublicRoutes.getSimpleTemplate("user", response);
     }
 
     public static String thisUserProfile(Request request, Response response) {

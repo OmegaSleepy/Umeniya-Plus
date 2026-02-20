@@ -18,6 +18,7 @@ public class ApiRoutes {
 
 
         get("/api/user/me-info", ApiController::getUserInformation);
+        get("/api/user/:user", ApiController::getSpecificUserInformation);
 
 
         path("/api/blog", () -> {

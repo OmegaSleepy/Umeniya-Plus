@@ -316,4 +316,25 @@ public class ApiController {
         }
 
     }
+
+    public static Object getSpecificUserInformation(Request request, Response response) {
+
+        String username = request.params("user");
+
+        if (username == null) {
+            return missingResource(response);
+        } else if (!AuthService.userExists(username)) {
+            return missingResource(response);
+        }
+
+        var user = ProfileService.getFullProfile(username);
+
+        Log.info("Sending information about " + username);
+
+        assert user != null;
+        ProfileIcons icon = user.ProfileIcon();
+
+        response.type(MediaType.JSON.getValue());
+        return gson.toJson(new UserRequestDTO(username, icon.toString(), user.permittingLevel().toString(), user.flames()));
+    }
 }
