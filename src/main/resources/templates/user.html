@@ -18,10 +18,10 @@
     </div>
 </header>
 
-
+<img id="that-profile-icon" src="" alt="User Icon">
 
 <script>
-    function s(){
+    async function s() {
         const url = window.location.href;
         const username = url.split("/").filter(Boolean).pop();
 
@@ -31,6 +31,14 @@
             method: "GET"
         });
 
+        if (!response.ok) {
+            return;
+        }
+
+        const json = await response.json();
+        const profileIcon = document.getElementById("that-profile-icon");
+
+        profileIcon.src = "/api/profile-icon/" + json.icon;
     }
     s();
 </script>
