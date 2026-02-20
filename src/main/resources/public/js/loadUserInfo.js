@@ -14,7 +14,7 @@ function createUserIsland() {
             border: 1px solid rgba(255, 81, 0, 0.3);
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
             
-            <img id="flames" src="/api/image/favicon.ico" alt="Искри" style="
+            <img id="flames" src="/favicon.ico" alt="Искри" style="
                 max-height: 20px; 
                 filter: drop-shadow(0 0 2px rgba(255, 81, 0, 0.5));
                 margin-right: 6px;">
