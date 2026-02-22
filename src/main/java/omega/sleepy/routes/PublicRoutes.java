@@ -50,6 +50,8 @@ public class PublicRoutes {
 
         get("/dashboard", PublicController::dashboard);
 
+        get("/edit/:id", (request, response) ->  getSimpleTemplate("edit", response));
+
         get("/logout", (request, response) -> getSimpleTemplate("logout", response));
 
         get("/user/:username", PublicController::userProfile);
