@@ -272,4 +272,45 @@ public class UserDao {
         list.addAll(getAdditionalUserInfo(username));
         return list;
     }
+
+    public static int getFlamesFromUsername(String username) {
+        String sql = "SELECT flames from user_extras where username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return resultSet.getInt("flames");
+            }
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
+    }
+
+    public static void setFlamesToUsername(int flames, String username) {
+        String sql = "UPDATE user_extras SET flames = ? WHERE username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, flames);
+            preparedStatement.setString(2, username);
+
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addFlamesToUsername(int flames, String username) {
+        String sql = "UPDATE user_extras SET flames = flames + ? WHERE username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, flames);
+            preparedStatement.setString(2, username);
+
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
