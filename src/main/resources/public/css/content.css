@@ -22,7 +22,7 @@
 
 .content thead tr {
     background-color: var(--primary-color);
-    color: #ffffff;
+    color: var(--bg-card); /* Replaced #ffffff */
     text-align: left;
     font-weight: bold;
 }

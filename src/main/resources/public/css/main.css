@@ -14,9 +14,15 @@
     --text-dark: #222222;
     --tag-border: #dddddd65;
     --border-color: #dddddd;
+    --border-light: #eeeeee;
     --tag-bg: #e9ecef;
     --code-bg: #111111;
     --code-text: #eeeeee;
+
+    --danger: #f44336;
+    --danger-hover: #da190b;
+    --success: #4CAF50;
+    --success-hover: #45a049;
 
     --max-width-large: 1000px;
     --max-width-content: 800px;
@@ -134,7 +140,7 @@ header {
     background: var(--tag-bg);
     padding: 5px 12px;
     border-radius: 20px;
-    border-color: #27283372;
+    border-color: var(--tag-border); /* Replaced #27283372 */
     border-width: 2px;
     border-style: dashed;
     display: inline-block;
@@ -154,10 +160,8 @@ header {
     box-sizing: border-box;
 }
 
-
-
 .meta-divider {
-    color: #ccc;
+    color: var(--border-color); /* Replaced #ccc */
     font-weight: bold;
 }
 
@@ -216,7 +220,7 @@ textarea {
 
 hr {
     border: 0;
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border-light); /* Replaced #eee */
     margin: 40px 0;
 }
 

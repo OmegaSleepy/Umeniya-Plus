@@ -77,7 +77,7 @@ public class ResourceController {
         return MiscService.getImage(image, request, response);
     }
 
-    public static Object getIcon(Request request, Response response){
+    public static Object getIcon(Request request, Response response) {
         response.type(MediaType.SVG.getValue());
         response.header("Cache-Control", "public, max-age=604800"); // 1 week
         String icon = request.params("icon");
@@ -107,29 +107,39 @@ public class ResourceController {
         return gson.toJson(icons);
 
     }
-
-
+    
     public static final Map<String, String> CSS_VARS = new LinkedHashMap<>();
 
     static {
         CSS_VARS.put("primary-color", "#5ad53d");
         CSS_VARS.put("primary-hover", "#3abd1d");
         CSS_VARS.put("primary-active", "#5ad53d");
+
         CSS_VARS.put("tetra-1", "#8496E8");
         CSS_VARS.put("tetra-1-dark", "#8486b8");
         CSS_VARS.put("tetra-2", "#E88496");
         CSS_VARS.put("tetra-2-dark", "#E07486");
+
         CSS_VARS.put("bg-body", "#f5f5f5");
         CSS_VARS.put("bg-card", "#ffffff");
+
         CSS_VARS.put("text-main", "#333333");
         CSS_VARS.put("text-muted", "#666666");
         CSS_VARS.put("text-light", "#888888");
         CSS_VARS.put("text-dark", "#222222");
+
         CSS_VARS.put("tag-border", "#dddddd65");
         CSS_VARS.put("border-color", "#dddddd");
+        CSS_VARS.put("border-light", "#eeeeee");
         CSS_VARS.put("tag-bg", "#e9ecef");
+
         CSS_VARS.put("code-bg", "#111111");
         CSS_VARS.put("code-text", "#eeeeee");
+
+        CSS_VARS.put("danger", "#f44336");
+        CSS_VARS.put("danger-hover", "#da190b");
+        CSS_VARS.put("success", "#4CAF50");
+        CSS_VARS.put("success-hover", "#45a049");
 
         CSS_VARS.put("cat-math", "#DCEBFF");
         CSS_VARS.put("cat-science", "#D9F4F1");
@@ -149,6 +159,7 @@ public class ResourceController {
 
         CSS_VARS.put("text-on-cat", "#333333");
     }
+
     public static Object getCssVars(Request request, Response response) {
         return gson.toJson(CSS_VARS);
     }

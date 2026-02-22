@@ -13,19 +13,19 @@
 }
 
 .btn-edit {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--success);
+    color: var(--bg-card);
 }
 
 .btn-edit:hover {
-    background-color: #45a049;
+    background-color: var(--success-hover);
 }
 
 .btn-delete {
-    background-color: #f44336;
-    color: white;
+    background-color: var(--danger);
+    color: var(--bg-card);
 }
 
 .btn-delete:hover {
-    background-color: #da190b;
+    background-color: var(--danger-hover);
 }

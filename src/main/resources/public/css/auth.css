@@ -87,7 +87,7 @@ input[type="password"] {
     min-height: 20px;
     margin-bottom: 15px;
     font-size: 0.85rem;
-    color: #dc3545;
+    color: var(--danger); /* Replaced #dc3545 */
     text-align: center;
 }
 
