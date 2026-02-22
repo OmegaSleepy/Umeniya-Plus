@@ -102,32 +102,37 @@
 
     async function loadInitialData() {
         try {
-            // Load Categories first
             const catRes = await fetch("/api/blog/tags");
+            if (!catRes.ok) throw new Error("Failed to fetch tags");
             const tags = await catRes.json();
-            categoryInput.innerHTML = "";
+
+            const select = document.getElementById("category");
+            select.innerHTML = "";
+
             Object.entries(tags).forEach(([key, value]) => {
                 const option = document.createElement("option");
                 option.value = key;
                 option.textContent = key;
-                categoryInput.appendChild(option);
+                select.appendChild(option);
             });
 
-            // Fetch existing blog data
             const blogRes = await fetch(`/api/blog/full/${blogId}`);
             if (!blogRes.ok) throw new Error("Blog post not found");
             const blog = await blogRes.json();
 
-            // Populate form
-            titleInput.value = blog.title;
-            excerptInput.value = blog.excerpt;
-            categoryInput.value = blog.category;
-            contentInput.value = blog.content;
+            titleInput.value = blog.title || "";
+            excerptInput.value = blog.excerpt || "";
+            contentInput.value = blog.content || "";
+
+            if (blog.category) {
+                categoryInput.value = blog.category;
+            }
 
             updatePreview();
+
         } catch (err) {
-            console.error("Error loading blog:", err);
-            alert("Грешка при зареждане на поста.");
+            console.error("Error loading blog data:", err);
+            alert("Грешка при зареждане на данните за редакцията.");
         }
     }
 
@@ -142,9 +147,8 @@
         };
 
         try {
-            // Note: Replace with your actual update endpoint
             const response = await fetch(`/api/blog/update/${blogId}`, {
-                method: "PUT", // or POST depending on your backend
+                method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(data)
             });
@@ -152,7 +156,7 @@
             if (!response.ok) throw new Error("Update failed");
 
             alert("Постът е обновен успешно!");
-            window.location.href = `/blog/${blogId}`; // Redirect to view the post
+            window.location.href = `/blog/${blogId}`;
         } catch (err) {
             console.error("Error updating blog post:", err);
             alert("Грешка при запис на промените.");
