@@ -69,6 +69,19 @@ public class PublicController {
         if(!AuthService.userExists(username)){
             return missingResourcePage(response);
         }
+
+        String token = request.cookie(AUTH_COOKIE);
+        if (token != null) {
+            String user = AuthService.getUsernameByToken(token);
+            if (user != null) {
+                if(user.equals(username)){
+                    response.redirect("/dashboard");
+                    return "";
+                }
+            }
+        }
+
+
         return PublicRoutes.getSimpleTemplate("user", response);
     }
 
