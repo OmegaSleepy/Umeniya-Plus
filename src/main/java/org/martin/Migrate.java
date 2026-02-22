@@ -1,7 +1,7 @@
 package org.martin;
 
-import org.martin.util.Log;
 import org.jetbrains.annotations.NotNull;
+import org.martin.util.Log;
 
 import java.sql.*;
 import java.time.LocalDateTime;

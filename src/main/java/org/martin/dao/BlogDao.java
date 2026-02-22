@@ -1,10 +1,10 @@
 package org.martin.dao;
 
+import org.jetbrains.annotations.NotNull;
 import org.martin.data.Blog;
 import org.martin.util.BlogFilter;
-import org.martin.util.enums.Direction;
 import org.martin.util.Log;
-import org.jetbrains.annotations.NotNull;
+import org.martin.util.enums.Direction;
 
 import java.sql.*;
 import java.util.*;

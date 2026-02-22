@@ -15,17 +15,16 @@ public class Database {
 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:sqlite:"+dbName);
+            return DriverManager.getConnection("jdbc:sqlite:" + dbName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-
-    private static void executeSQL(String sql){
+    private static void executeSQL(String sql) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.execute();
             Log.exec(sql);
         } catch (SQLException e) {
@@ -33,7 +32,7 @@ public class Database {
         }
     }
 
-    public static void initDatabase(){
+    public static void initDatabase() {
         Log.info("Database initializing...");
 
         String pragmaSchema = readFile("/sql/pragma.sql");
@@ -44,7 +43,6 @@ public class Database {
         String sessionSchema = readFile("/sql/schema/userSessions.sql");
         String userExtraSchema = readFile("/sql/schema/userExtras.sql");
         String readBlogSchema = readFile("/sql/schema/readBlogsSchema.sql");
-        //...
 
         executeSQL(blogSchema);
         executeSQL(userSchema);

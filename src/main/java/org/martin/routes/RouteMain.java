@@ -9,6 +9,5 @@ public class RouteMain {
         PublicRoutes.init();
         ApiRoutes.init();
         AuthRoutes.init();
-
     }
 }

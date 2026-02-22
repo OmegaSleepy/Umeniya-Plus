@@ -2,8 +2,8 @@ package org.martin.dao;
 
 import org.martin.exceptions.UserAlreadyExists;
 import org.martin.exceptions.UserDoesNotExist;
-import org.martin.util.db.Database;
 import org.martin.util.Log;
+import org.martin.util.db.Database;
 import org.martin.util.enums.PermittingLevel;
 import org.martin.util.enums.ProfileIcons;
 

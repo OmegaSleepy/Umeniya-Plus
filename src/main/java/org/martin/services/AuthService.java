@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.security.InvalidParameterException;
 
-import static org.martin.validation.UserValidator.*;
+import static org.martin.validation.UserValidator.isPasswordFormatInvalid;
 
 public class AuthService {
 	

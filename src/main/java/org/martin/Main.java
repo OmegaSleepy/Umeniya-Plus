@@ -3,8 +3,8 @@ package org.martin;
 import org.martin.dao.BlogDao;
 import org.martin.dao.UserDao;
 import org.martin.routes.RouteMain;
-import org.martin.util.db.Database;
 import org.martin.util.Log;
+import org.martin.util.db.Database;
 import spark.Spark;
 
 import static spark.Spark.*;

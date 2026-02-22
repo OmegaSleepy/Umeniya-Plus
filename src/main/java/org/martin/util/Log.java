@@ -77,7 +77,6 @@ public class Log {
 
     public static String stripAnsi (String message) {
 
-        //No need for more log message types
         message = message.replace(GREEN, "[INFO] ");
         message = message.replace(BLUE, "[EXEC] ");
         message = message.replace(YELLOW, "[WARN] ");
