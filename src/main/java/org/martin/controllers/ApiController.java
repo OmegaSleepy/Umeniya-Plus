@@ -435,4 +435,18 @@ public class ApiController {
 
         return "{\"status\":\"success\"}";
     }
+
+    public static Object getLikedPosts(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        if (token == null) {
+            return forbitten(response);
+        }
+        String username = AuthService.getUsernameByToken(token);
+        if (username == null) {
+            return forbitten(response);
+        }
+
+        return gson.toJson(BlogService.getLikedBlogsByUser(username));
+
+    }
 }

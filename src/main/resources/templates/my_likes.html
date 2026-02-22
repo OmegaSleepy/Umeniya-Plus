@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Моите Харесвания | Умения+</title>
+
+  <link rel="stylesheet" href="/api/style/main.css">
+  <link rel="stylesheet" href="/api/style/tags.css">
+  <link rel="stylesheet" href="/api/style/explorer.css">
+  <script src="/api/js/loadUserInfo.js" defer></script>
+  <script src="/api/js/applyTheme.js" defer></script>
+</head>
+<body>
+<header>
+  <div class="header-container" id="header-container">
+    <a href="/" class="logo">Умения+</a>
+    <div class="header-actions">
+      <a href="/create" class="btn-create">+ Сподели опит</a>
+    </div>
+  </div>
+</header>
+
+<main id="profile-container" style="width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px;">
+
+  <div class="article-container" style="margin: 30px auto; text-align: center; width: 90%; max-width: var(--max-width-large);">
+    <div style="font-size: 3rem; margin-bottom: 10px;">💚</div>
+    <h1 style="margin: 0; color: var(--text-dark); font-size: 2rem;">Харесани публикации</h1>
+    <p style="color: var(--text-muted);" id="likes-subtitle">Публикации, които сте запазили</p>
+  </div>
+
+  <div id="holder">
+  </div>
+</main>
+
+<script>
+
+  async function init() {
+    await loadLikedPosts();
+  }
+
+  async function loadLikedPosts() {
+    const holder = document.getElementById("holder");
+
+    try {
+      const response = await fetch(`/api/user/my-likes`, {
+        method: 'GET'
+      });
+
+      if (!response.ok) throw new Error("API error");
+
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        renderCards(data);
+        document.getElementById("likes-subtitle").textContent = `Открити: ${data.length} публикации`;
+      } else {
+        showEmpty();
+      }
+
+    } catch (err) {
+      console.error(err);
+      holder.innerHTML = "<p style='text-align:center;'>Грешка при зареждане на харесванията.</p>";
+    }
+  }
+
+  function renderCards(posts) {
+    const holder = document.getElementById("holder");
+
+    holder.innerHTML = posts.map(element => `
+            <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
+                <div class="blog-header">
+                    <span class="blog-tag">${element.tag}</span>
+                    <h2 class="blog-title">${element.title}</h2>
+                </div>
+
+                <div class="blog-stats">
+                    <span>👁️ ${element.views || 0}</span>
+                    <span>💚 ${element.likes || 0}</span>
+                </div>
+
+                <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
+                    от <strong>${element.creator}</strong> •
+                    <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
+                </p>
+
+                <p class="blog-excerpt">${element.excerpt || ''}</p>
+
+                <div class="blog-footer">
+                    <span class="read-more">Прочети повече →</span>
+                </div>
+            </div>
+        `).join('');
+  }
+
+  function showEmpty() {
+    document.getElementById("holder").innerHTML = `
+            <div class="empty-state" style="text-align: center; margin-top: 50px;">
+                <span style="font-size: 4rem;">📂</span>
+                <h3>Нямате харесани публикации.</h3>
+                <p>Когато харесате нечия история, тя ще се появи тук.</p>
+                <a href="/" class="btn-create" style="display: inline-block; margin-top: 20px; text-decoration: none;">Разгледай публикации</a>
+            </div>
+        `;
+  }
+
+  init();
+</script>
+</body>
+</html>
