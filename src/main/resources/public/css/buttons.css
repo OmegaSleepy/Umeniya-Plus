@@ -23,6 +23,31 @@
     background-color: var(--success-hover);
 }
 
+.btn-like {
+    background: var(--tetra-2);
+    border: 2px solid var(--border-color);
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-like:hover {
+    background-color: var(--tetra-2-dark);
+}
+
+.btn-like:hover {
+    background-color: var(--tetra-2-dark);
+    border-color: var(--border-color);
+}
+
+.btn-like.liked {
+    background: var(--tetra-2-dark);
+    color: var(--text-light);
+    border-color: var(--border-color);
+}
+
 .btn-some-fancy {
     background-color: var(--tetra-1);
     color: var(--bg-card);

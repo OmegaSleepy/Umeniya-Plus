@@ -117,8 +117,8 @@ public class ResourceController {
 
         CSS_VARS.put("tetra-1", "#8496E8");
         CSS_VARS.put("tetra-1-dark", "#8486b8");
-        CSS_VARS.put("tetra-2", "#E88496");
-        CSS_VARS.put("tetra-2-dark", "#E07486");
+        CSS_VARS.put("tetra-2", "#f3bdc8");
+        CSS_VARS.put("tetra-2-dark", "#bd949a");
 
         CSS_VARS.put("bg-body", "#f5f5f5");
         CSS_VARS.put("bg-card", "#ffffff");
