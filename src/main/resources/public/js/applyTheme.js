@@ -43,7 +43,9 @@
         path === "/home" ||
         path.startsWith("/help") ||
         path.startsWith("/dashboard") ||
-        path.startsWith("/shop");
+        path.startsWith("/shop") ||
+        path.startsWith("/edit") ||
+        path.startsWith("/create");
 
     if (isMyThemePage) {
         applyStyles("/api/style-for/me");

@@ -15,6 +15,9 @@
           href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="/api/js/loadUserInfo.js" defer></script>
     <script src="/api/js/applyTheme.js" defer></script>
     <style>
@@ -122,11 +125,21 @@
             const result = await response.json();
 
             if (response.ok && result.status === "ok") {
-                alert("Изтрито успешно!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Упешно!',
+                    text: 'Публикацията е изтрита!',
+                    confirmButtonColor: '#3085d6'
+                });
                 window.location.href = "/home";
             } else {
                 console.error("Сървърът отказа триене:", result);
-                alert("Нямаш права или постът не съществува.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Грешка!',
+                    text: 'Случи се случка, опитай отново!',
+                    confirmButtonColor: '#3085d6'
+                });
             }
         } catch (err) {
             console.error("Fatal error:", err);

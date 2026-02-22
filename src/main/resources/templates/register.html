@@ -5,6 +5,8 @@
     <title>Създай профил</title>
     <link rel="stylesheet" href="/api/style/main.css">
     <link rel="stylesheet" href="/api/style/auth.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 <div id="log-in-box" class="auth-container">
@@ -76,7 +78,11 @@
                 message.innerHTML = body.error || "Възникна грешка";
             }
         } else {
-            alert("Паролите не съвпадат!")
+            Swal.fire({
+                icon: 'warning',
+                title: 'Паролите не съвпадат!',
+                confirmButtonColor: '#3085d6'
+            });
         }
     })
 

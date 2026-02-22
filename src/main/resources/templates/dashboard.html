@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/api/style/explorer.css">
     <link rel="stylesheet" href="/api/style/buttons.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="/api/js/loadUserInfo.js" defer></script>
     <script src="/api/js/applyTheme.js" defer></script>
 </head>
@@ -169,11 +171,21 @@
             const result = await response.json();
 
             if (response.ok && result.status === "ok") {
-                alert("Изтрито успешно!");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Успешно!',
+                    text: 'Публикацията е изтрита!',
+                    confirmButtonColor: '#3085d6'
+                });
                 location.reload();
             } else {
                 console.error("Сървърът отказа триене:", result);
-                alert("Нямаш права или постът не съществува.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Грешка!',
+                    text: 'Нямаш нужните права или постът не съществува.',
+                    confirmButtonColor: '#3085d6'
+                });
             }
         } catch (err) {
             console.error("Fatal error:", err);
@@ -214,13 +226,12 @@
         const modal = document.getElementById("icon-modal");
         const grid = document.getElementById("icon-grid");
 
-        // Show loading state
         grid.innerHTML = "Зареждане...";
         modal.style.display = "flex";
 
         try {
             const response = await fetch("/api/icons");
-            const icons = await response.json(); // Expected: ["icon1.png", "icon2.png", ...]
+            const icons = await response.json();
 
             grid.innerHTML = icons.map(iconName => `
             <img src="/api/profile-icon/${iconName}"
@@ -246,7 +257,12 @@
                 closeModal();
                 setProfileIcon(document.getElementById("my-profile-icon").src);
             } else {
-                alert("Възникна грешка при обновяването.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Грешка!',
+                    text: 'Случи се случка, опитай отново!',
+                    confirmButtonColor: '#3085d6'
+                });
             }
         } catch (err) {
             console.error("Update failed:", err);
@@ -257,7 +273,6 @@
         document.getElementById("icon-modal").style.display = "none";
     }
 
-    // Close modal if clicking outside the white box
     window.onclick = function(event) {
         const modal = document.getElementById("icon-modal");
         if (event.target == modal) {
