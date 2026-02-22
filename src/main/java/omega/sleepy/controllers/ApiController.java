@@ -346,6 +346,10 @@ public class ApiController {
             return forbitten(response);
         }
 
+        if(ProfileService.checkAndDeductFunds(200, username)) {
+            return forbitten(response);
+        }
+
         JsonObject json = gson.fromJson(request.body(), JsonObject.class);
         ProfileService.setStyleForUser(json.asMap(), username);
         return "ok";

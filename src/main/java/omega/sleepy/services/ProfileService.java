@@ -88,4 +88,26 @@ public class ProfileService {
         map.forEach((k,v) -> value.append("--").append(k).append(": ").append(v).append(";\n"));
         StyleDao.setStyleForUser(value.toString(), username);
     }
+
+    public static boolean checkAndDeductFunds(int funds, String user) {
+        int currentFunds = UserDao.getFlamesFromUsername(user);
+        if (currentFunds <= funds) {
+            return false;
+        }
+        UserDao.setFlamesToUsername(currentFunds-funds, user);
+        return true;
+    }
+
+    public static boolean checkAndAddFunds(int funds, String user) {
+        int currentFunds = UserDao.getFlamesFromUsername(user);
+        if (currentFunds <= funds) {
+            return false;
+        }
+        UserDao.setFlamesToUsername(currentFunds+funds, user);
+        return true;
+    }
+
+    public static int checkFunds(int funds, String user) {
+        return UserDao.getFlamesFromUsername(user);
+    }
 }

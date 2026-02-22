@@ -146,10 +146,10 @@
         }
 
         buyBtn.addEventListener('click', async () => {
-            const price = 200;
 
-            //ifcheck for money
-            if (true) {
+            const izkri = getVisualFlames();
+
+            if (izkri >= 200) {
 
                 const themeData = {};
                 document.querySelectorAll('#color-pickers-list input').forEach(input => {
@@ -165,8 +165,9 @@
                     });
 
                     if (saveResponse.ok) {
+                        addVisualFlames(-200);
                         alert('Темата е закупена и запазена успешно!');
-                        // window.location.href = '/home';
+                        window.location.href = '/home';
                     } else {
                         alert('Възникна грешка при запазването.');
                     }
