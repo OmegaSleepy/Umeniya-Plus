@@ -178,5 +178,90 @@
         }
     }
 </script>
+
+<div id="icon-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 25px; border-radius: var(--radius-md); max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;">
+        <h3 style="margin-top: 0; color: var(--text-dark); border-bottom: 2px solid var(--primary-color); padding-bottom: 10px;">Избери нова икона</h3>
+        <button onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+
+        <div id="icon-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; margin-top: 20px;">
+        </div>
+    </div>
+</div>
+
+<style>
+    #my-profile-icon { transition: transform 0.2s, filter 0.2s; cursor: pointer; }
+    #my-profile-icon:hover { transform: scale(1.05); filter: brightness(0.9); }
+    .selectable-icon {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+        object-fit: cover;
+    }
+    .selectable-icon:hover { border-color: var(--primary-color); }
+</style>
+
+<script>
+
+    document.getElementById("my-profile-icon").addEventListener("click", openIconModal);
+
+    async function openIconModal() {
+        const modal = document.getElementById("icon-modal");
+        const grid = document.getElementById("icon-grid");
+
+        // Show loading state
+        grid.innerHTML = "Зареждане...";
+        modal.style.display = "flex";
+
+        try {
+            const response = await fetch("/api/icons");
+            const icons = await response.json(); // Expected: ["icon1.png", "icon2.png", ...]
+
+            grid.innerHTML = icons.map(iconName => `
+            <img src="/api/profile-icon/${iconName}"
+                 class="selectable-icon"
+                 onclick="updateProfilePicture('${iconName}')"
+                 alt="${iconName}">
+        `).join("");
+
+        } catch (err) {
+            grid.innerHTML = "Грешка при зареждане на иконите.";
+            console.error(err);
+        }
+    }
+
+    async function updateProfilePicture(iconName) {
+        try {
+            const response = await fetch(`/api/user/change-pfp/${iconName}`, {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                document.getElementById("my-profile-icon").src = `/api/profile-icon/${iconName}`;
+                closeModal();
+                setProfileIcon(document.getElementById("my-profile-icon").src);
+            } else {
+                alert("Възникна грешка при обновяването.");
+            }
+        } catch (err) {
+            console.error("Update failed:", err);
+        }
+    }
+
+    function closeModal() {
+        document.getElementById("icon-modal").style.display = "none";
+    }
+
+    // Close modal if clicking outside the white box
+    window.onclick = function(event) {
+        const modal = document.getElementById("icon-modal");
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
 </body>
 </html>

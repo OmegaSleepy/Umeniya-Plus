@@ -56,6 +56,12 @@ function getProfileIcon(){
     return icon.src;
 }
 
+function setProfileIcon(newIcon) {
+    const icon = document.getElementById("profile-icon");
+    if (!icon) return;
+    icon.src = newIcon;
+}
+
 async function loadUserInformation() {
     const iskri = document.getElementById("badge");
     iskri.style.display = "none";
