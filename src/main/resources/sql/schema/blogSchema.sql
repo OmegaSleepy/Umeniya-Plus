@@ -6,5 +6,7 @@ CREATE TABLE if not exists blogs
     excerpt TEXT NOT NULL,
     content TEXT NOT NULL,
     creator_username TEXT NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP,
+    tax INTEGER default 0,
+    views INTEGER default 0
 )

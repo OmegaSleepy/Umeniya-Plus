@@ -20,7 +20,7 @@ public class BlogService {
     public static boolean saveBlog(String title, String category, String excerpt, String content, String creator) {
         if(category.equalsIgnoreCase("Any")) category = "None";
 
-        Blog blog = new Blog(0, title, category, excerpt, content, creator, LocalDateTime.now().toString());
+        Blog blog = new Blog(0, title, category, excerpt, content, creator, LocalDateTime.now().toString(),0,0);
 
         Log.info(blog.toString());
 
@@ -46,7 +46,7 @@ public class BlogService {
         List<Blog> blogs;
         blogs = BlogDao.getBlogsByFilter(filter);
         List<Blog> filteredBlogs = new ArrayList<>();
-        blogs.forEach(blog -> filteredBlogs.add(new Blog(blog.id(), blog.title(), blog.tag(), blog.excerpt(), "", blog.creator(), blog.creationDate())));
+        blogs.forEach(blog -> filteredBlogs.add(blog.getWithoutContents()));
         return filteredBlogs;
     }
 
@@ -95,6 +95,8 @@ public class BlogService {
         if (!AuthService.userExists(user)) return null;
         if (user.equals(author)) return null;
         if (page < 1) return null;
+
+        BlogDao.addOneView(page);
 
         if(BlogDao.hasRecordOf(user, page)) return null;
 

@@ -133,7 +133,9 @@ public class BlogDao {
                 getResultSetString(rs, "excerpt"),
                 getResultSetString(rs, "content"),
                 getResultSetString(rs, "creator_username"),
-                getResultSetString(rs, "created_at")
+                getResultSetString(rs, "created_at"),
+                rs.getInt("tax"),
+                rs.getInt("views")
         );
     }
 
@@ -150,7 +152,7 @@ public class BlogDao {
     public static List<Blog> getBlogByAuthor(String user) {
         List<Blog> blogList = new ArrayList<>();
 
-        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at FROM blogs WHERE creator_username = ?";
+        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at, tax, views FROM blogs WHERE creator_username = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -262,6 +264,21 @@ public class BlogDao {
 
             preparedStatement.setString(1, user);
             preparedStatement.setInt(2, page);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addOneView(int id) {
+        String sql = "UPDATE blogs set views = views + 1 where id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
 
             preparedStatement.executeUpdate();
 
