@@ -133,5 +133,63 @@ blogForm.addEventListener("submit", async (event) => {
     }
 });
 
+// Character Counter Logic
+function updateCounter(inputId, counterId, max) {
+    const input = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    input.addEventListener('input', () => {
+        counter.innerText = `${input.value.length} / ${max}`;
+        if (input.value.length >= max) {
+            counter.style.color = 'var(--tetra-2)';
+        } else {
+            counter.style.color = 'var(--text-dark)';
+        }
+    });
+}
+
+updateCounter('title', 'titleCount', 64);
+updateCounter('excerpt', 'excerptCount', 128);
+updateCounter('content', 'contentCount', 8000);
+
+// Validation before submitting
+try {
+    document.getElementById('blogForm').addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value;
+        const excerpt = document.getElementById('excerpt').value;
+        const content = document.getElementById('content').value;
+
+        if (title.length >= 65 || excerpt.length >= 129 || content.length >= 8001) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Твърде дълъг текст!',
+                text: 'Моля, спазвайте ограниченията за брой символи.',
+                confirmButtonColor: '#FF4D6D'
+            });
+        }
+    });
+} catch (err) {
+    document.getElementById('editBlogForm').addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value;
+        const excerpt = document.getElementById('excerpt').value;
+        const content = document.getElementById('content').value;
+
+        if (title.length >= 65 || excerpt.length >= 129 || content.length >= 8001) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Твърде дълъг текст!',
+                text: 'Моля, спазвайте ограниченията за брой символи.',
+                confirmButtonColor: '#FF4D6D'
+            });
+        }
+    });
+}
+
+function counter(e){
+
+}
+
+
 // Run
 initForm();

@@ -51,9 +51,14 @@ public class ApiController {
         String excerpt = body.get("excerpt").getAsString();
         String content = body.get("content").getAsString();
 
-        boolean success = BlogService.saveBlog(title, category, excerpt, content, author);
+        if (BlogService.saveBlog(title, category, excerpt, content, author)) {
+            response.status(200);
+            return "{\"success\": true}";
+        } else {
+            response.status(400);
+            return "{\"success\": false}";
+        }
 
-        return gson.toJson(success ? "{\"status\":\"ok\"}" : "{\"status\":\"not ok\"}");
     }
 
     public static String getBlogPageById(Request request, Response response) {

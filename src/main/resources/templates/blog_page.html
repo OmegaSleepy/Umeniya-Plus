@@ -266,7 +266,7 @@
     let rewardClaimed = false;
     setTimeout(() => {
         timer = true;
-    }, 15000);
+    }, 1500);
     window.addEventListener('scroll', async () => {
         if (rewardClaimed || !timer) return;
         if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 50)) {

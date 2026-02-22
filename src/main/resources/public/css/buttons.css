@@ -59,3 +59,33 @@
 .btn-delete:hover {
     background-color: var(--danger-hover);
 }
+
+.btn-toggle {
+    background-color: transparent;
+    border: 2px solid var(--tetra-2);
+    color: var(--tetra-2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-toggle:hover {
+    background-color: var(--tetra-2);
+    color: white;
+}
+
+.btn-submit {
+    background-color: var(--tetra-2);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background-color: var(--tetra-2-dark);
+}

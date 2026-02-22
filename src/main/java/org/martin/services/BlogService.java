@@ -30,6 +30,7 @@ public class BlogService {
             BlogDao.addBlog(blog);
             return true;
         }
+        Log.error("Blog is not valid");
         return false;
 
     }
