@@ -3,45 +3,59 @@ function createUserIsland() {
     if (!header_container) return;
 
     header_container.insertAdjacentHTML('beforeend', `
-    <div class="user-island" style="display: flex; align-items: center; margin-left: auto; gap: 12px;">
+<div class="user-island" style="display: flex; align-items: center; margin-left: auto; gap: 12px;">
 
-        <div class="flames-badge" id="badge" style="
-            display: flex; 
-            align-items: center; 
-            background: linear-gradient(135deg, rgba(255, 145, 0, 0.1), rgba(255, 81, 0, 0.1));
-            padding: 4px 10px; 
-            border-radius: 20px; 
-            border: 1px solid rgba(255, 81, 0, 0.3);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-            
-            <img id="flames" src="/favicon.ico" alt="Искри" style="
-                max-height: 20px; 
-                filter: drop-shadow(0 0 2px rgba(255, 81, 0, 0.5));
-                margin-right: 6px;">
-            
-            <span id="flames-count" style="
-                font-weight: 800; 
-                color: #ff5100; 
-                font-style: normal;
-                font-size: 0.95rem;">0</span>
-        </div>
+    <div class="flames-badge" id="badge" style="
+        display: flex; 
+        align-items: center; 
+        background: linear-gradient(135deg, rgba(255, 145, 0, 0.1), rgba(255, 81, 0, 0.1));
+        padding: 4px 10px; 
+        border-radius: 20px; 
+        border: 1px solid rgba(255, 81, 0, 0.3);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
         
-        <label id="username" style="display: none; font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">
-            Потребител
-        </label>
+        <img id="flames" src="/favicon.ico" alt="Искри" style="
+            max-height: 20px; 
+            filter: drop-shadow(0 0 2px rgba(255, 81, 0, 0.5));
+            margin-right: 6px;">
+        
+        <span id="flames-count" style="
+            font-weight: 800; 
+            color: #ff5100; 
+            font-style: normal;
+            font-size: 0.95rem;">0</span>
+    </div>
 
-        <a href="/dashboard" style="display: flex; align-items: center; transition: transform 0.2s ease;" 
-           onmouseover="this.style.transform='scale(1.05)'" 
-           onmouseout="this.style.transform='scale(1)'">
-            <img id="profile-icon" src="/favicon-logo.ico" alt="Профил" style="
-                max-height: 38px; 
-                width: 38px;
-                object-fit: cover;
-                border-radius: 50%; 
-                border: 2px solid var(--primary-color);
-                box-shadow: var(--text-main);">
-        </a>
-    </div>`);
+    <a href="/shop" class="shop-button" style="
+        text-decoration: none;
+        background-color: var(--primary-color, #ff5100);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: transform 0.2s ease, opacity 0.2s ease;"
+        onmouseover="this.style.transform='scale(1.05)'; this.style.opacity='0.9';" 
+        onmouseout="this.style.transform='scale(1)'; this.style.opacity='1';">
+        Магазин
+    </a>
+    
+    <label id="username" style="display: none; font-weight: 600; color: var(--text-dark); font-size: 0.9rem;">
+        Потребител
+    </label>
+
+    <a href="/dashboard" style="display: flex; align-items: center; transition: transform 0.2s ease;" 
+       onmouseover="this.style.transform='scale(1.05)'" 
+       onmouseout="this.style.transform='scale(1)'">
+        <img id="profile-icon" src="/favicon-logo.ico" alt="Профил" style="
+            max-height: 38px; 
+            width: 38px;
+            object-fit: cover;
+            border-radius: 50%; 
+            border: 2px solid var(--primary-color);
+            box-shadow: var(--text-main);">
+    </a>
+</div>`);
 }
 
 function getUsername(){
