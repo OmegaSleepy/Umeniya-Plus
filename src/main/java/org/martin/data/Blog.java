@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public record Blog
         (int id, String title, String tag, String excerpt, String content,
          String creator, String creationDate,
-         int tax, int views) {
+         int views, int likes) {
 
     public boolean isNull(){
         return title == null;
@@ -18,7 +18,7 @@ public record Blog
     }
 
     public Blog getWithoutContents(){
-        return new Blog(id, title, tag, excerpt, "", creator, creationDate, tax, views);
+        return new Blog(id, title, tag, excerpt, "", creator, creationDate, views, likes);
     }
 }
 

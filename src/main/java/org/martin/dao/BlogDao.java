@@ -9,47 +9,10 @@ import org.martin.util.enums.Direction;
 import java.sql.*;
 import java.util.*;
 
+import static org.martin.controllers.ResourceController.any;
 import static org.martin.util.db.Database.getConnection;
 
 public class BlogDao {
-
-    private static final String DEFAULT_COLOR = "#F2F2F2";
-
-    private static final String any = "Всякакви";
-
-    private static final Map<String, String> CATEGORIES;
-
-    static {
-        Map<String, String> map = new LinkedHashMap<>();
-
-        map.put("Математика", "#DCEBFF");
-        map.put("Наука", "#D9F4F1");
-        map.put("Биология", "#E3F6E8");
-        map.put("Химия", "#EFE3FF");
-        map.put("Физика", "#E1F0FF");
-        map.put("Английски език", "#FFE3E3");
-        map.put("История", "#F5EAD6");
-        map.put("География", "#EEF3D9");
-        map.put("Изкуство", "#FFEBD6");
-        map.put("Музика", "#F2E6FF");
-        map.put("Компютърни науки", "#E3EAF5");
-        map.put("Икономика", "#E6F7F1");
-        map.put("Философия", "#ECE9F4");
-        map.put("Литература", "#FFF4E1");
-        map.put("Няма", DEFAULT_COLOR);
-        map.put(any, DEFAULT_COLOR);
-
-        CATEGORIES = Collections.unmodifiableMap(map);
-    }
-
-
-    public static Map<String, String> getCategories() {
-        return CATEGORIES;
-    }
-
-    public static String getDefaultCategory() {
-        return any;
-    }
 
     public static void init() {
     }
@@ -88,43 +51,6 @@ public class BlogDao {
         }
     }
 
-    public static List<Blog> getBlogView() {
-        List<Blog> blogList = new ArrayList<>();
-        String sql = "SELECT * FROM blogs LIMIT 10";
-
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                blogList.add(getBlog(rs));
-            }
-            Log.info("Found " + blogList.size() + " blogs");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return blogList;
-    }
-
-    public static List<Blog> getBlogWithoutContents() {
-        List<Blog> blogList = new ArrayList<>();
-        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at FROM blogs LIMIT 10";
-
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-
-            while (resultSet.next()) {
-                blogList.add(getBlog(resultSet));
-            }
-
-            return blogList;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static @NotNull Blog getBlog(ResultSet rs) throws SQLException {
         return new Blog(
                 rs.getInt("id"),
@@ -134,8 +60,8 @@ public class BlogDao {
                 getResultSetString(rs, "content"),
                 getResultSetString(rs, "creator_username"),
                 getResultSetString(rs, "created_at"),
-                rs.getInt("tax"),
-                rs.getInt("views")
+                rs.getInt("views"),
+                rs.getInt("likes")
         );
     }
 
@@ -152,7 +78,7 @@ public class BlogDao {
     public static List<Blog> getBlogByAuthor(String user) {
         List<Blog> blogList = new ArrayList<>();
 
-        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at, tax, views FROM blogs WHERE creator_username = ?";
+        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at, views, likes FROM blogs WHERE creator_username = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

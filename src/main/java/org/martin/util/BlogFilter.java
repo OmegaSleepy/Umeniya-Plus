@@ -1,5 +1,6 @@
 package org.martin.util;
 
+import org.martin.controllers.ResourceController;
 import org.martin.dao.BlogDao;
 import org.martin.util.enums.Direction;
 
@@ -45,7 +46,7 @@ public class BlogFilter {
             return this;
         }
         public Builder category(String category) {
-            if (category == null) category = BlogDao.getDefaultCategory();
+            if (category == null) category = ResourceController.getDefaultCategory();
             this.category = category;
             return this;
         }
@@ -72,7 +73,7 @@ public class BlogFilter {
         }
         public BlogFilter build() {
             title = title == null ? "" : title;
-            category = category == null ? BlogDao.getDefaultCategory() : category;
+            category = category == null ? ResourceController.getDefaultCategory() : category;
             direction = direction == null ? Direction.ASC : direction;
             return new BlogFilter(this);
         }

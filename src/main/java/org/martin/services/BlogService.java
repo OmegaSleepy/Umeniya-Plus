@@ -1,5 +1,6 @@
 package org.martin.services;
 
+import org.martin.controllers.ResourceController;
 import org.martin.dao.BlogDao;
 import org.martin.dao.UserDao;
 import org.martin.data.Blog;
@@ -119,7 +120,7 @@ public class BlogService {
 
     public static Object updateBlog(String title, String category, String excerpt, String content, String blogId) {
 
-        if(!BlogDao.getCategories().containsKey(category)) {
+        if(!ResourceController.getCategories().containsKey(category)) {
             return new RuntimeException("Category " + category + " doesn't exist");
         }
 
@@ -127,7 +128,7 @@ public class BlogService {
 
         var currentBlog = BlogDao.getBlogById(id);
 
-        var newBlog = new Blog(id, title, category, excerpt, content, currentBlog.creator(), currentBlog.creationDate(), currentBlog.tax(), currentBlog.views());
+        var newBlog = new Blog(id, title, category, excerpt, content, currentBlog.creator(), currentBlog.creationDate(), currentBlog.views(), currentBlog.likes());
 
         if(BlogValidator.isValidBlog(newBlog)) {
             return BlogDao.replaceBlog(id, newBlog);

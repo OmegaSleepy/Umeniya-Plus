@@ -98,7 +98,7 @@ public class ResourceController {
     }
 
     public static String getCategories(Request request, Response response) {
-        return gson.toJson(BlogDao.getCategories());
+        return gson.toJson(getCategories());
     }
 
     public static Object getIcons(Request request, Response response) {
@@ -162,5 +162,43 @@ public class ResourceController {
 
     public static Object getCssVars(Request request, Response response) {
         return gson.toJson(CSS_VARS);
+    }
+
+    private static final String DEFAULT_COLOR = "#F2F2F2";
+
+    public static final String any = "Всякакви";
+
+    private static final Map<String, String> CATEGORIES;
+
+    static {
+        Map<String, String> map = new LinkedHashMap<>();
+
+        map.put("Математика", "#DCEBFF");
+        map.put("Наука", "#D9F4F1");
+        map.put("Биология", "#E3F6E8");
+        map.put("Химия", "#EFE3FF");
+        map.put("Физика", "#E1F0FF");
+        map.put("Английски език", "#FFE3E3");
+        map.put("История", "#F5EAD6");
+        map.put("География", "#EEF3D9");
+        map.put("Изкуство", "#FFEBD6");
+        map.put("Музика", "#F2E6FF");
+        map.put("Компютърни науки", "#E3EAF5");
+        map.put("Икономика", "#E6F7F1");
+        map.put("Философия", "#ECE9F4");
+        map.put("Литература", "#FFF4E1");
+        map.put("Няма", DEFAULT_COLOR);
+        map.put(any, DEFAULT_COLOR);
+
+        CATEGORIES = Collections.unmodifiableMap(map);
+    }
+
+
+    public static Map<String, String> getCategories() {
+        return CATEGORIES;
+    }
+
+    public static String getDefaultCategory() {
+        return any;
     }
 }
