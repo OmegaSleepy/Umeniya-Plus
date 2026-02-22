@@ -76,7 +76,7 @@ public class BlogService {
         if(Objects.isNull(blog)) return false;
         if(blog.creator().equals(username)) return true;
 
-        if(user.permittingLevel() != PermittingLevel.ADMIN) return false;
+        if(user.permittingLevel() == PermittingLevel.ADMIN) return true;
         return false;
     }
 
