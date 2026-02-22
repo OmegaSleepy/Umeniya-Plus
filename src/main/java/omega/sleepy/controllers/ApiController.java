@@ -337,4 +337,17 @@ public class ApiController {
         }
         return gson.toJson(serviceResponse);
     }
+
+    public static Object createCSSForUser(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        String username = AuthService.getUsernameByToken(token);
+
+        if (username == null) {
+            return forbitten(response);
+        }
+
+        JsonObject json = gson.fromJson(request.body(), JsonObject.class);
+        ProfileService.setStyleForUser(json.asMap(), username);
+        return "ok";
+    }
 }

@@ -1,11 +1,10 @@
 package omega.sleepy.routes;
 
 import omega.sleepy.controllers.ApiController;
-
-import static spark.Spark.*;
-
 import omega.sleepy.controllers.AuthController;
 import omega.sleepy.controllers.ResourceController;
+
+import static spark.Spark.*;
 
 public class ApiRoutes {
     public static void init() {
@@ -27,6 +26,8 @@ public class ApiRoutes {
         get("/api/user/change-pfp/:icon", AuthController::changePfp);
 
         get("/api/variables-css/", ResourceController::getCssVars);
+
+        post("/api/create-css/", ApiController::createCSSForUser);
 
 
         path("/api/blog", () -> {

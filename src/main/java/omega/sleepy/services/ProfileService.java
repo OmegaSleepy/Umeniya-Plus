@@ -1,17 +1,18 @@
 package omega.sleepy.services;
 
+import com.google.gson.JsonElement;
+import omega.sleepy.dao.StyleDao;
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.User;
 import omega.sleepy.data.UserWithExtras;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.PermittingLevel;
 import omega.sleepy.util.ProfileIcons;
-import omega.sleepy.util.ProfileIcons.*;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class ProfileService {
     public static byte[] getProfileIcon(String name){
@@ -72,5 +73,11 @@ public class ProfileService {
                 ProfileIcons.valueOf(userInfo.get(5).toUpperCase()),
                 Integer.parseInt(userInfo.get(7)),
                 userInfo.get(8));
+    }
+
+    public static void setStyleForUser(Map<String, JsonElement> map, String username) {
+        StringBuilder value = new StringBuilder();
+        map.forEach((k,v) -> value.append("--").append(k).append(": ").append(v).append(";\n"));
+        StyleDao.setStyleForUser(value.toString(), username);
     }
 }
