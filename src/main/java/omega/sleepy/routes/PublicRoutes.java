@@ -44,6 +44,8 @@ public class PublicRoutes {
 
         get("/login", PublicController::loginInterface);
 
+        get("/shop", PublicController::shop);
+
         get("/register", PublicController::register);
 
         redirect.get("/signup", "/register");
