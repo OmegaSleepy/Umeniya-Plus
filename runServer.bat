@@ -2,7 +2,7 @@
 setlocal
 
 :: Configuration
-set MAIN_CLASS=omega.sleepy.Main
+set MAIN_CLASS=org.martin.Main
 set SKIP_TESTS=false
 
 :: Build command based on whether tests are skipped
