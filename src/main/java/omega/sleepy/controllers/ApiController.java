@@ -337,4 +337,16 @@ public class ApiController {
         response.type(MediaType.JSON.getValue());
         return gson.toJson(new UserRequestDTO(username, icon.toString(), user.permittingLevel().toString(), user.flames()));
     }
+
+
+    public static Object getByAuthor(Request request, Response response) {
+        String author = request.params("author");
+        if (author == null) return missingResource(response);
+
+        var list = BlogService.getBlogsByAuthor(author);
+
+        if (list == null) return missingResource(response);
+
+        return gson.toJson(list);
+    }
 }

@@ -26,6 +26,7 @@ public class ApiRoutes {
             post("/create", ApiController::createBlog);
 
             get("/get-filtered-view/", ApiController::getFilteredView);
+            get("/by-author/:author", ApiController::getByAuthor);
 
             get("/tags", ApiController::getCategories);
 

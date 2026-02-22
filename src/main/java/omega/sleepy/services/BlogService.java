@@ -77,4 +77,13 @@ public class BlogService {
         if(user.permittingLevel() != PermittingLevel.ADMIN) return false;
         return false;
     }
+
+    public static List<Blog> getBlogsByAuthor(String author) {
+        List<Blog> blogs;
+        if(!AuthService.userExists(author)) return null;
+
+        blogs = BlogDao.getBlogByAuthor(author);
+        return blogs;
+
+    }
 }

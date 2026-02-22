@@ -150,7 +150,7 @@ public class BlogDao {
     public static List<Blog> getBlogByAuthor(String user) {
         List<Blog> blogList = new ArrayList<>();
 
-        String sql = "SELECT * FROM blogs WHERE creator_username = ?";
+        String sql = "SELECT id, title, tag, excerpt, creator_username, created_at FROM blogs WHERE creator_username = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
