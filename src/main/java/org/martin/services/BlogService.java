@@ -153,6 +153,7 @@ public class BlogService {
 
         if(BlogDao.hasRecordOfLike(username, page)) return null;
 
+        BlogDao.addRecordOfLikedBlog(username, page);
         BlogDao.addOneLike(page);
 
         return true;

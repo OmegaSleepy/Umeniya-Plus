@@ -399,14 +399,20 @@ public class ApiController {
 
     public static Object likePost(Request request, Response response) {
         JsonObject json = gson.fromJson(request.body(), JsonObject.class);
-        String username = json.get("user").getAsString();
+        String username = json.get("username").getAsString();
         String page =  json.get("page").getAsString();
 
         if (page == null) {
             return missingResource(response);
         }
         if (username == null) {
-            return new ExceptionDTO("Трябва да си вписан, че да харесваш страницата!");
+            response.status(403);
+            return gson.toJson(new ExceptionDTO("Трябва да си вписан, че да харесваш страницата!"));
+        }
+
+        if(!AuthService.userExists(username)){
+            response.status(403);
+            return gson.toJson(new ExceptionDTO("Трябва да си вписан, че да харесваш страницата!"));
         }
 
         int pageId;
@@ -418,7 +424,8 @@ public class ApiController {
         }
 
         if(BlogService.likeAPost(username, pageId) == null){
-            return new ExceptionDTO("Вече си харесал тази публикация");
+            response.status(400);
+            return gson.toJson(new ExceptionDTO("Вече си харесал тази публикация"));
         }
 
         return "{\"status\":\"success\"}";
