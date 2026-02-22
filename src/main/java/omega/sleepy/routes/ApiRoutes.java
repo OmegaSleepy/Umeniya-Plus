@@ -3,18 +3,19 @@ package omega.sleepy.routes;
 import omega.sleepy.controllers.ApiController;
 
 import static spark.Spark.*;
+import omega.sleepy.controllers.ResourceController;
 
 public class ApiRoutes {
     public static void init() {
 
-        get("/api/style/:styleSheet", ApiController::getStyleSheet);
-        get("/api/js/:js", ApiController::getJavaScriptFile);
-        get("/api/image/:image", ApiController::getImage);
+        get("/api/style/:styleSheet", ResourceController::getStyleSheet);
+        get("/api/js/:js", ResourceController::getJavaScriptFile);
+        get("/api/image/:image", ResourceController::getImage);
 
 
-        get("/favicon.ico", ApiController::getFavicon);
-        get("/favicon-logo.ico", ApiController::getFavicon);
-        get("/api/profile-icon/:icon", ApiController::getIcon);
+        get("/favicon.ico", ResourceController::getFavicon);
+        get("/favicon-logo.ico", ResourceController::getFavicon);
+        get("/api/profile-icon/:icon", ResourceController::getIcon);
 
 
         get("/api/user/me-info", ApiController::getUserInformation);
@@ -30,7 +31,7 @@ public class ApiRoutes {
 
             post("/read", ApiController::rewardReader);
 
-            get("/tags", ApiController::getCategories);
+            get("/tags", ResourceController::getCategories);
 
             get("/:id", ApiController::getBlogContentsById);
 
