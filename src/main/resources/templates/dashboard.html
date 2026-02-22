@@ -156,14 +156,24 @@
     }
 
     async function deletePost(id) {
-        if (!confirm("Сигурни ли сте?")) return;
+        if (!confirm("Сигурен ли си?")) return;
 
-        const res = await fetch(`/api/blog/delete/${id}`, { method: "DELETE" });
+        try {
+            const response = await fetch(`/api/blog/delete/${id}`, {
+                method: 'POST'
+            });
 
-        if (res.ok) {
-            location.reload();
-        } else {
-            alert("Грешка при изтриването.");
+            const result = await response.json();
+
+            if (response.ok && result.status === "ok") {
+                alert("Изтрито успешно!");
+                location.reload();
+            } else {
+                console.error("Сървърът отказа триене:", result);
+                alert("Нямаш права или постът не съществува.");
+            }
+        } catch (err) {
+            console.error("Fatal error:", err);
         }
     }
 </script>
