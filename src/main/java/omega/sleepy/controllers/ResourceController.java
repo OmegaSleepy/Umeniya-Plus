@@ -12,9 +12,7 @@ import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static omega.sleepy.controllers.ControllerUtil.missingResource;
 
@@ -108,5 +106,33 @@ public class ResourceController {
 
         return gson.toJson(icons);
 
+    }
+
+
+    public static final Map<String, String> CSS_VARS = new LinkedHashMap<>();
+
+    static {
+        CSS_VARS.put("primary-color", "#5ad53d");
+        CSS_VARS.put("primary-hover", "#3abd1d");
+        CSS_VARS.put("primary-active", "#5ad53d");
+        CSS_VARS.put("tetra-1", "#8496E8");
+        CSS_VARS.put("tetra-1-dark", "#8486b8");
+        CSS_VARS.put("tetra-2", "#E88496");
+        CSS_VARS.put("tetra-2-dark", "#E07486");
+        CSS_VARS.put("bg-body", "#f5f5f5");
+        CSS_VARS.put("bg-card", "#ffffff");
+        CSS_VARS.put("text-main", "#333333");
+        CSS_VARS.put("text-muted", "#666666");
+        CSS_VARS.put("text-light", "#888888");
+        CSS_VARS.put("text-dark", "#222222");
+        CSS_VARS.put("tag-border", "#dddddd65");
+        CSS_VARS.put("border-color", "#dddddd");
+        CSS_VARS.put("tag-bg", "#e9ecef");
+        CSS_VARS.put("code-bg", "#111111");
+        CSS_VARS.put("code-text", "#eeeeee");
+    }
+
+    public static Object getCssVars(Request request, Response response) {
+        return gson.toJson(CSS_VARS);
     }
 }

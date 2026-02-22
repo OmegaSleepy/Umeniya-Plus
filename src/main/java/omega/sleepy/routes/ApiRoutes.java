@@ -26,6 +26,8 @@ public class ApiRoutes {
         get("/api/icons", ResourceController::getIcons);
         get("/api/user/change-pfp/:icon", AuthController::changePfp);
 
+        get("/api/variables-css/", ResourceController::getCssVars);
+
 
         path("/api/blog", () -> {
 
