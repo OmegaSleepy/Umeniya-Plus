@@ -11,7 +11,7 @@ import static org.martin.util.db.FileUtil.readFile;
 
 public class Database {
 
-    public static final String dbName = "mainDelta.db";
+    public static final String dbName = "server.db";
 
     public static Connection getConnection() {
         try {
