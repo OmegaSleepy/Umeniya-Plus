@@ -16,6 +16,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
     <script src="/api/js/loadUserInfo.js" defer></script>
+    <style>
+        .flame-badge {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff4500, #ff8c00);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 9999;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0) translateY(100px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .flame-icon {
+            font-size: 1.2rem;
+        }
+    </style>
 
 </head>
 <body>
@@ -143,6 +170,86 @@
     }
 
     formatPostDate();
+
+    let fiveSecondsPassed = false;
+    let rewardClaimed = false;
+
+    setTimeout(() => {
+        fiveSecondsPassed = true;
+        checkRewardConditions();
+    }, 5000);
+
+    window.addEventListener('scroll', () => {
+        checkRewardConditions();
+    });
+
+    async function checkRewardConditions() {
+        if (rewardClaimed || !fiveSecondsPassed) return;
+
+        const isAtBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 10);
+
+        if (isAtBottom) {
+            rewardClaimed = true;
+            await claimReadingReward();
+        }
+    }
+
+    async function claimReadingReward() {
+        const authorName = document.getElementById("post-author").innerText;
+
+        const currentUsername = typeof getUsername === 'function' ? getUsername() : null;
+
+        const urlSegments = window.location.pathname.split("/").filter(Boolean);
+        const blogId = urlSegments.pop();
+
+        console.log("blogId", blogId);
+        console.log("authorName", authorName);
+        console.log("currentUsername", currentUsername);
+
+        const payload = {
+            author: authorName,
+            user: currentUsername,
+            page: blogId
+        };
+
+        try {
+            const response = await fetch(`/api/blog/read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                showFlameUI(data.reward || 5);
+            } else if (response.status === 406) {
+                console.log("Тази публикация вече е прочетена.");
+            }
+        } catch (err) {
+            console.error("Грешка при изпращане на наградата:", err);
+        }
+    }
+
+    function showFlameUI(amount) {
+        const badge = document.createElement('div');
+        badge.className = 'flame-badge';
+        badge.innerHTML = `
+        <span class="flame-icon">🔥</span>
+        <span>+${amount} Искри</span>
+    `;
+
+        document.body.appendChild(badge);
+
+        addVisualFlames(amount);
+
+        setTimeout(() => {
+            badge.style.transition = "opacity 1s";
+            badge.style.opacity = "0";
+            setTimeout(() => badge.remove(), 1000);
+        }, 10000);
+    }
 
     console.log(postId);
 
