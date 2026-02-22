@@ -9,7 +9,7 @@ import static omega.sleepy.util.FileUtil.readFile;
 
 public class Database {
 
-    public static final String dbName = "main.db";
+    public static final String dbName = "mainDelta.db";
 
     public static Connection getConnection() {
         try {
@@ -41,12 +41,14 @@ public class Database {
         String userSchema = readFile("/sql/schema/userSchema.sql");
         String sessionSchema = readFile("/sql/schema/userSessions.sql");
         String userExtraSchema = readFile("/sql/schema/userExtras.sql");
+        String readBlogSchema = readFile("/sql/schema/readBlogSchema.sql");
         //...
 
         executeSQL(blogSchema);
         executeSQL(userSchema);
         executeSQL(sessionSchema);
         executeSQL(userExtraSchema);
+        executeSQL(readBlogSchema);
 
     }
 }
