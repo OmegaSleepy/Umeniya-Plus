@@ -6,11 +6,15 @@ import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.MiscService;
 import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.MediaType;
+import omega.sleepy.util.ProfileIcons;
 import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static omega.sleepy.controllers.ControllerUtil.missingResource;
 
@@ -97,5 +101,12 @@ public class ResourceController {
 
     public static String getCategories(Request request, Response response) {
         return gson.toJson(BlogDao.getCategories());
+    }
+
+    public static Object getIcons(Request request, Response response) {
+        List<ProfileIcons> icons = new ArrayList<>(Arrays.asList(ProfileIcons.values()));
+
+        return gson.toJson(icons);
+
     }
 }
