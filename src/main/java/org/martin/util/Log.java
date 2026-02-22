@@ -1,11 +1,9 @@
 package org.martin.util;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Log {
@@ -85,10 +83,65 @@ public class Log {
         return message;
     }
 
-    public static void writeoutBuffer(){
-	
-	
+    public static void writeoutBuffer() {
+        String subDir = (errorCount.get() > 0) ? CRASH_DIR : SUCCESSFUL_DIR;
+        java.io.File directory = new java.io.File(LOG_DIR + "/" + subDir);
 
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String fileName = LocalDateTime.now().format(FILE) + ".log";
+        java.io.File logFile = new java.io.File(directory, fileName);
+
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(logFile))) {
+            writer.println(getLogVersion());
+            writer.println(getLogCount());
+            writer.println("------------------------------------------");
+
+            synchronized (buffer) {
+                for (String line : buffer) {
+                    writer.println(stripAnsi(line));
+                }
+            }
+
+            System.out.println(GREEN + "[LOG] Buffer successfully written to: " + logFile.getAbsolutePath() + RESET);
+        } catch (java.io.IOException e) {
+            System.err.println(RED + "[ERROR] Failed to write log buffer: " + e.getMessage() + RESET);
+        }
+    }
+
+    public static void purgeOldLogs() {
+        java.io.File dir = new java.io.File(LOG_DIR);
+        if (!dir.exists() || !dir.isDirectory()) return;
+
+        List<java.io.File> allLogs = new ArrayList<>();
+        gatherFiles(dir, allLogs);
+
+        if (allLogs.size() > MAX_LOGS) {
+            allLogs.sort(Comparator.comparingLong(File::lastModified));
+
+            int logsToRemove = allLogs.size() - MAX_LOGS;
+            for (int i = 0; i < logsToRemove; i++) {
+                java.io.File toDelete = allLogs.get(i);
+                if (toDelete.delete()) {
+                    System.out.println(YELLOW + "[CLEANUP] Deleted old log: " + toDelete.getName() + RESET);
+                }
+            }
+        }
+    }
+
+    private static void gatherFiles(java.io.File directory, List<java.io.File> foundFiles) {
+        java.io.File[] files = directory.listFiles();
+        if (files == null) return;
+
+        for (java.io.File file : files) {
+            if (file.isDirectory()) {
+                gatherFiles(file, foundFiles);
+            } else if (file.getName().endsWith(".log")) {
+                foundFiles.add(file);
+            }
+        }
     }
 
 
