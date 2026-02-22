@@ -28,6 +28,8 @@ public class ApiRoutes {
             get("/get-filtered-view/", ApiController::getFilteredView);
             get("/by-author/:author", ApiController::getByAuthor);
 
+            post("/read", ApiController::rewardReader);
+
             get("/tags", ApiController::getCategories);
 
             get("/:id", ApiController::getBlogContentsById);
