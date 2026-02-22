@@ -48,13 +48,13 @@ public class PublicRoutes {
 
         redirect.get("/signup", "/register");
 
-        get("/dashboard", AuthController::dashboard); //PublicController::dashboard
+        get("/dashboard", PublicController::dashboard);
 
         get("/logout", (request, response) -> getSimpleTemplate("logout", response));
 
         get("/user/:username", PublicController::userProfile);
 
-        get("/me", PublicController::thisUserProfile);
+        redirect.get("/me", "/dashboard");
 
         path("/help", () -> {
             get("/markdown-info", (request, response) -> getSimpleTemplate("markdown", response));

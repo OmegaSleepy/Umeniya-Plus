@@ -72,7 +72,22 @@ public class PublicController {
         return PublicRoutes.getSimpleTemplate("user", response);
     }
 
-    public static String thisUserProfile(Request request, Response response) {
-        return null;
+    public static Object dashboard(Request request, Response response) {
+        String token = request.cookie(AUTH_COOKIE);
+        if (token == null) {
+            response.status(403);
+            response.redirect("/login");
+            return null;
+        }
+
+        try {
+            validateToken(token);
+        } catch (InvalidCredentials e) {
+            response.status(403);
+            response.redirect("/login");
+            return null;
+        }
+
+        return getSimpleTemplate("dashboard", response);
     }
 }
