@@ -44,51 +44,87 @@
     function showPassword() {
         const password_field = document.getElementById("password");
         const confirm_password_field = document.getElementById("confirm-password");
-        if (password_field.type === "password") {
-            password_field.type = "text"
-            confirm_password_field.type = "text"
-        } else {
-            password_field.type = "password"
-            confirm_password_field.type = "password"
+        const type = password_field.type === "password" ? "text" : "password";
+        password_field.type = type;
+        confirm_password_field.type = type;
+    }
+
+    const MIN_ALPHANUMERICAL = 6;
+    const MIN_SPECIAL = 1;
+    const MIN_NUMBER = 2;
+    const MIN_LENGTH = 12;
+
+    function validatePassword(password) {
+        if (!password || password.length < MIN_LENGTH) {
+            return `Паролата трябва да е поне ${MIN_LENGTH} символа.`;
         }
+
+        let letters = 0;
+        let digits = 0;
+        let specials = 0;
+
+        for (const char of password) {
+            if (/[a-zA-Z]/.test(char)) {
+                letters++;
+            } else if (/[0-9]/.test(char)) {
+                digits++;
+            } else {
+                specials++;
+            }
+        }
+
+        if (letters < MIN_ALPHANUMERICAL) return `Трябват поне ${MIN_ALPHANUMERICAL} букви.`;
+        if (digits < MIN_NUMBER) return `Трябват поне ${MIN_NUMBER} цифри.`;
+        if (specials < MIN_SPECIAL) return `Трябва поне ${MIN_SPECIAL} специален символ.`;
+
+        return null;
     }
 
     document.getElementById("send-info").addEventListener("click", async function () {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
         const password2 = document.getElementById("confirm-password").value;
+        const message = document.getElementById("message");
 
-        if (password === password2) {
-            const data = {
-                username, password
-            };
+        if (password !== password2) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Паролите не съвпадат!',
+                confirmButtonColor: '#3085d6'
+            });
+            return;
+        }
+
+        const error = validatePassword(password);
+        if (error) {
+            message.style.color = "red";
+            message.innerHTML = error;
+            return;
+        }
+
+        const data = { username, password };
+        try {
             const response = await fetch("/auth/credentials/sign-up", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 credentials: "include",
                 body: JSON.stringify(data)
             });
-            console.log(response);
 
             if (response.ok) {
                 window.location.href = "/home";
             } else {
                 const body = await response.json();
-                const message = document.getElementById("message");
+                message.style.color = "red";
                 message.innerHTML = body.error || "Възникна грешка";
             }
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Паролите не съвпадат!',
-                confirmButtonColor: '#3085d6'
-            });
+        } catch (e) {
+            message.innerHTML = "Грешка при свързване със сървъра.";
         }
-    })
+    });
 
     function reset() {
         document.getElementById("show-pass").checked = false;
-        console.log("reset")
     }
 
     reset();

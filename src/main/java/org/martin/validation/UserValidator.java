@@ -25,7 +25,7 @@ public class UserValidator {
                 specials++;
             }
         }
-        //TODO return those as throwable
+
         if(letters < MIN_ALPHANUMERICAL) Log.error("Too little alphanumerical");
         if(digits < MIN_NUMBER) Log.error("Too little digits");
         if(specials < MIN_SPECIAL) Log.error("Too little special characters");
