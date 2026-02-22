@@ -1,10 +1,6 @@
 (function() {
     const path = window.location.pathname;
     const hasToken = document.cookie.includes('token') || localStorage.getItem('token');
-    let cssUrl = null;
-
-    const isProfilePage = path.match(/^\/user\/([^\/]+)/);
-    const isBlogPage = path.startsWith("/blog/");
 
     const applyStyles = (url) => {
         if (!url || document.getElementById("user-custom-theme")) return;
@@ -18,27 +14,38 @@
         const showPage = () => document.documentElement.style.visibility = 'visible';
         themeLink.onload = showPage;
         themeLink.onerror = showPage;
-        setTimeout(showPage, 400);
+        setTimeout(showPage, 500);
 
         document.head.appendChild(themeLink);
     };
 
-    if (isProfilePage) {
-        applyStyles(`/api/style-for-someone/${isProfilePage[1]}`);
+    // --- 1. SOMEONE ELSE'S THEME (Highest Priority) ---
+
+    const profileMatch = path.match(/^\/user\/([^\/]+)/);
+    if (profileMatch) {
+        return applyStyles(`/api/style-for-someone/${profileMatch[1]}`);
     }
-    else if (isBlogPage) {
+
+    if (path.startsWith("/blog/")) {
         const authorCheck = setInterval(() => {
             const authorEl = document.getElementById("post-author");
             if (authorEl) {
                 clearInterval(authorCheck);
-                const username = authorEl.textContent.trim();
-                applyStyles(`/api/style-for-someone/${username}`);
+                applyStyles(`/api/style-for-someone/${authorEl.textContent.trim()}`);
             }
         }, 10);
-
         setTimeout(() => clearInterval(authorCheck), 1000);
+        return;
     }
-    else if (hasToken) {
+
+    // --- 2. YOUR THEME (Me) ---
+    const isMyThemePage = path === "/" ||
+        path === "/home" ||
+        path.startsWith("/help") ||
+        path.startsWith("/dashboard") ||
+        path.startsWith("/shop");
+
+    if (isMyThemePage) {
         applyStyles("/api/style-for/me");
     }
 })();

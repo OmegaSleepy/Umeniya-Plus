@@ -346,13 +346,15 @@ public class ApiController {
             return forbitten(response);
         }
 
-        if(ProfileService.checkAndDeductFunds(200, username)) {
+        if(!ProfileService.checkAndDeductFunds(200, username)) {
             return forbitten(response);
         }
 
         JsonObject json = gson.fromJson(request.body(), JsonObject.class);
         ProfileService.setStyleForUser(json.asMap(), username);
-        return "ok";
+        response.type(MediaType.JSON.getValue());
+        return "{\"status\":\"success\"}";
+
     }
 
     public static Object getCSSForUserToken(Request request, Response response) {

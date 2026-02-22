@@ -87,6 +87,7 @@ public class ProfileService {
         StringBuilder value = new StringBuilder();
         map.forEach((k,v) -> value.append("--").append(k).append(": ").append(v).append(";\n"));
         StyleDao.setStyleForUser(value.toString(), username);
+        Log.exec(value.toString());
     }
 
     public static boolean checkAndDeductFunds(int funds, String user) {

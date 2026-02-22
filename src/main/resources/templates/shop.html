@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/api/style/tags.css">
     <link rel="stylesheet" href="/api/style/buttons.css">
     <script src="/api/js/loadUserInfo.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         #shop-container {
@@ -146,11 +147,9 @@
         }
 
         buyBtn.addEventListener('click', async () => {
-
             const izkri = getVisualFlames();
 
             if (izkri >= 200) {
-
                 const themeData = {};
                 document.querySelectorAll('#color-pickers-list input').forEach(input => {
                     const key = input.getAttribute('data-var').replace('--', '');
@@ -166,17 +165,33 @@
 
                     if (saveResponse.ok) {
                         addVisualFlames(-200);
-                        alert('Темата е закупена и запазена успешно!');
+
+                        await Swal.fire({
+                            title: 'Успех!',
+                            text: 'Темата е закупена и запазена успешно!',
+                            icon: 'success',
+                            confirmButtonColor: '#ff4500',
+                            background: '#fff',
+                            confirmButtonText: 'Към началната страница'
+                        });
+
                         window.location.href = '/home';
                     } else {
-                        alert('Възникна грешка при запазването.');
+                        Swal.fire('Грешка', 'Възникна грешка при запазването.', 'error');
                     }
                 } catch (err) {
                     console.error("Save error:", err);
+                    Swal.fire('Ops!', 'Нещо се обърка със сървъра.', 'error');
                 }
 
             } else {
-                alert('Нямате достатъчно искри!');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Нямате достатъчно искри!',
+                    text: 'Трябват ви поне 200 искри за тази тема.',
+                    footer: '<a href="/help/iskri">Как да взема повече искри?</a>',
+                    confirmButtonColor: '#3085d6'
+                });
             }
         });
     });

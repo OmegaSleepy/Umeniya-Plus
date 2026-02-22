@@ -11,6 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
     <script src="/api/js/loadUserInfo.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -134,7 +136,12 @@
 
         } catch (err) {
             console.error("Error loading blog data:", err);
-            alert("Грешка при зареждане на данните за редакцията.");
+            await Swal.fire({
+                title: 'Грешка!',
+                text: 'Грешка при зареждане на данните за редакцията.',
+                icon: 'warning',
+                confirmButtonColor: '#ff4500',
+            });
         }
     }
 
@@ -157,11 +164,22 @@
 
             if (!response.ok) throw new Error("Update failed");
 
-            alert("Постът е обновен успешно!");
+            await Swal.fire({
+                title: 'Успех!',
+                text: 'Публикацията беше редактирана успешно! Ще бъдете прехвърлени към страницата на пулбикацията',
+                icon: 'success',
+                confirmButtonColor: '#ff4500',
+                background: '#fff',
+            });
             window.location.href = `/blog/${blogId}`;
         } catch (err) {
             console.error("Error updating blog post:", err);
-            alert("Грешка при запис на промените.");
+            await Swal.fire({
+                title: 'Грешка!',
+                text: 'Грешка при запис на промените.',
+                icon: 'warning',
+                confirmButtonColor: '#ff4500',
+            });
         }
     });
 
