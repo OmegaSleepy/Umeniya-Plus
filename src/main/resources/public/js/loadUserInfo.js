@@ -44,6 +44,12 @@ function createUserIsland() {
     </div>`);
 }
 
+function getUsername(){
+    const username = document.getElementById("username");
+    if (!username) return null;
+    return username.innerText;
+}
+
 async function loadUserInformation() {
     const iskri = document.getElementById("badge");
     iskri.style.display = "none";
@@ -79,9 +85,24 @@ async function loadUserInformation() {
     }
 }
 
-function setVisualFlames(i){
+function setVisualFlames(i) {
     const flames = document.getElementById("flames-count");
-    flames.innerText = i;
+    if (flames) {
+        flames.innerText = i;
+    }
+}
+
+function getVisualFlames() {
+    const flames = document.getElementById("flames-count");
+    return flames ? parseInt(flames.innerText) || 0 : 0;
+}
+
+function addVisualFlames(i) {
+    const flamesElement = document.getElementById("flames-count");
+    if (flamesElement) {
+        const currentFlames = parseInt(flamesElement.innerText) || 0;
+        flamesElement.innerText = currentFlames + i;
+    }
 }
 
 createUserIsland();
