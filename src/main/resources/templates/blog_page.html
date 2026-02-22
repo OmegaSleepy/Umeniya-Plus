@@ -200,20 +200,20 @@
 
     formatPostDate();
 
-    let fiveSecondsPassed = false;
+    let timer = false;
     let rewardClaimed = false;
 
     setTimeout(() => {
-        fiveSecondsPassed = true;
+        timer = true;
         checkRewardConditions();
-    }, 5000);
+    }, 15000);
 
     window.addEventListener('scroll', () => {
         checkRewardConditions();
     });
 
     async function checkRewardConditions() {
-        if (rewardClaimed || !fiveSecondsPassed) return;
+        if (rewardClaimed || !timer) return;
 
         const isAtBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 10);
 
