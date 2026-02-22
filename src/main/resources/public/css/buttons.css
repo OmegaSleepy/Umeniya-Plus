@@ -24,8 +24,9 @@
 }
 
 .btn-like {
-    background: var(--tetra-2);
+    background: var(--tetra-1);
     border: 2px solid var(--border-color);
+    color: var(--text-main);
     padding: 10px 25px;
     border-radius: 25px;
     cursor: pointer;
@@ -34,18 +35,11 @@
 }
 
 .btn-like:hover {
-    background-color: var(--tetra-2-dark);
-}
-
-.btn-like:hover {
-    background-color: var(--tetra-2-dark);
-    border-color: var(--border-color);
+    background-color: var(--tetra-1-dark);
 }
 
 .btn-like.liked {
-    background: var(--tetra-2-dark);
-    color: var(--text-light);
-    border-color: var(--border-color);
+    background: var(--tetra-1-dark);
 }
 
 .btn-some-fancy {

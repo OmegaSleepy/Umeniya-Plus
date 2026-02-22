@@ -11,15 +11,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
     <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="/api/js/loadUserInfo.js" defer></script>
     <script src="/api/js/applyTheme.js" defer></script>
+
     <style>
         .flame-badge {
             position: fixed;
@@ -39,15 +37,33 @@
         }
 
         @keyframes popIn {
-            from { transform: scale(0) translateY(100px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
+            from {
+                transform: scale(0) translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
 
-        .flame-icon {
-            font-size: 1.2rem;
+        .post-stats {
+            display: inline-flex;
+            gap: 15px;
+            margin-left: 15px;
+            color: #888;
+            font-size: 0.9rem;
         }
+
+        .like-section {
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+
     </style>
-
 </head>
 <body>
 
@@ -64,12 +80,16 @@
     <h1 class="post-title" th:text="${blog.title}">Заглавието на поста</h1>
 
     <div class="post-meta">
-        от  <a id="author-profile" href="/user/" style="text-decoration: none">
+        от <a id="author-profile" href="/user/" style="text-decoration: none">
         <span class="post-author" id="post-author" th:text="${blog.creator}">Автор</span>
-            </a>
+    </a>
         <span class="meta-divider">•</span>
-        <span id="post-date" class="post-date" th:data-date="${blog.creationDate}">
-        </span>
+        <span id="post-date" class="post-date" th:data-date="${blog.creationDate}"></span>
+
+        <div class="post-stats">
+            <span>👁️ <span th:text="${blog.views}">0</span></span>
+            <span>💚️ <span id="likes-count" th:text="${blog.likes}">0</span></span>
+        </div>
     </div>
 
     <div id="admin-controls" style="display: none; margin-bottom: 20px;">
@@ -77,15 +97,23 @@
         <button onclick="deletePost()" class="btn-delete">Изтрий</button>
     </div>
 
-    <p class="post-excerpt" th:text="${blog.excerpt}">Това е кратко описание на
-        съдържанието, целящо да грабне вниманието на читателя</p>
+    <p class="post-excerpt" th:text="${blog.excerpt}">Кратко описание...</p>
     <hr>
 
     <article id="post" class="content"></article>
 
+    <div class="like-section">
+        <button id="like-btn" onclick="likePost()" class="btn-like">
+            💚 Харесай
+        </button>
+    </div>
+
 </main>
 
 <script>
+    const pathParts = window.location.pathname.split("/");
+    const postId = pathParts[pathParts.length - 1];
+
     async function loadPost(id) {
         const res = await fetch(`/api/blog/${id}`);
         const markdown = await res.text();
@@ -103,61 +131,35 @@
         document.getElementById("post").innerHTML = cleanHtml;
     }
 
-    const pathParts = window.location.pathname.split("/");
-    const postId = pathParts[pathParts.length - 1];
-
-    async function canEdit() {
-        const response = await fetch(`/api/blog/can-edit/${postId}`);
-
-        if (response.ok) {
-            document.getElementById("admin-controls").style.display = "block";
-        }
-    }
-
     async function deletePost() {
-        const result = await Swal.fire({
-            title: 'Сигурен ли си?',
-            text: "Това действие е необратимо!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Да, изтрий!',
-            cancelButtonText: 'Отказ'
-        });
-
-        if (!result.isConfirmed) return;
-
-        const pathParts = window.location.pathname.split("/");
-        const postId = pathParts[pathParts.length - 1];
+        if (!confirm("Сигурен ли си?")) return;
 
         try {
-            const response = await fetch(`/api/blog/${postId}`, {
-                method: 'DELETE'
+            const response = await fetch(`/api/blog/delete/${postId}`, {
+                method: 'POST'
             });
 
-            const data = await response.json();
+            const result = await response.json();
 
-            if (response.ok && data.status === "ok") {
-                await Swal.fire({
+            if (response.ok && result.status === "ok") {
+                Swal.fire({
                     icon: 'success',
-                    title: 'Успешно!',
+                    title: 'Упешно!',
                     text: 'Публикацията е изтрита!',
                     confirmButtonColor: '#3085d6'
                 });
-
                 window.location.href = "/home";
             } else {
-                throw new Error(data.message || "Deletion failed");
+                console.error("Сървърът отказа триене:", result);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Грешка!',
+                    text: 'Случи се случка, опитай отново!',
+                    confirmButtonColor: '#3085d6'
+                });
             }
         } catch (err) {
-            console.error("Delete error:", err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Грешка!',
-                text: 'Случи се случка, опитай отново!',
-                confirmButtonColor: '#3085d6'
-            });
+            console.error("Fatal error:", err);
         }
     }
 
@@ -165,124 +167,142 @@
         window.location.href = `/edit/${postId}`;
     }
 
-    loadPost(postId);
-    canEdit();
+    async function likePost() {
+        // Check if getUsername exists, otherwise default to null/anonymous
+        const currentUsername = typeof getUsername === 'function' ? getUsername() : null;
+        const btn = document.getElementById("like-btn");
+
+        try {
+            const response = await fetch(`/api/blog/like`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: currentUsername,
+                    page: postId
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById("likes-count").innerText = data.newLikes;
+                btn.classList.add("liked");
+                btn.innerHTML = "💚 Харесано";
+                btn.disabled = true;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Благодарим!',
+                    text: 'Твоето харесване беше отчетено.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else if // 1. Handle Unauthenticated (403)
+            (response.status === 403) {
+                Swal.fire({
+                    title: 'Не си влязъл в профила си',
+                    text: "Трябва да влезеш, за да харесаш тази публикация.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#aaa',
+                    confirmButtonText: 'Към вход',
+                    cancelButtonText: 'Отказ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/login";
+                    }
+                });
+                return;
+            } else {
+                // Server error (e.g., 400 Bad Request or 409 Conflict)
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Опа!',
+                    text: data.error || 'Възникна грешка.',
+                    confirmButtonColor: '#3085d6'
+                });
+
+                if (data.error && data.error.includes("харесал")) {
+                    btn.classList.add("liked");
+                    btn.innerHTML = "💚 Вече харесано";
+                    btn.disabled = true;
+                }
+            }
+        } catch (err) {
+            console.error("Network error:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Грешка в мрежата',
+                text: 'Неуспешно свързване със сървъра.',
+                confirmButtonColor: '#d33'
+            });
+        }
+    }
+
+    async function canEdit() {
+        const response = await fetch(`/api/blog/can-edit/${postId}`);
+        if (response.ok) document.getElementById("admin-controls").style.display = "block";
+    }
 
     function formatPostDate() {
         const dateElement = document.getElementById("post-date");
         const rawDate = dateElement.getAttribute("data-date");
-
         if (rawDate) {
-            const date = new Date(rawDate);
-
-            const formattedDate = date.toLocaleDateString('bg-BG', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
+            dateElement.innerText = new Date(rawDate).toLocaleDateString('bg-BG', {
+                day: 'numeric', month: 'long', year: 'numeric'
             });
-
-            dateElement.innerText = formattedDate;
         }
-
-        link();
+        const username = document.getElementById("post-author").innerText;
+        if (username) document.getElementById("author-profile").href = `/user/${username}`;
     }
 
-    function link() {
-        const authorLink = document.getElementById("author-profile");
-        const authorNameElement = document.getElementById("post-author");
-
-        const username = authorNameElement.innerText;
-
-        if (username) {
-            authorLink.href = `/user/${username}`;
-        }
-    }
-
+    loadPost(postId);
+    canEdit();
     formatPostDate();
 
+    // Reward Logic...
     let timer = false;
     let rewardClaimed = false;
-
     setTimeout(() => {
         timer = true;
-        checkRewardConditions();
     }, 15000);
-
-    window.addEventListener('scroll', () => {
-        checkRewardConditions();
+    window.addEventListener('scroll', async () => {
+        if (rewardClaimed || !timer) return;
+        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 50)) {
+            rewardClaimed = true;
+            claimReadingReward();
+        }
     });
 
-    async function checkRewardConditions() {
-        if (rewardClaimed || !timer) return;
-
-        const isAtBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 10);
-
-        if (isAtBottom) {
-            rewardClaimed = true;
-            await claimReadingReward();
-        }
-    }
-
     async function claimReadingReward() {
-        const authorName = document.getElementById("post-author").innerText;
-
         const currentUsername = typeof getUsername === 'function' ? getUsername() : null;
-
-        const urlSegments = window.location.pathname.split("/").filter(Boolean);
-        const blogId = urlSegments.pop();
-
-        console.log("blogId", blogId);
-        console.log("authorName", authorName);
-        console.log("currentUsername", currentUsername);
-
-        const payload = {
-            author: authorName,
-            user: currentUsername,
-            page: blogId
-        };
-
+        const payload = {author: document.getElementById("post-author").innerText, user: currentUsername, page: postId};
         try {
-            const response = await fetch(`/api/blog/read`, {
+            const res = await fetch(`/api/blog/read`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)
             });
-
-            if (response.ok) {
-                const data = await response.json();
+            if (res.ok) {
+                const data = await res.json();
                 showFlameUI(data.reward || 5);
-            } else if (response.status === 406) {
-                console.log("Тази публикация вече е прочетена.");
             }
         } catch (err) {
-            console.error("Грешка при изпращане на наградата:", err);
+            console.error(err);
         }
     }
 
     function showFlameUI(amount) {
         const badge = document.createElement('div');
         badge.className = 'flame-badge';
-        badge.innerHTML = `
-        <span class="flame-icon">🔥</span>
-        <span>+${amount} Искри</span>
-    `;
-
+        badge.innerHTML = `<span class="flame-icon">🔥</span><span>+${amount} Искри</span>`;
         document.body.appendChild(badge);
-
-        addVisualFlames(amount);
-
         setTimeout(() => {
-            badge.style.transition = "opacity 1s";
             badge.style.opacity = "0";
             setTimeout(() => badge.remove(), 1000);
-        }, 10000);
+        }, 5000);
     }
-
-    console.log(postId);
-
 </script>
-
 </body>
 </html>
