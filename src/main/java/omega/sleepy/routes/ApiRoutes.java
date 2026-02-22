@@ -35,9 +35,13 @@ public class ApiRoutes {
 
             get("/:id", ApiController::getBlogContentsById);
 
+            get("/full/:id", ApiController::getBlogById);
+
             get("/can-edit/:id", ApiController::checkCanEdit);
             post("/delete/:id", ApiController::deleteBlog);
             post("/edit/:id", ApiController::editBlog);
+
+            put("/update/:id", ApiController::updateBlog);
 
         });
 

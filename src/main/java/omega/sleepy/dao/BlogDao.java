@@ -287,4 +287,23 @@ public class BlogDao {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean replaceBlog(int id, Blog newBlog) {
+        String sql = "UPDATE blogs SET title = ?, tag = ?, excerpt = ?, content = ? where id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, newBlog.title());
+            preparedStatement.setString(2, newBlog.tag());
+            preparedStatement.setString(3, newBlog.excerpt());
+            preparedStatement.setString(4, newBlog.content());
+            preparedStatement.setInt(5, id);
+
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            return false;
+        }
+    }
 }

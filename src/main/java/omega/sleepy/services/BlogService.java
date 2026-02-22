@@ -7,6 +7,7 @@ import omega.sleepy.data.User;
 import omega.sleepy.util.BlogFilter;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.PermittingLevel;
+import omega.sleepy.validation.BlogValidator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,5 +107,24 @@ public class BlogService {
         BlogDao.addRecordOfReadBlog(user, page);
 
         return true;
+    }
+
+    public static Object updateBlog(String title, String category, String excerpt, String content, String blogId) {
+
+        if(!BlogDao.getCategories().containsKey(category)) {
+            return new RuntimeException("Category " + category + " doesn't exist");
+        }
+
+        int id = Integer.parseInt(blogId);
+
+        var currentBlog = BlogDao.getBlogById(id);
+
+        var newBlog = new Blog(id, title, category, excerpt, content, currentBlog.creator(), currentBlog.creationDate(), currentBlog.tax(), currentBlog.views());
+
+        if(BlogValidator.isValidBlog(newBlog)) {
+            return BlogDao.replaceBlog(id, newBlog);
+        }
+
+        return null;
     }
 }

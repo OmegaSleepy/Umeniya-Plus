@@ -37,7 +37,7 @@ public class ApiController {
             return forbitten(response);
         }
 
-        try{
+        try {
             validateToken(token);
         } catch (InvalidCredentials e) {
             return forbitten(response);
@@ -67,7 +67,7 @@ public class ApiController {
 
         Blog blog = BlogService.getBlogById(id);
 
-        if(blog == null) {
+        if (blog == null) {
             return missingResourcePage(response);
         }
 
@@ -85,7 +85,7 @@ public class ApiController {
         var id = Integer.parseInt(request.params(":id"));
         String body = BlogService.getBlogBodyById(id);
 
-        if(body == null) {
+        if (body == null) {
             return missingResource(response);
         }
 
@@ -108,8 +108,6 @@ public class ApiController {
         return gson.toJson(blogs);
 
     }
-
-
 
 
     public static String getUserInformation(Request request, Response response) {
@@ -157,11 +155,11 @@ public class ApiController {
         try {
             id = Integer.parseInt(blogId);
 
-            if(!BlogService.canEdit(id, username)){
+            if (!BlogService.canEdit(id, username)) {
                 return forbitten(response);
             }
 
-            if(BlogService.deleteBlogById(id)) {
+            if (BlogService.deleteBlogById(id)) {
                 response.status(200);
                 response.type(MediaType.JSON.getValue());
                 return "{\"status\":\"ok\"}";
@@ -196,7 +194,7 @@ public class ApiController {
                 return forbitten(response);
             }
 
-            response.redirect("/edit/"+blogId);
+            response.redirect("/edit/" + blogId);
 
             return "{\"status\":\"ok\"}";
 
@@ -222,7 +220,7 @@ public class ApiController {
         try {
             id = Integer.parseInt(blogId);
 
-            if(BlogService.canEdit(id, username)){
+            if (BlogService.canEdit(id, username)) {
                 response.status(200);
                 response.type(MediaType.JSON.getValue());
                 return "{\"status\":\"ok\"}";
@@ -286,5 +284,57 @@ public class ApiController {
 
         response.type(MediaType.JSON.getValue());
         return "{\"reward\":10}";
+    }
+
+    public static Object getBlogById(Request request, Response response) {
+        String id = request.params("id");
+        if (id == null) return missingResource(response);
+        try {
+            int index = Integer.parseInt(id);
+            Blog blog = BlogService.getBlogById(index);
+            return gson.toJson(blog);
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
+    }
+
+    public static Object updateBlog(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        String blogId = request.params("id");
+
+        String username = AuthService.getUsernameByToken(token);
+        if (username == null) {
+            Log.error("Invalid token");
+            return forbitten(response);
+        }
+
+        try {
+            int id = Integer.parseInt(blogId);
+            if(!BlogService.canEdit(id, username)){
+                Log.error("No edit perms");
+                return forbitten(response);
+            }
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
+
+        JsonObject json = gson.fromJson(request.body(), JsonObject.class);
+
+        String title =  json.get("title").getAsString();
+        String content = json.get("content").getAsString();
+        String excerpt = json.get("excerpt").getAsString();
+        String category =  json.get("category").getAsString();
+
+        var serviceResponse = BlogService.updateBlog(title, category, excerpt, content, blogId);
+
+        if(serviceResponse instanceof Exception e) {
+
+            return gson.toJson(new RuntimeException(e));
+            
+        } else if(serviceResponse == null) {
+            Log.error("Failed to update blog");
+            return forbitten(response);
+        }
+        return gson.toJson(serviceResponse);
     }
 }
