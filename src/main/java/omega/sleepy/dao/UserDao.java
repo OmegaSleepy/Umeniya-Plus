@@ -110,7 +110,7 @@ public class UserDao {
         }
     }
 
-    public static void changePfp(String username, String icon){
+    public static boolean changePfp(String username, String icon){
         String sql = "UPDATE users set profile_icon = ? where username = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -119,6 +119,7 @@ public class UserDao {
             preparedStatement.setString(2, username);
 
             preparedStatement.execute();
+            return true;
 
         } catch (SQLException e) {
             throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
