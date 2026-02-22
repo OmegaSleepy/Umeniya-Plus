@@ -15,6 +15,8 @@ public class Main {
         port(4567);
         staticFileLocation("/public");
 
+        Log.purgeOldLogs();
+
         Log.info("Initializing System Logic");
 
         RouteMain.init();
@@ -26,6 +28,8 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Log.exec("Shutting down server...");
             Spark.stop();
+            Log.warn("Server shut down");
+            Log.writeoutBuffer();
         }));
     }
 }
