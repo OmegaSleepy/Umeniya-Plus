@@ -311,4 +311,33 @@ public class BlogDao {
             return -3;
         }
     }
+
+    public static List<Blog> getLikedBlogsByUser(String user) {
+        List<Blog> blogList = new ArrayList<>();
+
+        String sql = """
+        SELECT b.id, b.title, b.tag, b.excerpt,
+               b.creator_username, b.created_at, b.views, b.likes
+        FROM blogs b
+        INNER JOIN likedBlogs l ON b.id = l.id
+        WHERE l.user = ?
+        """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    blogList.add(getBlog(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return blogList;
+    }
 }

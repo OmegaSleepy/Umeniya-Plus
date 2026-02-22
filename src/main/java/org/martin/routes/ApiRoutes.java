@@ -31,11 +31,13 @@ public class ApiRoutes {
 
         path("/api/user", ()-> {
             get("/me-info", ApiController::getUserInformation);
-            get("/:user", ApiController::getSpecificUserInformation);
+            get("/my-likes", ApiController::getLikedPosts);
             get("/total-views/:user", ApiController::getTotalViewsByAuthor);
             get("/total-likes/:user", ApiController::getTotalLikesByAuthor);
             get("/change-pfp/:icon", AuthController::changePfp);
+            get("/:user", ApiController::getSpecificUserInformation);
         });
+
 
         path("/api/blog", () -> {
 

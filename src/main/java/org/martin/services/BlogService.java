@@ -158,4 +158,12 @@ public class BlogService {
 
         return true;
     }
+
+    public static Object getLikedBlogsByUser(String username) {
+        List<Blog> blogs;
+        if(!AuthService.userExists(username)) return null;
+
+        blogs = BlogDao.getLikedBlogsByUser(username);
+        return blogs;
+    }
 }

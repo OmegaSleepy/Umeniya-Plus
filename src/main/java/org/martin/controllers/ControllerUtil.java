@@ -7,12 +7,14 @@ import spark.Response;
 public class ControllerUtil {
     public static String forbitten(Response response) {
         Log.error("something happened HERE \n" + response.raw());
+        Log.error("Forbitten");
         response.status(401);
         response.type(MediaType.JSON.getValue());
         return "{\"status\":\"error\"}";
     }
     public static String missingResourcePage(Response response) {
         Log.error("something happened HERE \n" + response.raw());
+        Log.error("MissingResourcePage");
         response.status(404);
         response.type(MediaType.JSON.getValue());
         response.redirect("/404");
@@ -20,6 +22,7 @@ public class ControllerUtil {
     }
     public static String missingResource(Response response){
         Log.error("something happened HERE \n" + response.raw());
+        Log.error("MissingResource");
         response.status(404);
         response.type(MediaType.JSON.getValue());
         return "{\"status\":\"error\"}";

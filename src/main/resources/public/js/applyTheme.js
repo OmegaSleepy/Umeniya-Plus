@@ -45,7 +45,8 @@
         path.startsWith("/dashboard") ||
         path.startsWith("/shop") ||
         path.startsWith("/edit") ||
-        path.startsWith("/create");
+        path.startsWith("/create") ||
+        path.startsWith("/my-likes");
 
     if (isMyThemePage) {
         applyStyles("/api/style-for/me");
