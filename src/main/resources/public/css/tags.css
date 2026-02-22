@@ -1,5 +1,4 @@
 :root {
-   /* Категории - Light Mode */
    --cat-math: #DCEBFF;
    --cat-science: #D9F4F1;
    --cat-bio: #E3F6E8;
@@ -17,26 +16,6 @@
    --cat-none: #F2F2F2;
 
    --text-on-cat: #333333;
-}
-
-body.dark-mode {
-   --cat-math: #1e3a5f;
-   --cat-science: #1b4d47;
-   --cat-bio: #1d4d2a;
-   --cat-chem: #3d2b52;
-   --cat-phys: #253d52;
-   --cat-eng: #522525;
-   --cat-hist: #4d3a1d;
-   --cat-geo: #3d421d;
-   --cat-art: #523a1d;
-   --cat-music: #3a2552;
-   --cat-cs: #2d3542;
-   --cat-econ: #1d4d3d;
-   --cat-phil: #322d42;
-   --cat-lit: #4d422d;
-   --cat-none: #2d2d2d;
-
-   --text-on-cat: #ffffff;
 }
 
 .математика { background-color: var(--cat-math) !important; color: var(--text-on-cat) !important; }

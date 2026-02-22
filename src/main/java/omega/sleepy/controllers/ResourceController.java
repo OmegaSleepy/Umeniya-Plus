@@ -130,8 +130,25 @@ public class ResourceController {
         CSS_VARS.put("tag-bg", "#e9ecef");
         CSS_VARS.put("code-bg", "#111111");
         CSS_VARS.put("code-text", "#eeeeee");
-    }
 
+        CSS_VARS.put("cat-math", "#DCEBFF");
+        CSS_VARS.put("cat-science", "#D9F4F1");
+        CSS_VARS.put("cat-bio", "#E3F6E8");
+        CSS_VARS.put("cat-chem", "#EFE3FF");
+        CSS_VARS.put("cat-phys", "#E1F0FF");
+        CSS_VARS.put("cat-eng", "#FFE3E3");
+        CSS_VARS.put("cat-hist", "#F5EAD6");
+        CSS_VARS.put("cat-geo", "#EEF3D9");
+        CSS_VARS.put("cat-art", "#FFEBD6");
+        CSS_VARS.put("cat-music", "#F2E6FF");
+        CSS_VARS.put("cat-cs", "#E3EAF5");
+        CSS_VARS.put("cat-econ", "#E6F7F1");
+        CSS_VARS.put("cat-phil", "#ECE9F4");
+        CSS_VARS.put("cat-lit", "#FFF4E1");
+        CSS_VARS.put("cat-none", "#F2F2F2");
+
+        CSS_VARS.put("text-on-cat", "#333333");
+    }
     public static Object getCssVars(Request request, Response response) {
         return gson.toJson(CSS_VARS);
     }

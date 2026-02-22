@@ -12,7 +12,7 @@ public class StyleDao {
         String sql = "SELECT style_profile from user_extras WHERE username = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(2, username);
+            preparedStatement.setString(1, username);
 
             try (ResultSet rs = preparedStatement.executeQuery()){
                 return rs.getString("style_profile");
