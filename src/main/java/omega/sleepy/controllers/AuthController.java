@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
+import static omega.sleepy.controllers.ControllerUtil.forbitten;
 import static omega.sleepy.services.AuthService.*;
 
 public class AuthController {
@@ -108,5 +109,19 @@ public class AuthController {
             response.redirect("/login");
             return "";
         }
+    }
+
+    public static Object changePfp(Request request, Response response) {
+        String icon = request.params(":icon");
+        String cookie =  request.cookie(AUTH_COOKIE);
+        if (cookie == null) {
+            return forbitten(response);
+        }
+        String username = AuthService.getUsernameByToken(cookie);
+        if (username == null) {
+            return forbitten(response);
+        }
+        AuthService.changeProfilePicture(username, icon);
+        return "{\"status\":\"success\"}";
     }
 }
