@@ -1,4 +1,4 @@
-package omega.sleepy.util;
+package omega.sleepy.util.enums;
 
 public enum MediaType {
 

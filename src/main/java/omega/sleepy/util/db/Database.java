@@ -1,11 +1,13 @@
-package omega.sleepy.util;
+package omega.sleepy.util.db;
+
+import omega.sleepy.util.Log;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static omega.sleepy.util.FileUtil.readFile;
+import static omega.sleepy.util.db.FileUtil.readFile;
 
 public class Database {
 

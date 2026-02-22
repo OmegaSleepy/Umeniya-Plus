@@ -4,6 +4,7 @@ import omega.sleepy.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,17 @@ public class Migrate {
 
     public static void main(String[] args) throws SQLException {
 //        migrateDB();
-        migrateLanguage();
+//        migrateLanguage();
+        fixDate();
+    }
+
+    private static void fixDate() throws SQLException {
+        Connection db = DriverManager.getConnection("jdbc:sqlite:main.db");
+        String sql = "UPDATE blogs set created_at = ?";
+        PreparedStatement ps = db.prepareStatement(sql);
+        ps.setString(1, LocalDateTime.now().toString());
+        ps.executeUpdate();
+
     }
 
     private static void migrateLanguage() throws SQLException {

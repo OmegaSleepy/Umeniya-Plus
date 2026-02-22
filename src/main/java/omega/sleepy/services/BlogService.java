@@ -6,7 +6,7 @@ import omega.sleepy.data.Blog;
 import omega.sleepy.data.User;
 import omega.sleepy.util.BlogFilter;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.PermittingLevel;
+import omega.sleepy.util.enums.PermittingLevel;
 import omega.sleepy.validation.BlogValidator;
 
 import java.time.LocalDateTime;

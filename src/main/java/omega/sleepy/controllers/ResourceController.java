@@ -5,8 +5,8 @@ import omega.sleepy.dao.BlogDao;
 import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.MiscService;
 import omega.sleepy.services.ProfileService;
-import omega.sleepy.util.MediaType;
-import omega.sleepy.util.ProfileIcons;
+import omega.sleepy.util.enums.MediaType;
+import omega.sleepy.util.enums.ProfileIcons;
 import spark.Request;
 import spark.Response;
 import spark.utils.IOUtils;
@@ -107,7 +107,7 @@ public class ResourceController {
         return gson.toJson(icons);
 
     }
-    
+
     public static final Map<String, String> CSS_VARS = new LinkedHashMap<>();
 
     static {

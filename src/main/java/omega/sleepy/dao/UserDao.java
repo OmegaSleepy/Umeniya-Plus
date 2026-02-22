@@ -2,10 +2,10 @@ package omega.sleepy.dao;
 
 import omega.sleepy.exceptions.UserAlreadyExists;
 import omega.sleepy.exceptions.UserDoesNotExist;
-import omega.sleepy.util.Database;
+import omega.sleepy.util.db.Database;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.PermittingLevel;
-import omega.sleepy.util.ProfileIcons;
+import omega.sleepy.util.enums.PermittingLevel;
+import omega.sleepy.util.enums.ProfileIcons;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

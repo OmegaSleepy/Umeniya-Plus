@@ -4,7 +4,7 @@ import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.routes.PublicRoutes;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.MediaType;
+import omega.sleepy.util.enums.MediaType;
 import spark.Request;
 import spark.Response;
 

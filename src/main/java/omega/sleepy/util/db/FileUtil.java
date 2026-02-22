@@ -1,4 +1,4 @@
-package omega.sleepy.util;
+package omega.sleepy.util.db;
 
 import java.io.IOException;
 import java.io.InputStream;

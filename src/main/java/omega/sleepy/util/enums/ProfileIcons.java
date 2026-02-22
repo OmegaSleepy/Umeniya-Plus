@@ -1,4 +1,4 @@
-package omega.sleepy.util;
+package omega.sleepy.util.enums;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.random;

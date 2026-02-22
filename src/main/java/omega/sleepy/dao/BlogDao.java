@@ -2,14 +2,14 @@ package omega.sleepy.dao;
 
 import omega.sleepy.data.Blog;
 import omega.sleepy.util.BlogFilter;
-import omega.sleepy.util.Direction;
+import omega.sleepy.util.enums.Direction;
 import omega.sleepy.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.*;
 
-import static omega.sleepy.util.Database.getConnection;
+import static omega.sleepy.util.db.Database.getConnection;
 
 public class BlogDao {
 

@@ -6,8 +6,8 @@ import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.User;
 import omega.sleepy.data.UserWithExtras;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.PermittingLevel;
-import omega.sleepy.util.ProfileIcons;
+import omega.sleepy.util.enums.PermittingLevel;
+import omega.sleepy.util.enums.ProfileIcons;
 import spark.utils.IOUtils;
 
 import java.io.IOException;

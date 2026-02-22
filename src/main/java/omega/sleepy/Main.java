@@ -3,7 +3,7 @@ package omega.sleepy;
 import omega.sleepy.dao.BlogDao;
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.routes.RouteMain;
-import omega.sleepy.util.Database;
+import omega.sleepy.util.db.Database;
 import omega.sleepy.util.Log;
 import spark.Spark;
 

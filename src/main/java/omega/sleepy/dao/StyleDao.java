@@ -1,6 +1,6 @@
 package omega.sleepy.dao;
 
-import omega.sleepy.util.Database;
+import omega.sleepy.util.db.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

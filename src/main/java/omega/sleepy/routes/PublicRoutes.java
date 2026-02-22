@@ -2,10 +2,9 @@ package omega.sleepy.routes;
 
 
 import omega.sleepy.controllers.ApiController;
-import omega.sleepy.controllers.AuthController;
 import omega.sleepy.controllers.PublicController;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.MediaType;
+import omega.sleepy.util.enums.MediaType;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;

@@ -6,11 +6,9 @@ import omega.sleepy.dao.UserDao;
 import omega.sleepy.dto.ExceptionDTO;
 import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
-import omega.sleepy.exceptions.MalformedPassword;
-import omega.sleepy.exceptions.UserAlreadyExists;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.util.Log;
-import omega.sleepy.util.MediaType;
+import omega.sleepy.util.enums.MediaType;
 import spark.Request;
 import spark.Response;
 

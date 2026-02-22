@@ -1,7 +1,7 @@
 package omega.sleepy.controllers;
 
 import omega.sleepy.util.Log;
-import omega.sleepy.util.MediaType;
+import omega.sleepy.util.enums.MediaType;
 import spark.Response;
 
 public class ControllerUtil {

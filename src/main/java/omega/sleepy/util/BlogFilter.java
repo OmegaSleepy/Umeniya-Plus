@@ -1,6 +1,7 @@
 package omega.sleepy.util;
 
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.util.enums.Direction;
 
 public class BlogFilter {
 
