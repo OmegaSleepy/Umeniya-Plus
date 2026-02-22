@@ -42,6 +42,11 @@
                       id="stat-count">0</span>
                 <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Публикации</span>
             </div>
+            <div style="background: var(--bg-body); padding: 15px; border-radius: var(--radius-md); flex: 1; max-width: 200px;">
+                <span style="display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
+                      id="stat-views">0</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;"> хора помогнал с умение</span>
+            </div>
         </div>
     </div>
 
@@ -90,6 +95,7 @@
     async function loadMyPosts(username) {
         const holder = document.getElementById("holder");
         const statCount = document.getElementById("stat-count");
+        const statViews = document.getElementById("stat-views");
 
         try {
             const res = await fetch(`/api/blog/by-author/${username}`);
@@ -99,11 +105,18 @@
 
             statCount.textContent = posts?.length || 0;
 
+            const response = await fetch(`/api/user/total-views/${username}`);
+            const data = await response.json();
+
+            statViews.textContent = `${data}`;
+
             if (posts?.length) {
                 renderDashboardCards(posts);
             } else {
                 showEmptyDashboard();
             }
+
+
 
         } catch {
             holder.innerHTML =
@@ -114,37 +127,30 @@
     function renderDashboardCards(posts) {
         const holder = document.getElementById("holder");
 
-        holder.innerHTML = posts.map(p => {
-            const tagSlug = p.tag?.toLowerCase().replace(/\s+/g, "-") || "няма";
+        holder.innerHTML = posts.map(element => `
+                    <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
+                        <div class="blog-header">
+                            <span class="blog-tag">${element.tag}</span>
+                            <h2 class="blog-title">${element.title}</h2>
+                        </div>
 
-            return `
-        <div class="blog ${tagSlug}">
-            <div class="blog-header">
-                <span class="blog-tag ${tagSlug}">${p.tag}</span>
-                <h2 class="blog-title"
-                    onclick="location.href='/blog/${p.id}'"
-                    style="cursor:pointer;">
-                    ${p.title}
-                </h2>
-            </div>
+                        <div class="blog-stats">
+                            <span>👁️ ${element.views || 0}</span>
+                            ${element.tax > 0 ? `<span>🔒 ${element.tax}</span>` : ''}
+                        </div>
 
-            <p class="blog-excerpt">
-                ${p.excerpt || 'Кликнете за преглед.'}
-            </p>
+                        <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
+                            от <strong>${element.creator}</strong> •
+                            <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
+                        </p>
 
-            <div class="blog-footer">
-                <button class="btn-edit"
-                        onclick="location.href='/edit/${p.id}'">
-                    Редактирай
-                </button>
-                <button class="btn-delete"
-                        onclick="deletePost('${p.id}')">
-                    Изтрий
-                </button>
-            </div>
-        </div>
-        `;
-        }).join("");
+                        <p class="blog-excerpt">${element.excerpt || ''}</p>
+
+                        <div class="blog-footer">
+                            <span class="read-more">Прочети повече →</span>
+                        </div>
+                    </div>
+                `).join('');
     }
 
     function showEmptyDashboard() {
