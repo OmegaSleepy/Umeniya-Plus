@@ -288,6 +288,55 @@ public class BlogDao {
         }
     }
 
+    public static boolean hasRecordOfLike(String user, int page) {
+        String sql = "SELECT user, id FROM likedBlogs where user = ? and id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
+            preparedStatement.setInt(2, page);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addRecordOfLikedBlog(String user, int page) {
+        String sql = "INSERT INTO likedBlogs values (?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
+            preparedStatement.setInt(2, page);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addOneLike(int id) {
+        String sql = "UPDATE blogs set likes = likes + 1 where id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     public static boolean replaceBlog(int id, Blog newBlog) {
         String sql = "UPDATE blogs SET title = ?, tag = ?, excerpt = ?, content = ? where id = ?";
         try (Connection conn = getConnection();
