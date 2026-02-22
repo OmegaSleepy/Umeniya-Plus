@@ -85,8 +85,7 @@ public class BlogService {
 
         if(blog.creator().equals(username)) return true;
 
-        if(user.permittingLevel() == PermittingLevel.ADMIN) return true;
-        return false;
+        return user.permittingLevel() == PermittingLevel.ADMIN;
     }
 
     public static List<Blog> getBlogsByAuthor(String author) {
