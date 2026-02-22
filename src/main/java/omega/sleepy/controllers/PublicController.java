@@ -8,8 +8,8 @@ import omega.sleepy.util.MediaType;
 import spark.Request;
 import spark.Response;
 
-import static omega.sleepy.controllers.ApiController.missingResourcePage;
 import static omega.sleepy.controllers.AuthController.AUTH_COOKIE;
+import static omega.sleepy.controllers.ControllerUtil.missingResourcePage;
 import static omega.sleepy.routes.PublicRoutes.getSimpleTemplate;
 import static omega.sleepy.services.AuthService.validateToken;
 

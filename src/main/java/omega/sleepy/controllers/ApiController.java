@@ -2,15 +2,12 @@ package omega.sleepy.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import omega.sleepy.dao.BlogDao;
 import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.dto.UserRequestDTO;
 import omega.sleepy.exceptions.InvalidCredentials;
-import omega.sleepy.routes.ApiRoutes;
 import omega.sleepy.services.AuthService;
 import omega.sleepy.services.BlogService;
-import omega.sleepy.services.MiscService;
 import omega.sleepy.services.ProfileService;
 import omega.sleepy.util.Log;
 import omega.sleepy.util.MediaType;
@@ -18,22 +15,18 @@ import omega.sleepy.util.ProfileIcons;
 import org.thymeleaf.context.Context;
 import spark.Request;
 import spark.Response;
-import spark.utils.IOUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static omega.sleepy.controllers.ControllerUtil.*;
 import static omega.sleepy.routes.PublicRoutes.templateEngine;
 import static omega.sleepy.services.AuthService.validateToken;
 
 public class ApiController {
 
     private static final Gson gson = new Gson();
-
-
-
 
     public static String createBlog(Request request, Response response) {
         JsonObject body = gson.fromJson(request.body(), JsonObject.class);
@@ -87,7 +80,6 @@ public class ApiController {
         return templateEngine.process("blog_page", context);
     }
 
-
     public static String getBlogContentsById(Request request, Response response) {
         response.type(MediaType.TXT.getValue());
         var id = Integer.parseInt(request.params(":id"));
@@ -117,27 +109,8 @@ public class ApiController {
 
     }
 
-    public static String missingResourcePage(Response response) {
-        Log.error("something happened HERE \n" + response.raw());
-        response.status(404);
-        response.type(MediaType.JSON.getValue());
-        response.redirect("/404");
-        return "{\"status\":\"error\"}";
-    }
 
-    public static String missingResource(Response response){
-        Log.error("something happened HERE \n" + response.raw());
-        response.status(404);
-        response.type(MediaType.JSON.getValue());
-        return "{\"status\":\"error\"}";
-    }
 
-    public static String forbitten(Response response) {
-        Log.error("something happened HERE \n" + response.raw());
-        response.status(401);
-        response.type(MediaType.JSON.getValue());
-        return "{\"status\":\"error\"}";
-    }
 
     public static String getUserInformation(Request request, Response response) {
         String token = request.cookie(AuthController.AUTH_COOKIE);

@@ -7,7 +7,7 @@ import spark.utils.IOUtils;
 
 import java.io.IOException;
 
-import static omega.sleepy.controllers.ApiController.missingResource;
+import static omega.sleepy.controllers.ControllerUtil.missingResource;
 
 public class MiscService {
 
