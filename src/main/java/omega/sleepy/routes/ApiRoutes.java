@@ -49,7 +49,7 @@ public class ApiRoutes {
             get("/full/:id", ApiController::getBlogById);
 
             get("/can-edit/:id", ApiController::checkCanEdit);
-            post("/delete/:id", ApiController::deleteBlog);
+            delete("/:id", ApiController::deleteBlog);
             post("/edit/:id", ApiController::editBlog);
 
             put("/update/:id", ApiController::updateBlog);

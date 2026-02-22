@@ -73,8 +73,8 @@
     </div>
 
     <div id="admin-controls" style="display: none; margin-bottom: 20px;">
-        <button onclick="editPost()" class="btn-edit">✎ Редактирай</button>
-        <button onclick="deletePost()" class="btn-delete">🗑 Изтрий</button>
+        <button onclick="editPost()" class="btn-edit">Редактирай</button>
+        <button onclick="deletePost()" class="btn-delete">Изтрий</button>
     </div>
 
     <p class="post-excerpt" th:text="${blog.excerpt}">Това е кратко описание на
@@ -115,34 +115,49 @@
     }
 
     async function deletePost() {
-        if (!confirm("Сигурен ли си?")) return;
+        const result = await Swal.fire({
+            title: 'Сигурен ли си?',
+            text: "Това действие е необратимо!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Да, изтрий!',
+            cancelButtonText: 'Отказ'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const pathParts = window.location.pathname.split("/");
+        const postId = pathParts[pathParts.length - 1];
 
         try {
-            const response = await fetch(`/api/blog/delete/${postId}`, {
-                method: 'POST'
+            const response = await fetch(`/api/blog/${postId}`, {
+                method: 'DELETE'
             });
 
-            const result = await response.json();
+            const data = await response.json();
 
-            if (response.ok && result.status === "ok") {
-                Swal.fire({
+            if (response.ok && data.status === "ok") {
+                await Swal.fire({
                     icon: 'success',
-                    title: 'Упешно!',
+                    title: 'Успешно!',
                     text: 'Публикацията е изтрита!',
                     confirmButtonColor: '#3085d6'
                 });
+
                 window.location.href = "/home";
             } else {
-                console.error("Сървърът отказа триене:", result);
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Грешка!',
-                    text: 'Случи се случка, опитай отново!',
-                    confirmButtonColor: '#3085d6'
-                });
+                throw new Error(data.message || "Deletion failed");
             }
         } catch (err) {
-            console.error("Fatal error:", err);
+            console.error("Delete error:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Грешка!',
+                text: 'Случи се случка, опитай отново!',
+                confirmButtonColor: '#3085d6'
+            });
         }
     }
 

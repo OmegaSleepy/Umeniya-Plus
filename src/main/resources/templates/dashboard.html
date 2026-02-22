@@ -45,7 +45,7 @@
             <div style="background: var(--bg-body); padding: 15px; border-radius: var(--radius-md); flex: 1; max-width: 200px;">
                 <span style="display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
                       id="stat-views">0</span>
-                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;"> хора помогнал с умение</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Помогнати души</span>
             </div>
         </div>
     </div>
@@ -117,7 +117,6 @@
             }
 
 
-
         } catch {
             holder.innerHTML =
                 "<p style='grid-column: 1/-1; text-align:center;'>Грешка при зареждане на данните.</p>";
@@ -128,29 +127,42 @@
         const holder = document.getElementById("holder");
 
         holder.innerHTML = posts.map(element => `
-                    <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
-                        <div class="blog-header">
-                            <span class="blog-tag">${element.tag}</span>
-                            <h2 class="blog-title">${element.title}</h2>
-                        </div>
+            <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}">
+                <div class="blog-header">
+                    <span class="blog-tag">${element.tag}</span>
+                    <h2 class="blog-title">${element.title}</h2>
+                </div>
 
-                        <div class="blog-stats">
-                            <span>👁️ ${element.views || 0}</span>
-                            ${element.tax > 0 ? `<span>🔒 ${element.tax}</span>` : ''}
-                        </div>
+                <div class="blog-stats">
+                    <span>👁️ ${element.views || 0}</span>
+                    ${element.tax > 0 ? `<span>🔒 ${element.tax}</span>` : ''}
+                </div>
 
-                        <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
-                            от <strong>${element.creator}</strong> •
-                            <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
-                        </p>
+                <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
+                    от <strong>${element.creator}</strong> •
+                    <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
+                </p>
 
-                        <p class="blog-excerpt">${element.excerpt || ''}</p>
+                <p class="blog-excerpt">${element.excerpt || ''}</p>
 
-                        <div class="blog-footer">
-                            <span class="read-more">Прочети повече →</span>
-                        </div>
-                    </div>
-                `).join('');
+                <div class="blog-footer">
+                    <button class="btn-some-fancy"
+                        onclick="location.href='/blog/${element.id}'">
+                        Прочети
+                    </button>
+
+                    <button class="btn-edit"
+                        onclick="location.href='/edit/${element.id}'">
+                        Редактирай
+                    </button>
+
+                    <button class="btn-delete"
+                        onclick="deletePost('${element.id}')">
+                        Изтрий
+                    </button>
+                </div>
+            </div>
+        `).join('');
     }
 
     function showEmptyDashboard() {
@@ -167,51 +179,77 @@
     }
 
     async function deletePost(id) {
-        if (!confirm("Сигурен ли си?")) return;
+        const result = await Swal.fire({
+            title: 'Сигурен ли си?',
+            text: "Няма да можеш да възстановиш публикацията!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Да, изтрий!',
+            cancelButtonText: 'Отказ'
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch(`/api/blog/delete/${id}`, {
-                method: 'POST'
+            const response = await fetch(`/api/blog/${id}`, {
+                method: 'DELETE'
             });
 
-            const result = await response.json();
+            const data = await response.json();
 
-            if (response.ok && result.status === "ok") {
-                Swal.fire({
+            if (response.ok && data.status === "ok") {
+                await Swal.fire({
                     icon: 'success',
                     title: 'Успешно!',
                     text: 'Публикацията е изтрита!',
                     confirmButtonColor: '#3085d6'
                 });
+
                 location.reload();
             } else {
-                console.error("Сървърът отказа триене:", result);
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Грешка!',
-                    text: 'Нямаш нужните права или постът не съществува.',
-                    confirmButtonColor: '#3085d6'
-                });
+                throw new Error(data.message || "Server rejected deletion");
             }
         } catch (err) {
-            console.error("Fatal error:", err);
+            console.error("Delete error:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Грешка!',
+                text: 'Нещо се обърка при връзката със сървъра.',
+                confirmButtonColor: '#3085d6'
+            });
         }
     }
 </script>
 
-<div id="icon-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+<div id="icon-modal"
+     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
     <div style="background: white; padding: 25px; border-radius: var(--radius-md); max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative;">
-        <h3 style="margin-top: 0; color: var(--text-dark); border-bottom: 2px solid var(--primary-color); padding-bottom: 10px;">Избери нова икона</h3>
-        <button onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <h3 style="margin-top: 0; color: var(--text-dark); border-bottom: 2px solid var(--primary-color); padding-bottom: 10px;">
+            Избери нова икона</h3>
+        <button onclick="closeModal()"
+                style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+            &times;
+        </button>
 
-        <div id="icon-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; margin-top: 20px;">
+        <div id="icon-grid"
+             style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 15px; margin-top: 20px;">
         </div>
     </div>
 </div>
 
 <style>
-    #my-profile-icon { transition: transform 0.2s, filter 0.2s; cursor: pointer; }
-    #my-profile-icon:hover { transform: scale(1.05); filter: brightness(0.9); }
+    #my-profile-icon {
+        transition: transform 0.2s, filter 0.2s;
+        cursor: pointer;
+    }
+
+    #my-profile-icon:hover {
+        transform: scale(1.05);
+        filter: brightness(0.9);
+    }
+
     .selectable-icon {
         width: 100%;
         aspect-ratio: 1/1;
@@ -221,7 +259,10 @@
         transition: border-color 0.2s;
         object-fit: cover;
     }
-    .selectable-icon:hover { border-color: var(--primary-color); }
+
+    .selectable-icon:hover {
+        border-color: var(--primary-color);
+    }
 </style>
 
 <script>
@@ -279,7 +320,7 @@
         document.getElementById("icon-modal").style.display = "none";
     }
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const modal = document.getElementById("icon-modal");
         if (event.target == modal) {
             closeModal();

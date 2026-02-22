@@ -127,7 +127,7 @@ public class ApiController {
 
         var user = ProfileService.getFullProfile(username);
 
-        System.out.println(username);
+        Log.info("Getting info about " + username);
 
         assert user != null;
         ProfileIcons icon = user.ProfileIcon();
@@ -280,7 +280,7 @@ public class ApiController {
             return "{\"status\":\"error\"}";
         }
 
-        System.out.println(author + " " + user + " " + page);
+        Log.info(author + " " + user + " " + page);
 
         response.type(MediaType.JSON.getValue());
         return "{\"reward\":10}";

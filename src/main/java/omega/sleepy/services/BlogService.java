@@ -73,7 +73,15 @@ public class BlogService {
         if(user == null) return false;
 
         Blog blog = BlogDao.getBlogById(id);
-        if(Objects.isNull(blog)) return false;
+
+        if (blog == null) {
+            return false;
+        }
+
+        if (blog.creator() == null) {
+            return false;
+        }
+
         if(blog.creator().equals(username)) return true;
 
         if(user.permittingLevel() == PermittingLevel.ADMIN) return true;
