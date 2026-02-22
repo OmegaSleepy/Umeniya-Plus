@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моето Табло | Умения+</title>
+    <link rel="stylesheet" href="/api/style/main.css">
+    <link rel="stylesheet" href="/api/style/tags.css">
+    <link rel="stylesheet" href="/api/style/explorer.css">
+    <script src="/api/js/loadUserInfo.js" defer></script>
+</head>
+<body>
+<header>
+    <div class="header-container" id="header-container">
+        <a href="/" class="logo">Умения+</a>
+        <div class="header-actions">
+            <a href="/create" class="btn-create">+ Ново Умение</a>
+            <a href="/logout" class="btn-back" style="margin-left: 15px;">Изход</a>
+        </div>
+    </div>
+</header>
+
+<main id="dashboard-container"
+      style="width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px;">
+
+    <div class="article-container"
+         style="margin: 30px auto; text-align: center; width: 90%; max-width: var(--max-width-large); display: flex; flex-direction: column; align-items: center;">
+        <img id="my-profile-icon" src="" alt="Profile"
+             style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary-color); background: #f0f0f0; margin-bottom: 15px;">
+
+        <h1 style="margin: 0; color: var(--text-dark);">Здравей, <span id="welcome-name">...</span>!</h1>
+        <p style="color: var(--text-muted); margin-top: 5px;">Добре дошъл в личното си табло за управление.</p>
+
+        <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center; width: 100%;">
+            <div style="background: var(--bg-body); padding: 15px; border-radius: var(--radius-md); flex: 1; max-width: 200px;">
+                <span style="display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
+                      id="stat-count">0</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Публикации</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-container" style="margin-top: 20px;">
+        <h2 style="color: var(--text-dark); border-left: 5px solid var(--primary-color); padding-left: 15px;">Твоите
+            споделени умения</h2>
+    </div>
+
+    <div id="holder">
+    </div>
+
+</main>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", initDashboard);
+
+    let someSecondsPassed = false;
+
+    setTimeout(() => {
+        someSecondsPassed = true;
+        initDashboard();
+    }, 200);
+
+    async function initDashboard() {
+        try {
+            const username = await getUsername();
+
+            setupDashboardUI(username);
+            loadMyPosts(username);
+
+        } catch (err) {
+            console.error("Auth error:", err);
+            window.location.href = "/login";
+        }
+    }
+
+    function setupDashboardUI(username) {
+        document.title = `Табло: ${username} - Умения+`;
+        const welcomeName = document.getElementById("welcome-name");
+        if (welcomeName) welcomeName.textContent = username;
+        const profileIcon = document.getElementById("my-profile-icon");
+        profileIcon.src = getProfileIcon();
+    }
+
+    async function loadMyPosts(username) {
+        const holder = document.getElementById("holder");
+        const statCount = document.getElementById("stat-count");
+
+        try {
+            const res = await fetch(`/api/blog/by-author/${username}`);
+            if (!res.ok) throw new Error();
+
+            const posts = await res.json();
+
+            statCount.textContent = posts?.length || 0;
+
+            if (posts?.length) {
+                renderDashboardCards(posts);
+            } else {
+                showEmptyDashboard();
+            }
+
+        } catch {
+            holder.innerHTML =
+                "<p style='grid-column: 1/-1; text-align:center;'>Грешка при зареждане на данните.</p>";
+        }
+    }
+
+    function renderDashboardCards(posts) {
+        const holder = document.getElementById("holder");
+
+        holder.innerHTML = posts.map(p => {
+            const tagSlug = p.tag?.toLowerCase().replace(/\s+/g, "-") || "няма";
+
+            return `
+        <div class="blog ${tagSlug}">
+            <div class="blog-header">
+                <span class="blog-tag ${tagSlug}">${p.tag}</span>
+                <h2 class="blog-title"
+                    onclick="location.href='/blog/${p.id}'"
+                    style="cursor:pointer;">
+                    ${p.title}
+                </h2>
+            </div>
+
+            <p class="blog-excerpt">
+                ${p.excerpt || 'Кликнете за преглед.'}
+            </p>
+
+            <div class="blog-footer">
+                <button class="btn-edit"
+                        onclick="location.href='/edit/${p.id}'">
+                    Редактирай
+                </button>
+                <button class="btn-delete"
+                        onclick="deletePost('${p.id}')">
+                    Изтрий
+                </button>
+            </div>
+        </div>
+        `;
+        }).join("");
+    }
+
+    function showEmptyDashboard() {
+        document.getElementById("holder").innerHTML = `
+        <div class="empty-state">
+            <span>📝</span>
+            <h3>Все още нямаш споделени умения.</h3>
+            <p>Твоето табло е празно. Сподели първия си опит сега!</p>
+            <a href="/create" class="btn-create">
+                + Сподели опит
+            </a>
+        </div>
+    `;
+    }
+
+    async function deletePost(id) {
+        if (!confirm("Сигурни ли сте?")) return;
+
+        const res = await fetch(`/api/blog/delete/${id}`, { method: "DELETE" });
+
+        if (res.ok) {
+            location.reload();
+        } else {
+            alert("Грешка при изтриването.");
+        }
+    }
+</script>
+</body>
+</html>

@@ -50,6 +50,12 @@ function getUsername(){
     return username.innerText;
 }
 
+function getProfileIcon(){
+    const icon = document.getElementById("profile-icon");
+    if (!icon) return null;
+    return icon.src;
+}
+
 async function loadUserInformation() {
     const iskri = document.getElementById("badge");
     iskri.style.display = "none";
