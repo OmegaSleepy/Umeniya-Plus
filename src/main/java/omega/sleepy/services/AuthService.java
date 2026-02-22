@@ -5,6 +5,7 @@ import omega.sleepy.exceptions.InvalidCredentials;
 import omega.sleepy.exceptions.InvalidPassword;
 import omega.sleepy.exceptions.MalformedPassword;
 import omega.sleepy.util.Log;
+import omega.sleepy.util.ProfileIcons;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.security.InvalidParameterException;
@@ -69,5 +70,9 @@ public class AuthService {
 			Log.warn("Invalid session");
 			throw new InvalidCredentials("Token either expired or is not valid");
 		}
+	}
+
+	public static boolean changeProfilePicture(String username, String icon) {
+		return UserDao.changePfp(username, icon.toUpperCase());
 	}
 }
