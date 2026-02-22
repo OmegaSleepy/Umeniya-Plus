@@ -12,6 +12,7 @@
           href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github-dark.min.css">
     <script src="/api/js/loadUserInfo.js" defer></script>
     <script src="/api/js/applyTheme.js" defer></script>
+    <script src="/api/js/editor.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -69,100 +70,6 @@
         <div id="markdown-body" class="post-content"></div>
     </div>
 </div>
-
-<script>
-
-    const contentInput = document.getElementById('content');
-    const titleInput = document.getElementById('title');
-    const excerptInput = document.getElementById('excerpt');
-    const categoryInput = document.getElementById('category');
-    const previewPanel = document.getElementById('preview-panel');
-    const toggleBtn = document.getElementById('togglePreview');
-
-    function updatePreview() {
-        document.getElementById('preview-title').textContent = titleInput.value || "Преглед на заглавието";
-        document.getElementById('preview-excerpt').textContent = excerptInput.value || "Краткото описание ще се появи тук...";
-        document.getElementById('preview-tag').textContent = categoryInput.value || "Категория";
-
-        const rawValue = contentInput.value;
-
-        document.getElementById('markdown-body').innerHTML = marked.parse(rawValue);
-    }
-
-    toggleBtn.addEventListener('click', () => {
-        const isShowing = previewPanel.style.display === 'block';
-
-        if (isShowing) {
-            previewPanel.style.display = 'none';
-
-        } else {
-            previewPanel.style.display = 'block';
-
-            updatePreview();
-        }
-    });
-
-    [contentInput, titleInput, excerptInput, categoryInput].forEach(el => {
-        el.addEventListener('input', updatePreview);
-    });
-
-    async function loadCategories() {
-        try {
-            const response = await fetch("/api/blog/tags");
-            if (!response.ok) throw new Error("Failed to fetch tags");
-            const tags = await response.json();
-            const select = document.getElementById("category");
-            select.innerHTML = "";
-            Object.entries(tags).forEach(([key, value]) => {
-                const option = document.createElement("option");
-                option.value = key;
-                option.textContent = key;
-                select.appendChild(option);
-            });
-            select.selectedIndex = select.options.length - 2;
-        } catch (err) {
-            console.error("Error loading categories:", err);
-        }
-    }
-
-    document.getElementById("blogForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const data = {
-            title: titleInput.value,
-            category: categoryInput.value,
-            excerpt: excerptInput.value,
-            content: contentInput.value
-        };
-
-        try {
-            const response = await fetch("/api/blog/create", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(data)
-            });
-            if (!response.ok) throw new Error("Network response was not OK");
-            await Swal.fire({
-                icon: 'success',
-                title: 'Публикацията е успешно публикувана!',
-                text: 'Благодарим за труда ви!',
-                footer: '<a href="/help/iskri">Какво са искри?</a>',
-                confirmButtonText: 'Към началната страница',
-                confirmButtonColor: '#3085d6'
-            });
-            window.location.href = '/home';
-        } catch (err) {
-            console.error("Error submitting blog post:", err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Публикацията не бе публикувана!',
-                text: 'Случи се случка, опитайте отново...',
-                confirmButtonColor: '#3085d6'
-            });
-        }
-    });
-
-    loadCategories();
-</script>
 </body>
 
 
