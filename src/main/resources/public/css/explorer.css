@@ -140,3 +140,21 @@
 .hidden-pagination {
     display: none !important;
 }
+
+.blog-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.blog-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}

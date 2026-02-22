@@ -76,7 +76,7 @@
 
     document.getElementById("clear").addEventListener("click", clearFilter);
 
-    function clearFilter(){
+    function clearFilter() {
         const category_select = document.getElementById("category");
         category_select.selectedIndex = category_select.options.length - 1;
         document.getElementById("blog-name").value = '';
@@ -128,24 +128,29 @@
 
             if (data && data.length > 0) {
                 holder.innerHTML = data.map(element => `
-                <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
-                    <div class="blog-header">
-                        <span class="blog-tag">${element.tag}</span>
-                        <h2 class="blog-title">${element.title}</h2>
+                    <div class="blog ${element.tag.toString().toLowerCase().replace(" ", "-")}" onclick="window.location.href='/blog/${element.id}'">
+                        <div class="blog-header">
+                            <span class="blog-tag">${element.tag}</span>
+                            <h2 class="blog-title">${element.title}</h2>
+                        </div>
+
+                        <div class="blog-stats">
+                            <span>👁️ ${element.views || 0}</span>
+                            ${element.tax > 0 ? `<span>🔒 ${element.tax}</span>` : ''}
+                        </div>
+
+                        <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
+                            от <strong>${element.creator}</strong> •
+                            <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
+                        </p>
+
+                        <p class="blog-excerpt">${element.excerpt || ''}</p>
+
+                        <div class="blog-footer">
+                            <span class="read-more">Прочети повече →</span>
+                        </div>
                     </div>
-
-                    <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
-                        от <strong>${element.creator}</strong> •
-                        <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
-                    </p>
-
-                    <p class="blog-excerpt">${element.excerpt || ''}</p>
-
-                    <div class="blog-footer">
-                        <span class="read-more">Прочети повече →</span>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
 
                 togglePaginationVisibility(true);
                 renderPagination(data.length);
