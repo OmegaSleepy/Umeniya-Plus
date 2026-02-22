@@ -177,7 +177,32 @@ public class ApiController {
     }
 
     public static Object editBlog(Request request, Response response) {
-        return "";
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        if (token == null) {
+            return forbitten(response);
+        }
+        String username = AuthService.getUsernameByToken(token);
+        if (username == null) {
+            return forbitten(response);
+        }
+        String blogId = request.params("id");
+
+        int id;
+
+        try {
+            id = Integer.parseInt(blogId);
+
+            if (!BlogService.canEdit(id, username)) {
+                return forbitten(response);
+            }
+
+            response.redirect("/edit/"+blogId);
+
+            return "{\"status\":\"ok\"}";
+
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
     }
 
     public static Object checkCanEdit(Request request, Response response) {
