@@ -371,11 +371,20 @@ public class ApiController {
 
         return ProfileService.getStyleFromUser(username);
     }
+
     public static Object getCSSFromUsername(Request request, Response response) {
         String username = request.params("username");
         if (username == null) return missingResource(response);
         response.type(MediaType.CSS.getValue());
 
         return ProfileService.getStyleFromUser(username);
+    }
+
+    public static int getTotalViewsByAuthor(Request request, Response response) {
+        String author = request.params("user");
+        if (author == null) {
+            return -1;
+        }
+        return BlogService.getBlogViewsByAuthor(author);
     }
 }

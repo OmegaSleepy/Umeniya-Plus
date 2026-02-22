@@ -127,4 +127,9 @@ public class BlogService {
 
         return null;
     }
+
+    public static int getBlogViewsByAuthor(String author) {
+        if(!AuthService.userExists(author)) return -2;
+        else return BlogDao.totalViewsByAuthor(author);
+    }
 }

@@ -21,6 +21,7 @@ public class ApiRoutes {
 
         get("/api/user/me-info", ApiController::getUserInformation);
         get("/api/user/:user", ApiController::getSpecificUserInformation);
+        get("/api/user/total-views/:user", ApiController::getTotalViewsByAuthor);
 
         get("/api/icons", ResourceController::getIcons);
         get("/api/user/change-pfp/:icon", AuthController::changePfp);

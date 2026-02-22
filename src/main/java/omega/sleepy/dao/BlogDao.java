@@ -306,4 +306,19 @@ public class BlogDao {
             return false;
         }
     }
+
+    public static int totalViewsByAuthor(String author) {
+        String sql = "SELECT sum(views) FROM blogs WHERE creator_username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+            preparedStatement.setString(1, author);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            return -3;
+        }
+    }
 }
