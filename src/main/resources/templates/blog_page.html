@@ -185,8 +185,9 @@
             const data = await response.json();
 
             if (response.ok) {
-                document.getElementById("likes-count").innerText = data.newLikes;
-                btn.classList.add("liked");
+                const likesElement = document.getElementById("likes-count");
+                const currentLikes = parseInt(likesElement.innerText) || 0;
+                likesElement.innerText = currentLikes + 1;
                 btn.innerHTML = "💚 Харесано";
                 btn.disabled = true;
 
