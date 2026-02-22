@@ -236,4 +236,36 @@ public class BlogDao {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean hasRecordOf(String user, int page) {
+        String sql = "SELECT (user, page) FROM readBlogs where user = ? and page = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
+            preparedStatement.setInt(2, page);
+
+            return preparedStatement.executeQuery().next();
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addRecordOfReadBlog(String user, int page) {
+        String sql = "INSERT INTO readBlogs values (?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, user);
+            preparedStatement.setInt(2, page);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }
