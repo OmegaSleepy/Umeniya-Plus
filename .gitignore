@@ -39,7 +39,9 @@ build/
 ### Mac OS ###
 .DS_Store
 
+### Other ###
 .sqlite
 .jks
 .idea
 .db
+.log
