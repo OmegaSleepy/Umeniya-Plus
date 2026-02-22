@@ -115,7 +115,7 @@
             const data = await response.json();
 
             const response1 = await fetch(`/api/user/total-likes/${username}`);
-            document.getElementById("stat-likes").textContent = await response.json();
+            statLikes.textContent = await response1.json();
 
             statViews.textContent = `${data}`;
 
@@ -126,7 +126,8 @@
             }
 
 
-        } catch {
+        } catch(err) {
+            console.error(err);
             holder.innerHTML =
                 "<p style='grid-column: 1/-1; text-align:center;'>Грешка при зареждане на данните.</p>";
         }
