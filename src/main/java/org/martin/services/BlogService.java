@@ -141,4 +141,20 @@ public class BlogService {
         if(!AuthService.userExists(author)) return -2;
         else return BlogDao.totalViewsByAuthor(author);
     }
+
+    public static Object getBlogLikesByAuthor(String author) {
+        if(!AuthService.userExists(author)) return -2;
+        else return BlogDao.totalLikesByAuthor(author);
+    }
+
+    public static Object likeAPost(String username, int page) {
+        if (!AuthService.userExists(username)) return null;
+        if (page < 1) return null;
+
+        if(BlogDao.hasRecordOfLike(username, page)) return null;
+
+        BlogDao.addOneLike(page);
+
+        return true;
+    }
 }

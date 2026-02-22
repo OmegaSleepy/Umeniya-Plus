@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.martin.dao.UserDao;
 import org.martin.data.Blog;
+import org.martin.dto.ExceptionDTO;
 import org.martin.dto.UserRequestDTO;
 import org.martin.exceptions.InvalidCredentials;
 import org.martin.services.AuthService;
@@ -386,5 +387,40 @@ public class ApiController {
             return -1;
         }
         return BlogService.getBlogViewsByAuthor(author);
+    }
+
+    public static Object getTotalLikesByAuthor(Request request, Response response) {
+        String author = request.params("user");
+        if (author == null) {
+            return -1;
+        }
+        return BlogService.getBlogLikesByAuthor(author);
+    }
+
+    public static Object likePost(Request request, Response response) {
+        JsonObject json = gson.fromJson(request.body(), JsonObject.class);
+        String username = json.get("user").getAsString();
+        String page =  json.get("page").getAsString();
+
+        if (page == null) {
+            return missingResource(response);
+        }
+        if (username == null) {
+            return new ExceptionDTO("Трябва да си вписан, че да харесваш страницата!");
+        }
+
+        int pageId;
+
+        try {
+            pageId = Integer.parseInt(page);
+        } catch (NumberFormatException e) {
+            return missingResource(response);
+        }
+
+        if(BlogService.likeAPost(username, pageId) == null){
+            return new ExceptionDTO("Вече си харесал тази публикация");
+        }
+
+        return "{\"status\":\"success\"}";
     }
 }

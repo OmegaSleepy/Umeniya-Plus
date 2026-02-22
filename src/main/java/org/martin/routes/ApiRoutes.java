@@ -19,12 +19,9 @@ public class ApiRoutes {
         get("/api/profile-icon/:icon", ResourceController::getIcon);
 
 
-        get("/api/user/me-info", ApiController::getUserInformation);
-        get("/api/user/:user", ApiController::getSpecificUserInformation);
-        get("/api/user/total-views/:user", ApiController::getTotalViewsByAuthor);
+
 
         get("/api/icons", ResourceController::getIcons);
-        get("/api/user/change-pfp/:icon", AuthController::changePfp);
 
         get("/api/variables-css/", ResourceController::getCssVars);
 
@@ -32,6 +29,13 @@ public class ApiRoutes {
         get("/api/style-for/me", ApiController::getCSSForUserToken);
         get("/api/style-for-someone/:username", ApiController::getCSSFromUsername);
 
+        path("/api/user", ()-> {
+            get("/me-info", ApiController::getUserInformation);
+            get("/:user", ApiController::getSpecificUserInformation);
+            get("/total-views/:user", ApiController::getTotalViewsByAuthor);
+            get("/total-likes/:user", ApiController::getTotalLikesByAuthor);
+            get("/change-pfp/:icon", AuthController::changePfp);
+        });
 
         path("/api/blog", () -> {
 
@@ -41,6 +45,7 @@ public class ApiRoutes {
             get("/by-author/:author", ApiController::getByAuthor);
 
             post("/read", ApiController::rewardReader);
+            post("/like", ApiController::likePost);
 
             get("/tags", ResourceController::getCategories);
 
