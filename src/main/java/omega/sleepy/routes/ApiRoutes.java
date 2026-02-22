@@ -3,6 +3,8 @@ package omega.sleepy.routes;
 import omega.sleepy.controllers.ApiController;
 
 import static spark.Spark.*;
+
+import omega.sleepy.controllers.AuthController;
 import omega.sleepy.controllers.ResourceController;
 
 public class ApiRoutes {
@@ -20,6 +22,9 @@ public class ApiRoutes {
 
         get("/api/user/me-info", ApiController::getUserInformation);
         get("/api/user/:user", ApiController::getSpecificUserInformation);
+
+        get("/api/icons", ResourceController::getIcons);
+        get("/api/user/change-pfp/:icon", AuthController::changePfp);
 
 
         path("/api/blog", () -> {
