@@ -87,24 +87,15 @@
         document.getElementById('markdown-body').innerHTML = marked.parse(rawValue);
     }
 
-    //TODO just make the UI stay the same, but the preview must hide
     toggleBtn.addEventListener('click', () => {
         const isShowing = previewPanel.style.display === 'block';
 
         if (isShowing) {
             previewPanel.style.display = 'none';
-            formSide.classList.remove('split-mode');
 
-            mainWrapper.style.display = 'block';
-            mainWrapper.style.maxWidth = '600px';
-            toggleBtn.textContent = "Show Preview";
         } else {
             previewPanel.style.display = 'block';
-            formSide.classList.add('split-mode');
 
-            mainWrapper.style.display = 'flex';
-            mainWrapper.style.maxWidth = '1400px';
-            toggleBtn.textContent = "Hide Preview";
             updatePreview();
         }
     });
