@@ -138,9 +138,8 @@
 
                         <div class="blog-stats">
                             <span>👁️ ${element.views || 0}</span>
-                            ${element.tax > 0 ? `<span>🔒 ${element.tax}</span>` : ''}
+                            <span>💚${element.likes || 0}</span>
                         </div>
-
                         <p class="post-meta" style="margin: 0; font-size: 0.85rem;">
                             от <strong>${element.creator}</strong> •
                             <span>${new Date(element.creationDate).toLocaleDateString('bg-BG')}</span>
