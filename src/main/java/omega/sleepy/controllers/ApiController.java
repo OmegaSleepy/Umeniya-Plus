@@ -350,4 +350,26 @@ public class ApiController {
         ProfileService.setStyleForUser(json.asMap(), username);
         return "ok";
     }
+
+    public static Object getCSSForUserToken(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        if (token == null) {
+            return missingResource(response);
+        }
+
+        String username = AuthService.getUsernameByToken(token);
+        if (username == null) {
+            return forbitten(response);
+        }
+        response.type("text/css");
+
+        return ProfileService.getStyleFromUser(username);
+    }
+    public static Object getCSSFromUsername(Request request, Response response) {
+        String username = request.params("username");
+        if (username == null) return missingResource(response);
+        response.type(MediaType.CSS.getValue());
+
+        return ProfileService.getStyleFromUser(username);
+    }
 }

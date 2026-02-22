@@ -75,6 +75,14 @@ public class ProfileService {
                 userInfo.get(8));
     }
 
+    public static String getStyleFromUser(String username){
+        var value = StyleDao.getStyleFromUser(username);
+        value = value.replace("\n", " ");
+        value = value.replace("\"", " ");
+        value = ":root { " + value + " }";
+        return value;
+    }
+
     public static void setStyleForUser(Map<String, JsonElement> map, String username) {
         StringBuilder value = new StringBuilder();
         map.forEach((k,v) -> value.append("--").append(k).append(": ").append(v).append(";\n"));

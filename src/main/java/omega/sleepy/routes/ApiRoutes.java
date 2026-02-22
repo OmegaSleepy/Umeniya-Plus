@@ -28,6 +28,8 @@ public class ApiRoutes {
         get("/api/variables-css/", ResourceController::getCssVars);
 
         post("/api/create-css/", ApiController::createCSSForUser);
+        get("/api/style-for/me", ApiController::getCSSForUserToken);
+        get("/api/style-for-someone/:username", ApiController::getCSSFromUsername);
 
 
         path("/api/blog", () -> {
