@@ -47,6 +47,11 @@
                       id="stat-views">0</span>
                 <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Помогнати души</span>
             </div>
+            <div style="background: var(--bg-body); padding: 15px; border-radius: var(--radius-md); flex: 1; max-width: 200px;">
+                <span style="display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
+                      id="stat-likes">0</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Харесвания</span>
+            </div>
         </div>
     </div>
 
@@ -96,6 +101,7 @@
         const holder = document.getElementById("holder");
         const statCount = document.getElementById("stat-count");
         const statViews = document.getElementById("stat-views");
+        const statLikes = document.getElementById("stat-likes");
 
         try {
             const res = await fetch(`/api/blog/by-author/${username}`);
@@ -107,6 +113,9 @@
 
             const response = await fetch(`/api/user/total-views/${username}`);
             const data = await response.json();
+
+            const response1 = await fetch(`/api/user/total-likes/${username}`);
+            document.getElementById("stat-likes").textContent = await response.json();
 
             statViews.textContent = `${data}`;
 

@@ -39,6 +39,11 @@
                       id="stat-views">0</span>
                 <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Помогнати души</span>
             </div>
+            <div style="background: var(--bg-body); padding: 15px; border-radius: var(--radius-md); flex: 1; max-width: 200px;">
+                <span style="display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary-color);"
+                      id="stat-likes">0</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Харесвания</span>
+            </div>
         </div>
     </div>
 
@@ -72,6 +77,7 @@
 
         await loadPosts();
         await loadViews();
+        await loadLikes();
     }
 
     async function loadPosts() {
@@ -98,6 +104,10 @@
     async function loadViews() {
         const response = await fetch(`/api/user/total-views/${username}`);
         document.getElementById("stat-views").textContent = await response.json();
+    }
+    async function loadLikes() {
+        const response = await fetch(`/api/user/total-likes/${username}`);
+        document.getElementById("stat-likes").textContent = await response.json();
     }
 
     function renderCards(posts) {
