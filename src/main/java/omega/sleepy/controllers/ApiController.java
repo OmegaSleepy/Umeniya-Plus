@@ -349,4 +349,24 @@ public class ApiController {
 
         return gson.toJson(list);
     }
+
+    public static Object rewardReader(Request request, Response response) {
+        JsonObject json = gson.fromJson(request.body(), JsonObject.class);
+
+        String user = json.get("user").getAsString();
+        String author = json.get("author").getAsString();
+        int page = json.get("page").getAsInt();
+
+        var res = BlogService.award(user, author, page);
+
+        if (res == null) {
+            response.status(406);
+            return "{\"status\":\"error\"}";
+        }
+
+        System.out.println(author + " " + user + " " + page);
+
+        response.type(MediaType.JSON.getValue());
+        return "{\"reward\":10}";
+    }
 }

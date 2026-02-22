@@ -1,6 +1,7 @@
 package omega.sleepy.services;
 
 import omega.sleepy.dao.BlogDao;
+import omega.sleepy.dao.UserDao;
 import omega.sleepy.data.Blog;
 import omega.sleepy.data.User;
 import omega.sleepy.util.BlogFilter;
@@ -85,5 +86,23 @@ public class BlogService {
         blogs = BlogDao.getBlogByAuthor(author);
         return blogs;
 
+    }
+
+    private static final int GENERAL_REWARD = 10;
+
+    public static Object award(String user, String author, int page) {
+        if (!AuthService.userExists(author)) return null;
+        if (!AuthService.userExists(user)) return null;
+        if (user.equals(author)) return null;
+        if (page < 1) return null;
+
+        if(BlogDao.hasRecordOf(user, page)) return null;
+
+        UserDao.addFlamesToUsername(GENERAL_REWARD, user);
+        UserDao.addFlamesToUsername(GENERAL_REWARD, author);
+
+        BlogDao.addRecordOfReadBlog(user, page);
+
+        return true;
     }
 }

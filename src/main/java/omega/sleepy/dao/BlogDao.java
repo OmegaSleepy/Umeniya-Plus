@@ -238,14 +238,16 @@ public class BlogDao {
     }
 
     public static boolean hasRecordOf(String user, int page) {
-        String sql = "SELECT (user, page) FROM readBlogs where user = ? and page = ?";
+        String sql = "SELECT user, id FROM readBlogs where user = ? and id = ?";
         try (Connection conn = getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
             preparedStatement.setString(1, user);
             preparedStatement.setInt(2, page);
 
-            return preparedStatement.executeQuery().next();
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                return rs.next();
+            }
 
         } catch (SQLException e) {
             Log.error(e.getMessage());
