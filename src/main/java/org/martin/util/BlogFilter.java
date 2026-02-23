@@ -1,7 +1,6 @@
 package org.martin.util;
 
 import org.martin.controllers.ResourceController;
-import org.martin.dao.BlogDao;
 import org.martin.util.enums.Direction;
 
 public class BlogFilter {
@@ -61,6 +60,8 @@ public class BlogFilter {
             if(direction == null) direction = "";
             directionValue = switch (direction) {
                 case "oldest-first" ->  Direction.ASC;
+                case "liked-first" ->  Direction.LIKES;
+                case "viewed-first" ->  Direction.VIEWS;
                 default -> Direction.DESC;
             };
             this.direction = directionValue;

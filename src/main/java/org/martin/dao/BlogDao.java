@@ -143,8 +143,15 @@ public class BlogDao {
 
         if (!isAny) sql.append("tag = ? AND ");// (category));
         sql.append("title like ? ");//(name));
-        sql.append("ORDER BY created_at %s ".formatted(order));
-        sql.append("LIMIT 16 OFFSET ? ;");//(page * 15));
+
+        switch(orderDirection) {
+            case ASC, DESC -> sql.append("ORDER BY created_at %s".formatted(order));
+            case LIKES ->  sql.append("ORDER BY likes desc");
+            case VIEWS ->  sql.append("ORDER BY views desc");
+            default -> sql.append("ORDER BY views desc");
+        }
+
+        sql.append(" LIMIT 16 OFFSET ? ;");//(page * 15));
 
         Log.info("SQL: " + sql);
 
