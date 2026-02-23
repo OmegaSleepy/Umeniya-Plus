@@ -28,11 +28,15 @@ function updatePreview() {
     }
 }
 
-// Toggle Preview Visibility
 toggleBtn.addEventListener('click', () => {
     previewPanel.classList.toggle('active');
-    const isShowing = previewPanel.classList.contains('active') || previewPanel.style.display === 'block';
+
+    const isShowing = previewPanel.classList.contains('active');
+
     previewPanel.style.display = isShowing ? 'block' : 'none';
+
+    toggleBtn.textContent = isShowing ? 'Затвори Прегледа' : 'Предварителен Преглед';
+    
     if (isShowing) updatePreview();
 });
 
