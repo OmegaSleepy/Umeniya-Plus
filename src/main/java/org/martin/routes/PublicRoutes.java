@@ -57,12 +57,14 @@ public class PublicRoutes {
 
         get("/logout", (request, response) -> getSimpleTemplate("logout", response));
 
+
         get("/user/:username", PublicController::userProfile);
 
         redirect.get("/me", "/dashboard");
 
         path("/help", () -> {
             get("/markdown-info", (request, response) -> getSimpleTemplate("markdown", response));
+            get("/iskri", (request, response) -> getSimpleTemplate("iskri", response));
         });
 
         notFound((request, response) -> {

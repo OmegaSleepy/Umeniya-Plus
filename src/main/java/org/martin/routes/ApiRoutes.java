@@ -19,8 +19,6 @@ public class ApiRoutes {
         get("/api/profile-icon/:icon", ResourceController::getIcon);
 
 
-
-
         get("/api/icons", ResourceController::getIcons);
 
         get("/api/variables-css/", ResourceController::getCssVars);
@@ -29,7 +27,7 @@ public class ApiRoutes {
         get("/api/style-for/me", ApiController::getCSSForUserToken);
         get("/api/style-for-someone/:username", ApiController::getCSSFromUsername);
 
-        path("/api/user", ()-> {
+        path("/api/user", () -> {
             get("/me-info", ApiController::getUserInformation);
             get("/my-likes", ApiController::getLikedPosts);
             get("/total-views/:user", ApiController::getTotalViewsByAuthor);
