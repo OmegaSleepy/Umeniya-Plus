@@ -112,6 +112,10 @@
 
 </main>
 
+<footer id="post-footer" style="margin-top: 50px; padding: 40px; text-align: center; color: var(--text-light); border-top: 1px solid var(--border-color);">
+    <p> Умения+ за НОИТ 2026г.</p>
+</footer>
+
 <script>
     const pathParts = window.location.pathname.split("/");
     const postId = pathParts[pathParts.length - 1];
@@ -276,19 +280,34 @@
     canEdit();
     formatPostDate();
 
-    // Reward Logic...
-    let timer = false;
+    let timerFinished = false;
+    let scrollReachedBottom = false;
     let rewardClaimed = false;
+
     setTimeout(() => {
-        timer = true;
-    }, 1500);
-    window.addEventListener('scroll', async () => {
-        if (rewardClaimed || !timer) return;
-        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 50)) {
+        timerFinished = true;
+        checkEligibility();
+    }, 15000); // 15 seconds
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                scrollReachedBottom = true;
+                checkEligibility();
+                observer.disconnect();
+            }
+        });
+    }, { threshold: 1.0 });
+
+    const endOfPost = document.getElementById('post-footer');
+    if (endOfPost) observer.observe(endOfPost);
+
+    function checkEligibility() {
+        if (timerFinished && scrollReachedBottom && !rewardClaimed) {
             rewardClaimed = true;
             claimReadingReward();
         }
-    });
+    }
 
     async function claimReadingReward() {
         const currentUsername = typeof getUsername === 'function' ? getUsername() : null;
@@ -302,6 +321,7 @@
             if (res.ok) {
                 const data = await res.json();
                 showFlameUI(data.reward || 5);
+                addVisualFlames(data.reward);
             }
         } catch (err) {
             console.error(err);
