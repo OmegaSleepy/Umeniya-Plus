@@ -131,35 +131,47 @@
         document.getElementById("post").innerHTML = cleanHtml;
     }
 
-    async function deletePost() {
-        if (!confirm("Сигурен ли си?")) return;
+    async function deletePost(id) {
+        const result = await Swal.fire({
+            title: 'Сигурен ли си?',
+            text: "Няма да можеш да възстановиш публикацията!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Да, изтрий!',
+            cancelButtonText: 'Отказ'
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
-            const response = await fetch(`/api/blog/delete/${postId}`, {
+            const response = await fetch(`/api/blog/${postId}`, {
                 method: 'DELETE'
             });
 
-            const result = await response.json();
+            const data = await response.json();
 
-            if (response.ok && result.status === "ok") {
-                Swal.fire({
+            if (response.ok && data.status === "ok") {
+                await Swal.fire({
                     icon: 'success',
-                    title: 'Упешно!',
+                    title: 'Успешно!',
                     text: 'Публикацията е изтрита!',
                     confirmButtonColor: '#3085d6'
                 });
-                window.location.href = "/home";
+
+                window.location.href = `/home`;
             } else {
-                console.error("Сървърът отказа триене:", result);
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Грешка!',
-                    text: 'Случи се случка, опитай отново!',
-                    confirmButtonColor: '#3085d6'
-                });
+                throw new Error(data.message || "Server rejected deletion");
             }
         } catch (err) {
-            console.error("Fatal error:", err);
+            console.error("Delete error:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Грешка!',
+                text: 'Нещо се обърка при връзката със сървъра.',
+                confirmButtonColor: '#3085d6'
+            });
         }
     }
 
