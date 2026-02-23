@@ -136,7 +136,7 @@
 
         try {
             const response = await fetch(`/api/blog/delete/${postId}`, {
-                method: 'POST'
+                method: 'DELETE'
             });
 
             const result = await response.json();
