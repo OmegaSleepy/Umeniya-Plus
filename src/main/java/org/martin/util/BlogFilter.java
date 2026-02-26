@@ -3,6 +3,7 @@ package org.martin.util;
 import org.martin.controllers.ResourceController;
 import org.martin.util.enums.Direction;
 
+// Object class for
 public class BlogFilter {
 
     private final String title;

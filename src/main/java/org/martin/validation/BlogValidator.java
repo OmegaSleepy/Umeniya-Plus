@@ -5,6 +5,7 @@ import org.martin.data.Blog;
 
 public class BlogValidator {
 
+    // backend check if the contents of a blog creation/edit are in a set limit
     public static boolean isValidBlog(Blog blog) {
         var titleL = blog.title().length();
         if(titleL > 64) return false;

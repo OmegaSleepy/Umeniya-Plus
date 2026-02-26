@@ -14,9 +14,6 @@ import static org.martin.util.db.Database.getConnection;
 
 public class BlogDao {
 
-    public static void init() {
-    }
-
     public static void addBlog(Blog blog) {
         Log.error("Saving " + blog.toString());
         String sql = "INSERT into blogs(title, tag, excerpt, content, creator_username, created_at) values (?, ?, ?, ?, ?, ?)";

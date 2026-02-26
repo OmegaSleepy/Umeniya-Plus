@@ -3,6 +3,9 @@ package org.martin.util.enums;
 import static java.lang.Math.abs;
 import static java.lang.Math.random;
 
+/**
+ * List of all profile icons sourced by {@code svgrepo.com} under CC0 1.0 Universal PD Dedication
+ * **/
 public enum ProfileIcons {
     AGENT, BUSINESSMAN, CHEF, DICK, GIRL_NEXT_DOOR, GOBLIN,
     GRANDFATHER, HIP_HOP_BOY, INDIAN_PRINCESS, INDIAN, KNIGHT,

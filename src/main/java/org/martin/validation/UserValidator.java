@@ -9,12 +9,13 @@ public class UserValidator {
     public static final int MIN_NUMBER = 2;
     public static final int MIN_LENGTH = 12;
 
+    // called when registering to assure that the password meets strict safety standards
     public static boolean isPasswordFormatInvalid(String password) {
         if (password == null || password.length() < MIN_LENGTH) return true;
 
         int letters = 0;
         int digits = 0;
-        int specials = 0;
+        int specials = 0; // non digit, not letter (ex. '.', '?', '@')
 
         for (char c : password.toCharArray()) {
             if (Character.isLetter(c)) {

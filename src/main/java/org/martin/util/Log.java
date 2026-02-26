@@ -6,15 +6,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * For this module (Umeniya+) we use Log to log information to the console even though Spark uses another lib.
+ * This allows for more customizability and saving the logs to a file.
+ * **/
 public class Log {
 
+    //ignore the version, it is meant for developing
     public static final String LOG_VERSION = "1.5.0";
+    //int of how many logs can be held at a time in logs/
     public static final int MAX_LOGS = 16;
+    //the "root" of the log files dir
     public static final String LOG_DIR = "logs";
     public static final String CRASH_DIR = "crash";
     public static final String SUCCESSFUL_DIR = "regular";
 
-
+    //asci symbols for coloring text in the terminal, may not work in some old windows consoles, UNIX seams to implement them by default
     private static final String RESET = "\u001B[0m";
     private static final String GREEN = "\u001B[32m";
     private static final String BLUE = "\u001B[34m";
@@ -35,7 +42,7 @@ public class Log {
         }
     }
 
-
+    //logging methods with different levels of importance
     public static void info (String message) {
         log(message, GREEN);
         infoCount.incrementAndGet();
@@ -71,6 +78,7 @@ public class Log {
         return "INFO=%d | EXEC=%d | WARN=%d | ERROR=%d"
                 .formatted(infoCount.get(), execCount.get(), warnCount.get(), errorCount.get());
     }
+
 
 
     public static String stripAnsi (String message) {

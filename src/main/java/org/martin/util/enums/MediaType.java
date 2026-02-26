@@ -1,5 +1,8 @@
 package org.martin.util.enums;
 
+/**
+ * Simple enum for the media types. Used exclusively with {@code controllers} and {@code routes}. Basically {@code http} logic.
+ * **/
 public enum MediaType {
 
     JSON("application/json"),

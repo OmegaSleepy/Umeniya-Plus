@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Not essential file used for migrating through schema during the making of the program
+@Deprecated
 public class Migrate {
     record Blog(int id, String title, String tag, String excerpt, String content) {}
 

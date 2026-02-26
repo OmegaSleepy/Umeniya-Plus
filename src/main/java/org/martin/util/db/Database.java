@@ -9,10 +9,19 @@ import java.sql.SQLException;
 
 import static org.martin.util.db.FileUtil.readFile;
 
+/**
+ * Main module for the db connection and schema
+ * @see org.martin.dao.BlogDao
+ * @see org.martin.dao.UserDao
+ * @see org.martin.dao.StyleDao
+ * **/
 public class Database {
 
     public static final String dbName = "server.db";
 
+    /**
+     * Public method for getting an instance of a connection with the db. All connections must originate from here.
+     * **/
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection("jdbc:sqlite:" + dbName);
