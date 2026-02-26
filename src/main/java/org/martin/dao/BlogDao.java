@@ -12,6 +12,11 @@ import java.util.*;
 import static org.martin.controllers.ResourceController.any;
 import static org.martin.util.db.Database.getConnection;
 
+/**
+ * Data Access Object for the blog table(s).
+ * @see org.martin.data.Blog
+ * @see org.martin.services.BlogService
+ * **/
 public class BlogDao {
 
     public static void addBlog(Blog blog) {

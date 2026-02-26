@@ -2,6 +2,10 @@ package org.martin.data;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An object representation of the blog table schema, used everywhere
+ * @see org.martin.dao.BlogDao
+ * **/
 public record Blog
         (int id, String title, String tag, String excerpt, String content,
          String creator, String creationDate,

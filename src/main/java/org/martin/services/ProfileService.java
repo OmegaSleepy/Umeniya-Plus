@@ -1,7 +1,6 @@
 package org.martin.services;
 
 import com.google.gson.JsonElement;
-import org.martin.dao.StyleDao;
 import org.martin.dao.UserDao;
 import org.martin.data.User;
 import org.martin.data.UserWithExtras;
@@ -82,7 +81,7 @@ public class ProfileService {
     }
 
     public static String getStyleFromUser(String username){
-        var value = StyleDao.getStyleFromUser(username);
+        var value = UserDao.getStyleFromUser(username);
         value = value.replace("\n", " ");
         value = value.replace("\"", " ");
         value = ":root { " + value + " }";
@@ -92,7 +91,7 @@ public class ProfileService {
     public static void setStyleForUser(Map<String, JsonElement> map, String username) {
         StringBuilder value = new StringBuilder();
         map.forEach((k,v) -> value.append("--").append(k).append(": ").append(v).append(";\n"));
-        StyleDao.setStyleForUser(value.toString(), username);
+        UserDao.setStyleForUser(value.toString(), username);
         Log.exec(value.toString());
     }
 

@@ -19,9 +19,15 @@ import java.util.UUID;
 import static org.martin.controllers.ControllerUtil.forbitten;
 import static org.martin.services.AuthService.*;
 
+/**
+ * Used for auth http. It has more responsibility because it manages http cookies
+ * **/
 public class AuthController {
 
     private static final Gson gson = new Gson();
+    /**
+     * The name of the auth_cookie sent to the client
+     * **/
     public static final String AUTH_COOKIE = "auth_cookie";
     public static final String LOGIN_ERROR = "Потребителят не съществува или паролата е грешна!";
 

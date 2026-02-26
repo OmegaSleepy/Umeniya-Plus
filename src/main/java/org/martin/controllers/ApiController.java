@@ -25,6 +25,11 @@ import static org.martin.controllers.ControllerUtil.*;
 import static org.martin.routes.PublicRoutes.templateEngine;
 import static org.martin.services.AuthService.validateToken;
 
+/**
+ * The most important .java file in the project.
+ * It has the most responsibilities, and it contacts most services
+ * This controller manages all http logic for the api
+ * **/
 public class ApiController {
 
     private static final Gson gson = new Gson();

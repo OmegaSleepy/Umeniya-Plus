@@ -4,6 +4,10 @@ import org.martin.util.Log;
 import org.martin.util.enums.MediaType;
 import spark.Response;
 
+/**
+ * On the boundary of util and a controller. Controller because of HTTP.
+ * Holds common methods for error codes
+ * **/
 public class ControllerUtil {
     public static String forbitten(Response response) {
         Log.error("something happened HERE \n" + response.raw());

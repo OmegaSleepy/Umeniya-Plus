@@ -13,6 +13,11 @@ import static org.martin.controllers.ControllerUtil.missingResourcePage;
 import static org.martin.routes.PublicRoutes.getSimpleTemplate;
 import static org.martin.services.AuthService.validateToken;
 
+/**
+ * Used for public api http.
+ * Functions like {@link #skipLogIn} are used for protected pages
+ * @see PublicRoutes
+ * **/
 public class PublicController {
     public static String loginInterface(Request request, Response response) {
         String token = request.cookie(AUTH_COOKIE);

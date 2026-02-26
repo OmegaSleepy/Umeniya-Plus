@@ -18,6 +18,12 @@ import java.util.List;
 
 import static org.martin.util.Log.error;
 
+/**
+ * Data Access Object for the user table(s).
+ * @see org.martin.data.User
+ * @see org.martin.data.UserWithExtras
+ * @see org.martin.services.AuthService
+ * **/
 public class UserDao {
     public static String getPasswordHashFromUsername(String username) {
         String sql = "SELECT password_hash from users where username = ?";
@@ -307,6 +313,33 @@ public class UserDao {
         try (Connection connection = Database.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, flames);
+            preparedStatement.setString(2, username);
+
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getStyleFromUser(String username) {
+        String sql = "SELECT style_profile from user_extras WHERE username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+
+            try (ResultSet rs = preparedStatement.executeQuery()){
+                return rs.getString("style_profile");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void setStyleForUser(String map, String username) {
+        String sql = "UPDATE user_extras SET style_profile = ? WHERE username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, map);
             preparedStatement.setString(2, username);
 
             preparedStatement.execute();
