@@ -454,4 +454,17 @@ public class ApiController {
         return gson.toJson(BlogService.getLikedBlogsByUser(username));
 
     }
+
+    public static Object resetUserTheme(Request request, Response response) {
+        String token = request.cookie(AuthController.AUTH_COOKIE);
+        String username = AuthService.getUsernameByToken(token);
+
+        if (username == null) {
+            return forbitten(response);
+        }
+
+        ProfileService.setStyleForUser(Map.of(), username);
+        response.type(MediaType.JSON.getValue());
+        return "{\"status\":\"success\"}";
+    }
 }

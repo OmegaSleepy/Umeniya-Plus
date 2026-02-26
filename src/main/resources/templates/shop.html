@@ -12,6 +12,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        .blog {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 25px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .blog-footer {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .blog-title {
+            margin: 15px 0 10px 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
         #shop-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -102,7 +124,25 @@
         </div>
     </div>
 
-    <div class="blog" style="opacity: 0.6; border: 2px dashed #ddd; background: transparent; justify-content: center; align-items: center;">
+    <div class="blog" id="theme-reset">
+        <div class="blog-stats">
+            <span>🎨 Премахване на персонализация</span>
+            <span class="price-badge">Безплатно!</span>
+        </div>
+        <h2 class="blog-title" style="margin-top: 15px;">Премахвател на Тема</h2>
+        <p class="blog-excerpt">
+            Премахва темата която сте поставили върху профила си. Използвайте в случай на неизползваем сайт!
+        </p>
+        <div style="flex-grow: 4; display: flex; align-items: center; justify-content: center; opacity: 0.3; font-size: 3rem; padding: 40px 0;">
+            🧹
+        </div>
+
+        <div class="blog-footer">
+            <button class="btn-edit" id="btn-reset-theme" style="width: 100%;">Плати Нищо!</button>
+        </div>
+    </div>
+
+    <div class="blog" style="opacity: 0.6; border: 2px dashed #ddd; background: transparent; justify-content: center; align-items: center; margin-top: 20px;">
         <div style="text-align: center; color: var(--text-muted);">
             <p style="font-size: 2rem;">🔒</p>
             <p>Очаквайте скоро</p>
@@ -199,6 +239,50 @@
                 });
             }
         });
+    });
+</script>
+
+<script>
+    const resetBtn = document.getElementById('btn-reset-theme');
+
+    resetBtn.addEventListener('click', async () => {
+        // Ask for confirmation using SweetAlert2
+        const result = await Swal.fire({
+            title: 'Сигурни ли сте?',
+            text: "Това ще премахне всички ваши персонализирани цветове!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff4500',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Да, изчисти ги!',
+            cancelButtonText: 'Отказ'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('/api/style-for-me/reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    await Swal.fire({
+                        title: 'Изчистено!',
+                        text: 'Темата ви беше рестартирана към оригиналния вид.',
+                        icon: 'success',
+                        confirmButtonColor: '#ff4500'
+                    });
+
+                    // Reload the page to apply the default CSS
+                    window.location.reload();
+                } else {
+                    Swal.fire('Грешка', 'Не успяхме да нулираме темата.', 'error');
+                }
+            } catch (error) {
+                console.error("Reset error:", error);
+                Swal.fire('Грешка!', 'Възникна проблем със сървъра.', 'error');
+            }
+        }
     });
 </script>
 

@@ -32,6 +32,7 @@ public class ApiRoutes {
         post("/api/create-css/", ApiController::createCSSForUser);
         get("/api/style-for/me", ApiController::getCSSForUserToken);
         get("/api/style-for-someone/:username", ApiController::getCSSFromUsername);
+        post("/api/style-for-me/reset", ApiController::resetUserTheme);
 
         path("/api/user", () -> {
             get("/me-info", ApiController::getUserInformation);
