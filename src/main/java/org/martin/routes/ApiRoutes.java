@@ -6,6 +6,12 @@ import org.martin.controllers.ResourceController;
 
 import static spark.Spark.*;
 
+/**
+ * All API requests end here
+ * @see ApiController
+ * @see org.martin.services.BlogService
+ * @see org.martin.services.MiscService
+ * **/
 public class ApiRoutes {
     public static void init() {
 

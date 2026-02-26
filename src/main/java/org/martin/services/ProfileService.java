@@ -14,6 +14,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This service is used for profile customization.
+ * @see org.martin.controllers.ApiController
+ * @see org.martin.routes.ApiRoutes
+ * @see ProfileIcons
+ * **/
 public class ProfileService {
     public static byte[] getProfileIcon(String name){
         if (name == null) {
@@ -108,7 +114,7 @@ public class ProfileService {
         return true;
     }
 
-    public static int checkFunds(int funds, String user) {
+    public static int checkFunds(String user) {
         return UserDao.getFlamesFromUsername(user);
     }
 }

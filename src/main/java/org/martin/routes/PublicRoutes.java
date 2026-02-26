@@ -12,6 +12,9 @@ import spark.Response;
 
 import static spark.Spark.*;
 
+/**
+ * List of all routes that return a webpage
+ * **/
 public class PublicRoutes {
 
     public static TemplateEngine templateEngine;
@@ -19,6 +22,8 @@ public class PublicRoutes {
     public static void init(){
         Log.info("Public routes initializing...");
 
+        //part of thymeleaf - used for backend webpage rendering
+        //in general makes it easier for backend to send HTML webpages to the clients
         templateEngine = new TemplateEngine();
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
@@ -29,7 +34,7 @@ public class PublicRoutes {
         resolver.setCacheable(false); //to true in prod
         templateEngine.setTemplateResolver(resolver);
 
-        after((req, res) -> Log.info("Matched: " + req.pathInfo()));
+
 
         get("/", (request, response) -> getSimpleTemplate("start", response));
 
@@ -65,11 +70,6 @@ public class PublicRoutes {
         path("/help", () -> {
             get("/markdown-info", (request, response) -> getSimpleTemplate("markdown", response));
             get("/iskri", (request, response) -> getSimpleTemplate("iskri", response));
-        });
-
-        notFound((request, response) -> {
-            response.redirect("/404");
-            return null;
         });
 
         Log.info("All public rouses initialized");

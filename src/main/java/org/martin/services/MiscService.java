@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static org.martin.controllers.ControllerUtil.missingResource;
 
+/****/
 public class MiscService {
 
     public static Object getImage(String image, Request request, Response response) {

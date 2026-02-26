@@ -16,6 +16,11 @@ import java.util.*;
 
 import static org.martin.controllers.ControllerUtil.missingResource;
 
+/**
+ * This controller sits between the role of a controller and a service.
+ * Its responsibilities lack the need of the db.
+ * The class is used for resource fetching
+ * **/
 public class ResourceController {
 
     private static final Gson gson = new Gson();

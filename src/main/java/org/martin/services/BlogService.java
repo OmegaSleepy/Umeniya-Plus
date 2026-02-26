@@ -17,6 +17,11 @@ import java.util.Objects;
 
 import static org.martin.validation.BlogValidator.isValidBlog;
 
+/**
+ * Service all about Blogs.
+ * @see BlogDao
+ * @see org.martin.controllers.ApiController
+ * **/
 public class BlogService {
 
     public static boolean saveBlog(String title, String category, String excerpt, String content, String creator) {

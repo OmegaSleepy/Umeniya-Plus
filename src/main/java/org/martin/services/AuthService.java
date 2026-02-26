@@ -11,6 +11,12 @@ import java.security.InvalidParameterException;
 
 import static org.martin.validation.UserValidator.isPasswordFormatInvalid;
 
+/**
+ * Safe password, profile and login handler
+ * @see UserDao
+ * @see org.martin.controllers.AuthController
+ * @see org.martin.routes.AuthRoutes
+ * **/
 public class AuthService {
 	
 	public static boolean isPasswordInvalid(String username, String plainTextPassword){
