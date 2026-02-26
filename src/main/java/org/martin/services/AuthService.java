@@ -35,8 +35,7 @@ public class AuthService {
 		UserDao.changePassword(username, hashPassword(newPasswordPT));
 	}
 
-	public static void deleteProfile(String username, String plainTextPassword) throws InvalidPassword{
-		if(isPasswordInvalid(username, plainTextPassword)) throw new InvalidPassword("Password is not correct");
+	public static void deleteProfile(String username){
 		UserDao.deleteUser(username);
 	}
 

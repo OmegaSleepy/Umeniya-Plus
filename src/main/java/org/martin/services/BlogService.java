@@ -100,7 +100,13 @@ public class BlogService {
 
         blogs = BlogDao.getBlogByAuthor(author);
         return blogs;
+    }
 
+    public static List<Blog> getBlogsByUsername(String author) {
+        List<Blog> blogs;
+
+        blogs = BlogDao.getBlogByAuthor(author);
+        return blogs;
     }
 
     private static final int GENERAL_REWARD = 10;

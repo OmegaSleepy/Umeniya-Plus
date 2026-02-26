@@ -104,13 +104,9 @@ public class ProfileService {
         return true;
     }
 
-    public static boolean checkAndAddFunds(int funds, String user) {
+    public static void addFunds(int funds, String user) {
         int currentFunds = UserDao.getFlamesFromUsername(user);
-        if (currentFunds <= funds) {
-            return false;
-        }
         UserDao.setFlamesToUsername(currentFunds+funds, user);
-        return true;
     }
 
     public static int checkFunds(String user) {

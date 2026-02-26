@@ -99,7 +99,15 @@ public class UserDao {
         } catch (SQLException e) {
             throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
         }
+        sql = "DELETE from user_extras where username = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.execute();
 
+        } catch (SQLException e) {
+            throw new UserDoesNotExist("User by the username %s, does not exist".formatted(username));
+        }
     }
 
     public static String getPfp(String username){
