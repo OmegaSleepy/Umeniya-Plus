@@ -13,6 +13,7 @@ import static spark.Spark.*;
 public class Main {
     public static void main(String[] args) {
         // Server config
+        Spark.awaitStop();
         ipAddress("0.0.0.0");
         port(4567);
         staticFileLocation("/public");

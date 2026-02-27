@@ -18,7 +18,6 @@ public class ApiTest {
     @BeforeAll
     void setup() {
         Main.main(null);
-        Spark.awaitInitialization();
     }
 
     @AfterAll

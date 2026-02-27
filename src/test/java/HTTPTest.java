@@ -21,7 +21,6 @@ public class HTTPTest {
     @BeforeAll
     void setup() {
         Main.main(null);
-        Spark.awaitInitialization();
     }
 
     @Test

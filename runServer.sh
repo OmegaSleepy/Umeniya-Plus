@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Configuration
-MAIN_CLASS="omega.sleepy.Main"
+MAIN_CLASS="org.martin.Main"
 SKIP_TESTS=false
 
 # Build command based on whether tests are skipped
