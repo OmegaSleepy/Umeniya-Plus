@@ -13,15 +13,14 @@ import static spark.Spark.*;
 public class Main {
     public static void main(String[] args) {
         // Server config
-        Spark.awaitStop();
+        Log.info(Main.class.getName());
         ipAddress("0.0.0.0");
-        port(4567);
+        port(7860);
         staticFileLocation("/public");
 
         // Logs
         Log.purgeOldLogs();
         Log.info("Initializing System Logic");
-
 
         //Initializing BusinessLogic
         RouteMain.init();
