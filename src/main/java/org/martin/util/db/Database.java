@@ -23,7 +23,7 @@ public class Database {
      * **/
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:sqlite:" + dbName);
+            return DriverManager.getConnection("jdbc:sqlite:app/" + dbName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
